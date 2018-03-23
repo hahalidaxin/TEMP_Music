@@ -39,9 +39,6 @@ public class GameData {
 
     //----------游戏设置参数
     public static boolean GameEffect = true;     //是否开启游戏音效 ---------需要加载修改之类
-    public static float MeVolumn = 1;           //游戏的音量大小
-
-    // TODO: 2018/3/8 游戏设置参数是要求读取的 本地保存
 
     //-----------游戏欢迎界面数据
     public static final long ani_Span = 1000;
@@ -56,9 +53,9 @@ public class GameData {
     public static StringBuffer mainMusicScore;                   //游戏的乐谱信息
     public static String fileMusicScoreName;    //乐谱的文件名
     public static String MusicName;             //乐曲名称
-    public static float baseSlideHeight = STANDARD_HIEGHT/5;       //默认大小方块的高
+    public static float baseSlideHeight = STANDARD_HIEGHT/4;       //默认大小方块的高
     public static float baseSlideWidth = STANDARD_WIDTH/4;       //默认大小方块的宽
-    public static final float[] SlideHeight = {0,384,768,1152,1536};    //不同类型的滑块的默认长度
+    public static final float[] SlideHeight = {0,480,960,1440,1536};    //不同类型的滑块的默认长度
     public static long gamepauseTime;               //游戏的暂停时间用来保持createSlideTh的节奏
     public static long gamerestartTime;
 

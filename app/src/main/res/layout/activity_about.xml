@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/c_AboutBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.hahal.musictouch.activity.game.AboutActivity">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="50dp"
+        android:fontFamily="serif"
+        android:textColor="@color/c_GameAbout"
+        android:textStyle="bold"
+        android:text="游戏声明"/>
+
+    <TextView
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="12"
+        android:textColor="@color/c_GameAbout"
+        android:textSize="25dp"
+        android:text="本游戏作为大一年度项目\n由计算机学院宿舍365全体成员共同完成"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:textColor="@color/c_GameAbout"
+        android:gravity="center"
+        android:text="版权所有，违者必究"/>
+
+</LinearLayout>

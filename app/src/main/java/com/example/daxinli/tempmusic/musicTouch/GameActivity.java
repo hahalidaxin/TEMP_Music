@@ -3,13 +3,11 @@ package com.example.daxinli.tempmusic.musicTouch;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 import com.example.daxinli.tempmusic.MySurfaceView;
 import com.example.daxinli.tempmusic.constant.GameData;
-import com.example.daxinli.tempmusic.util.manager.SoundManager;
 import com.example.daxinli.tempmusic.util.screenscale.Constant;
 import com.example.daxinli.tempmusic.util.screenscale.ScreenScaleUtil;
 
@@ -17,9 +15,10 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class GameActivity extends AppCompatActivity {
+
+
+public class GameActivity extends BaseActivity {
     public static MySurfaceView mySurfaceView;
-    public static SoundManager sound;
     public static SharedPreferences.Editor editor;  //保存上次退出的保留
     public static SharedPreferences sp;
 
@@ -34,12 +33,13 @@ public class GameActivity extends AppCompatActivity {
 
         //加载资源文件
         initScreenData();               //初始化屏幕数据 为后续计算对应点做准备
-        initSound();
+        //sinitSound();
         loadSettings();
         initIOFile();
 
         setContentView(mySurfaceView);                          //以SurfaceView作为主界面
     }
+    /*
     @Override
     protected void onResume() {
         super.onResume();
@@ -55,17 +55,19 @@ public class GameActivity extends AppCompatActivity {
             GameActivity.sound.mp.pause();
         }
     }
-
+    */
     public void initScreenData() {
         DisplayMetrics dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         Constant.ssr= ScreenScaleUtil.calScale(dm.widthPixels, dm.heightPixels);
         System.out.println(Integer.toString(dm.widthPixels)+" "+Integer.toString(dm.heightPixels));
     }
+    /*
     public void initSound() {
         sound = new SoundManager(this);
         //sound.playBackGroundMusic(this, R.raw.background);
     }
+    */
     public void loadSettings() {
         sp = this.getSharedPreferences("settings", Context.MODE_PRIVATE);
         editor = sp.edit();

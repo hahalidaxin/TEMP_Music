@@ -5,9 +5,11 @@ import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.constant.GameData;
 import com.example.daxinli.tempmusic.musicTouch.GameActivity;
+import com.example.daxinli.tempmusic.musicTouch.WelcomeActivity;
 import com.example.daxinli.tempmusic.util.DrawUtil;
 import com.example.daxinli.tempmusic.util.SFUtil;
 import com.example.daxinli.tempmusic.util.elseUtil.Area;
+import com.example.daxinli.tempmusic.util.manager.SoundManager;
 import com.example.daxinli.tempmusic.util.screenscale.Constant;
 
 
@@ -92,7 +94,7 @@ public class MainSlide{
 
             if(state==0) {
                 state = 1;
-                //Sound.playSound(Pitch,0);
+                WelcomeActivity.sound.playGameMusic(SoundManager.PIANO_PITCH[Pitch],0);
                 //sound的初始化处于WelcomeActivity中 因此需要提前调用WelcomeActivity
                 synchronized (GameData.lock) {
                     GameData.GameScore += 5;
@@ -121,7 +123,10 @@ public class MainSlide{
         pressCurX = Constant.fromRealScreenXToStandardScreenX(pressCurX);
         pressCurY = Constant.fromRealScreenYToStandardScreenY(pressCurY);
 
-        if(state == 0 && pressCurY>=Y+Height*2/3) state = 1;
+        if(state == 0 && pressCurY>=Y+Height*2/3) {
+            WelcomeActivity.sound.playGameMusic(SoundManager.PIANO_PITCH[Pitch+7],0);      //此处播放长音
+            state = 1;
+        }
         if(touchMode!=2 && state==1) touchMode = 1;
         if(touchMode==1 && state==1) ls_minY = Math.max(Y,Math.min(ls_minY,pressCurY));
     }

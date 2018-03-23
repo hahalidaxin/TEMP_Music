@@ -3,30 +3,25 @@ package com.example.daxinli.tempmusic;
 import android.content.Context;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.MatrixState.MatrixState2D;
 import com.example.daxinli.tempmusic.constant.GameData;
 import com.example.daxinli.tempmusic.musicTouch.GameActivity;
-import com.example.daxinli.tempmusic.util.elseUtil.Area;
 import com.example.daxinli.tempmusic.util.manager.ShaderManager;
 import com.example.daxinli.tempmusic.view.BaseView;
 import com.example.daxinli.tempmusic.view.GameView;
 import com.example.daxinli.tempmusic.view.GameoverView;
-import com.example.daxinli.tempmusic.view.LoadView;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-import javax.security.auth.login.LoginException;
 
 public class MySurfaceView extends GLSurfaceView {
     public GameActivity  activity;
     public static BaseView curView;         //在每个子View中对curView进行修改
     public static GameView gameView;
     public static GameoverView gameoverView;
-    public static LoadView loadView;
 
     private SceneRenderer mRenderer;
 
@@ -58,8 +53,6 @@ public class MySurfaceView extends GLSurfaceView {
                     }
                 } else if(curView==gameoverView) {
                     //exit()
-                } else if(curView==loadView) {
-                    //
                 }
                 break;
         }
@@ -78,7 +71,7 @@ public class MySurfaceView extends GLSurfaceView {
 
     public void exit() {
         //结束游戏actviity
-        activity.finish();
+        activity.removeActivity();
     }
     private class SceneRenderer implements GLSurfaceView.Renderer
     {

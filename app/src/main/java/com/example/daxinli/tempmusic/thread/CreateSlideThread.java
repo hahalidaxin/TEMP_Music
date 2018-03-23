@@ -35,6 +35,10 @@ public class CreateSlideThread extends Thread {
 
     public CreateSlideThread() {
         this.setName("CreateSlideThread");
+        attachSpan = 0;
+        pause = false;
+        flag = true;
+        random = new Random();
     }
 
     @Override

@@ -3,4 +3,15 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="c_Loading">#15F8FF</color>
+    <color name="LightBlue">#0BD8FF</color>
+    <color name="c_GameAbout">#C6EAFF</color>
+    <color name="c_AboutBackground">#000</color>
+    <color name="c_Background">#000</color>
+    <color name="colorBlue">#48d4e4</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#66000000</color>
+    <color name="colorGray">#66e4e1e1</color>
+    <color name="colorLightGray">#eae8e8</color>
+    <color name="black_overlay">#eae8e8</color>
 </resources>
