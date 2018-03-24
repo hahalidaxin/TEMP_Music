@@ -5,7 +5,7 @@ import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.MySurfaceView;
 import com.example.daxinli.tempmusic.constant.GameData;
-import com.example.daxinli.tempmusic.object.BN2DObject;
+import com.example.daxinli.tempmusic.object.Obj2DRectangle;
 import com.example.daxinli.tempmusic.object.MainSlide;
 import com.example.daxinli.tempmusic.thread.ActionThread;
 import com.example.daxinli.tempmusic.thread.CreateSlideThread;
@@ -35,7 +35,7 @@ public class GameView extends BaseView {
         CreateSlideThread createSlideThread;
         MainSlideThread mainSlideThread;
 
-        List<BN2DObject> viewlist=new ArrayList<BN2DObject>();
+        List<Obj2DRectangle> viewlist=new ArrayList<Obj2DRectangle>();
         ArrayList<MainSlide> tmpSlide = new ArrayList<MainSlide>();
         public static ArrayList<MainSlide> mainSlideArrayList = new ArrayList<MainSlide>();     //声明为全局可用的静态变量
         boolean initFlag = false;
@@ -59,10 +59,10 @@ public class GameView extends BaseView {
             //加载恒参图片
             Area ar = GameData.area_btn_pause;
             GameData.area_btn_pause = ar;
-            viewlist.add(new BN2DObject(ar.x,ar.y,ar.width,ar.height
+            viewlist.add(new Obj2DRectangle(ar.x,ar.y,ar.width,ar.height
                     ,TextureManager.getTextures("btn_pause_g.png"), ShaderManager.getShader(2)));
             ar = GameData.area_pic_rheart;
-            viewlist.add(new BN2DObject(ar.x,ar.y,ar.width,ar.height
+            viewlist.add(new Obj2DRectangle(ar.x,ar.y,ar.width,ar.height
                     ,TextureManager.getTextures("pic_rheart_g.png"), ShaderManager.getShader(2)));
 
             initFlag = true;
@@ -177,7 +177,7 @@ public class GameView extends BaseView {
             float loadX = (GameData.STANDARD_WIDTH-length*GameData.num_W)/2;
             DrawUtil.drawNumber(loadX,20,(float)GameData.num_W,(float)GameData.num_H,GameData.GameScore);
             if(viewlist.size()>0) {
-                for(BN2DObject obj:viewlist) {
+                for(Obj2DRectangle obj:viewlist) {
                     obj.drawSelf();
                 }
             }

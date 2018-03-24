@@ -15,8 +15,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-
-
 public class GameActivity extends BaseActivity {
     public static MySurfaceView mySurfaceView;
     public static SharedPreferences.Editor editor;  //保存上次退出的保留

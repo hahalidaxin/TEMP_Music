@@ -1,7 +1,6 @@
 package com.example.daxinli.tempmusic.util;
 
-import com.example.daxinli.tempmusic.MatrixState.MatrixState2D;
-import com.example.daxinli.tempmusic.object.BN2DObject;
+import com.example.daxinli.tempmusic.object.Obj2DRectangle;
 import com.example.daxinli.tempmusic.util.manager.ShaderManager;
 import com.example.daxinli.tempmusic.util.manager.TextureManager;
 
@@ -12,13 +11,13 @@ import com.example.daxinli.tempmusic.util.manager.TextureManager;
 public class DrawUtil {
     //绘制Bitmap
     public static void drawBitmap(float x,float y,float width,float height,String pname) {
-        BN2DObject bitmap = new BN2DObject(x,y,width,height, TextureManager.getTextures(pname),
+        Obj2DRectangle bitmap = new Obj2DRectangle(x,y,width,height, TextureManager.getTextures(pname),
                 ShaderManager.getShader(2));
         bitmap.drawSelf();
     }
     //绘制纯色方块
     public static  void drawRect(float x,float y,float width,float height,float a,float r,float g,float b) {
-        BN2DObject bitmap = new BN2DObject(x,y,width,height,a,r,g,b,            // TODO: 2018/3/19 新建一个shader  用于接收argb绘制相应颜色方块
+        Obj2DRectangle bitmap = new Obj2DRectangle(x,y,width,height,a,r,g,b,            // TODO: 2018/3/19 新建一个shader  用于接收argb绘制相应颜色方块
                 ShaderManager.getShader(6));
         bitmap.drawSelf();
     }
@@ -40,7 +39,7 @@ public class DrawUtil {
         for(int i=0;i<str_num.length();i++) {
             char c = str_num.charAt(i);
             int ni = c - '0';
-            BN2DObject obj = new BN2DObject(x+i*numwidth,y,numwidth,numheight, TextureManager.getTextures(numsF[ni]),
+            Obj2DRectangle obj = new Obj2DRectangle(x+i*numwidth,y,numwidth,numheight, TextureManager.getTextures(numsF[ni]),
                     ShaderManager.getShader(2));
             obj.drawSelf();
         }

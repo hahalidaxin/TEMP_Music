@@ -9,7 +9,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-public class BN2DObject
+public class Obj2DRectangle
 {
 	
 	public static float loadPosition=90;
@@ -51,7 +51,7 @@ public class BN2DObject
 
 	float a,r,g,b;
 	
-	public BN2DObject(float x,float y,float width,float height,float a,float r,float g,float b,int programId) {
+	public Obj2DRectangle(float x, float y, float width, float height, float a, float r, float g, float b, int programId) {
 		x+=width/2; y+=height/2;
 		this.x=Constant.fromScreenXToNearX(x);	//将坐标转化为视口坐标
 		this.y=Constant.fromScreenYToNearY(y);
@@ -63,7 +63,7 @@ public class BN2DObject
         this.isPure = true;
         initVertexDataRect(width,height);
     }
-	public BN2DObject(float x,float y,float picWidth,float picHeight,int texId,int programId)
+	public Obj2DRectangle(float x, float y, float picWidth, float picHeight, int texId, int programId)
 	{
 		x+=picWidth/2; y+=picHeight/2;
 		this.x=Constant.fromScreenXToNearX(x);
@@ -73,7 +73,7 @@ public class BN2DObject
 		initVertexData(picWidth,picHeight);
 	}
 	/*
-	public BN2DObject(float x,float y,float picWidth,float picHeight,int texId,int programId,int spng)
+	public Obj2DRectangle(float x,float y,float picWidth,float picHeight,int texId,int programId,int spng)
 	{
 		this.spng=spng;
 		this.x= Constant.fromScreenXToNearX(x);;
@@ -83,7 +83,7 @@ public class BN2DObject
 		initVertexData(picWidth,picHeight);
 	}
 
-	public BN2DObject(float x,float y,float width,float height,int han,int lie,int HZ,int LZ,
+	public Obj2DRectangle(float x,float y,float width,float height,int han,int lie,int HZ,int LZ,
 			int texId,int programId)
 	{
 		this.x=Constant.fromScreenXToNearX(x);

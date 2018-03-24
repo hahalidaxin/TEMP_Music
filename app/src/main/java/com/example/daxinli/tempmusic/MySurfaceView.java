@@ -13,6 +13,7 @@ import com.example.daxinli.tempmusic.util.manager.ShaderManager;
 import com.example.daxinli.tempmusic.view.BaseView;
 import com.example.daxinli.tempmusic.view.GameView;
 import com.example.daxinli.tempmusic.view.GameoverView;
+import com.example.daxinli.tempmusic.view.EffectView;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -22,6 +23,7 @@ public class MySurfaceView extends GLSurfaceView {
     public static BaseView curView;         //在每个子View中对curView进行修改
     public static GameView gameView;
     public static GameoverView gameoverView;
+    public static EffectView effView;
 
     private SceneRenderer mRenderer;
 
@@ -82,7 +84,8 @@ public class MySurfaceView extends GLSurfaceView {
             if(curView == null)  {
                 gameView = new GameView(MySurfaceView.this);
                 gameoverView = new GameoverView(MySurfaceView.this);
-                curView = gameView;
+                effView = new EffectView();
+                curView = effView;
                 GameData.viewState = GameData.Game_playing;             //设置游戏界面的View号
             }
             curView.drawView(gl);
