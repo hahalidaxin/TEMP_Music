@@ -18,6 +18,9 @@ public class SFUtil {
         if(x>=area.x && x<=area.x+area.width && y>=area.y && y<=area.y+area.height) return true;
         return false;
     }
+    public static float distance(float x,float y,float x2,float y2) {
+        return (float)Math.sqrt((x2-x)*(x2-x)+(y2-y)*(y2-y));
+    }
 
     //根据要求与素材在canvas上绘制需要的数字
     public static void drawNums(Canvas canvas, String drawNum, Bitmap[] nums, float x, float y) {

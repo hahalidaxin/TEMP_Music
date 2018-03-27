@@ -18,7 +18,7 @@ public class ScreenScaleUtil {
     public static ScreenScaleResult calScale(float targetWidth, float targetHeight) {
         ScreenScaleResult result = null;
         ScreenOrien so = null;
-        if(targetWidth > targetHeight) {
+        if (targetWidth > targetHeight) {
             so = ScreenOrien.HP;
         } else {
             so = ScreenOrien.SP;
@@ -28,41 +28,68 @@ public class ScreenScaleUtil {
         float targetRatio;
         float ratio;
         float realTargetWidth;
+        float realTargetHeight;
         float lcuX;
         float lcuY;
-        if(so == ScreenOrien.HP) {
+        //等比例缩放并剪裁
+
+        if (so == ScreenOrien.HP) {
             targetRatio = targetWidth / targetHeight;
-            if(targetRatio > 1.7777778F) {
+            if (targetRatio > 1.7777778F) {
                 ratio = targetHeight / 1080.0F;
                 realTargetWidth = 1920.0F * ratio;
                 lcuX = (targetWidth - realTargetWidth) / 2.0F;
                 lcuY = 0.0F;
-                result = new ScreenScaleResult((int)lcuX, (int)lcuY, ratio, so);
+                result = new ScreenScaleResult((int) lcuX, (int) lcuY, ratio, so);
             } else {
                 ratio = targetWidth / 1920.0F;
                 realTargetWidth = 1080.0F * ratio;
                 lcuX = 0.0F;
                 lcuY = (targetHeight - realTargetWidth) / 2.0F;
-                result = new ScreenScaleResult((int)lcuX, (int)lcuY, ratio, so);
+                result = new ScreenScaleResult((int) lcuX, (int) lcuY, ratio, so);
             }
         }
 
-        if(so == ScreenOrien.SP) {
+        if (so == ScreenOrien.SP) {
             targetRatio = targetWidth / targetHeight;
-            if(targetRatio > 0.5625F) {
+            if (targetRatio > 0.5625F) {
                 ratio = targetHeight / 1920.0F;
                 realTargetWidth = 1080.0F * ratio;
                 lcuX = (targetWidth - realTargetWidth) / 2.0F;
                 lcuY = 0.0F;
-                result = new ScreenScaleResult((int)lcuX, (int)lcuY, ratio, so);
+                result = new ScreenScaleResult((int) lcuX, (int) lcuY, ratio, so);
             } else {
                 ratio = targetWidth / 1080.0F;
                 realTargetWidth = 1920.0F * ratio;
                 lcuX = 0.0F;
                 lcuY = (targetHeight - realTargetWidth) / 2.0F;
-                result = new ScreenScaleResult((int)lcuX, (int)lcuY, ratio, so);
+                result = new ScreenScaleResult((int) lcuX, (int) lcuY, ratio, so);
             }
         }
+        return result ;
+        /*
+        //此处使用等比例缩放并剪裁的方案
+        if(so == ScreenOrien.HP) {
+            ratio = targetHeight/sHpHeight;
+            realTargetWidth = sHpWidth*ratio;
+            lcuX = 0;
+            lcuY = 0;
+            if(targetWidth<realTargetWidth) {
+                lcuY = targetHeight - realTargetWidth;
+            }
+            result = new ScreenScaleResult((int)lcuX,(int)lcuY,ratio,so);
+        } else if(so == ScreenOrien.SP){
+            ratio = targetWidth/sSpWidth;
+            realTargetHeight = sSpHeight*ratio;
+            lcuX = 0;
+            lcuY = 0;
+            if(targetHeight<realTargetHeight) {
+                lcuY = targetHeight - realTargetHeight;
+            }
+            result = new ScreenScaleResult((int)lcuX,(int)lcuY,ratio,so);
+        }
         return result;
+
+        */
     }
 }

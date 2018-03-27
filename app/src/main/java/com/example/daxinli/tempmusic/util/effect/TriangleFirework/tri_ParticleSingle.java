@@ -23,7 +23,7 @@ public class tri_ParticleSingle {
                               float vx,float vy,
                               float a,float r,float g,float b,
                               float xAngle,float xScale,
-                              int lifeTime,int vgType) {
+                              int lifeTime,float vg) {
         this.x = x;
         this.y = y;
         this.radius = radius;
@@ -37,7 +37,7 @@ public class tri_ParticleSingle {
         isDead = false;
         this.vx = vx;
         this.vy = vy;
-        vg = tri_ParticleData.vg[vgType];
+        this.vg = vg;
         tri = new Obj2DTriangle(x,y,radius,
                                 a,r,g,b,
                                 0,1,
@@ -46,7 +46,7 @@ public class tri_ParticleSingle {
     //go是直接操作xyz信息还是直接进行矩阵变换的呢
     public void go(float lifeSpanStep) {
         if(!isDead) {
-            if(vy>0) vy = vy+vg*lifeSpanStep;        //添加重力因子的影响
+            if(vg>0) vy = vy+vg*lifeSpanStep;        //添加重力因子的影响
             x = x + vx*lifeSpanStep;        //setXY
             y = y + vy*lifeSpanStep;
             tri.xAngle += AngleSpan;

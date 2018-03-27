@@ -94,18 +94,21 @@ public class MainSlide{
 
             if(state==0) {
                 state = 1;
-                WelcomeActivity.sound.playGameMusic(SoundManager.PIANO_PITCH[Pitch],0);
+                if(WelcomeActivity.sound!=null) {
+                    WelcomeActivity.sound.playGameMusic(SoundManager.PIANO_PITCH[Pitch], 0);
+                }
                 //sound的初始化处于WelcomeActivity中 因此需要提前调用WelcomeActivity
                 synchronized (GameData.lock) {
-                    GameData.GameScore += 5;
+                    GameData.GameScore += GameData.slideT1score;
                 }
                 return true;
             }
         } else if(type==2) {                    //对于type==2的长滑块类型
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    if(SFUtil.isin(eX,eY,new Area(X,Y,Width,Height)))
+                    if(SFUtil.isin(eX,eY,new Area(X,Y,Width,Height))) {
                         onTouchDown(event);
+                    }
                     break;
                 case MotionEvent.ACTION_UP:
                     onTouchUp(event);
@@ -124,7 +127,12 @@ public class MainSlide{
         pressCurY = Constant.fromRealScreenYToStandardScreenY(pressCurY);
 
         if(state == 0 && pressCurY>=Y+Height*2/3) {
-            WelcomeActivity.sound.playGameMusic(SoundManager.PIANO_PITCH[Pitch+7],0);      //此处播放长音
+            if(WelcomeActivity.sound!=null) {
+                WelcomeActivity.sound.playGameMusic(SoundManager.PIANO_PITCH[Pitch + 7], 0);      //此处播放长音
+            }
+            synchronized (GameData.lock) {
+                GameData.GameScore += GameData.slideT2score;
+            }
             state = 1;
         }
         if(touchMode!=2 && state==1) touchMode = 1;

@@ -5,13 +5,14 @@ import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.MySurfaceView;
 import com.example.daxinli.tempmusic.constant.GameData;
-import com.example.daxinli.tempmusic.object.Obj2DRectangle;
 import com.example.daxinli.tempmusic.object.MainSlide;
+import com.example.daxinli.tempmusic.object.Obj2DRectangle;
 import com.example.daxinli.tempmusic.thread.ActionThread;
 import com.example.daxinli.tempmusic.thread.CreateSlideThread;
 import com.example.daxinli.tempmusic.thread.MainSlideThread;
-import com.example.daxinli.tempmusic.util.DrawUtil;
+import com.example.daxinli.tempmusic.util.LogUtil;
 import com.example.daxinli.tempmusic.util.SFUtil;
+import com.example.daxinli.tempmusic.util.effect.ElseEffect.DrawScore;
 import com.example.daxinli.tempmusic.util.elseUtil.Area;
 import com.example.daxinli.tempmusic.util.manager.ShaderManager;
 import com.example.daxinli.tempmusic.util.manager.TextureManager;
@@ -38,9 +39,15 @@ public class GameView extends BaseView {
         List<Obj2DRectangle> viewlist=new ArrayList<Obj2DRectangle>();
         ArrayList<MainSlide> tmpSlide = new ArrayList<MainSlide>();
         public static ArrayList<MainSlide> mainSlideArrayList = new ArrayList<MainSlide>();     //声明为全局可用的静态变量
+
+        DrawScore scoreDraw;
+
         boolean initFlag = false;
         public static boolean isGameOver = false;
         boolean isThClose = false;
+
+
+        long lastTime=0;
 
         public GameView(MySurfaceView father) {
             this.father = father;
@@ -52,7 +59,9 @@ public class GameView extends BaseView {
         public void initView() {
             //设置Area
             GameData.area_btn_pause = new Area(960,20,120,120);
-            GameData.area_pic_rheart = new Area(0,20,120,120);
+            //GameData.area_pic_rheart = new Area(0,20,120,120);
+
+            scoreDraw = new DrawScore();
 
             //初始化纹理
             TextureManager.loadingTexture(father,0,14);           //加载游戏界面相关图片
@@ -61,9 +70,9 @@ public class GameView extends BaseView {
             GameData.area_btn_pause = ar;
             viewlist.add(new Obj2DRectangle(ar.x,ar.y,ar.width,ar.height
                     ,TextureManager.getTextures("btn_pause_g.png"), ShaderManager.getShader(2)));
-            ar = GameData.area_pic_rheart;
-            viewlist.add(new Obj2DRectangle(ar.x,ar.y,ar.width,ar.height
-                    ,TextureManager.getTextures("pic_rheart_g.png"), ShaderManager.getShader(2)));
+            //ar = GameData.area_pic_rheart;
+            //viewlist.add(new Obj2DRectangle(ar.x,ar.y,ar.width,ar.height
+            //       ,TextureManager.getTextures("pic_rheart_g.png"), ShaderManager.getShader(2)));
 
             initFlag = true;
         }
@@ -108,6 +117,7 @@ public class GameView extends BaseView {
         }
         @Override
         public boolean onTouchEvent(MotionEvent e) {                //需要将返回值设为true 否则不能继续触发move以及up函数
+            //long lastTime = System.currentTimeMillis();
             //对触摸事件进行检查 首先为otherView的控件 其次为滑块
             float x = e.getX();
             float y = e.getY();
@@ -135,7 +145,9 @@ public class GameView extends BaseView {
                 synchronized (GameView.lock) {
                     for(MainSlide slide:mainSlideArrayList) {
                         if(slide.state==0) {
-                            slide.onTouchEvent(tmpe);
+                            if(slide.onTouchEvent(tmpe)) {
+                                scoreDraw.runAnim();
+                            }
                             break;
                         } else if(slide.type!=1) {                     //如果最下方是长滑块的话还应该对触摸事件进行相应
                             slide.onTouchEvent(tmpe);
@@ -148,6 +160,9 @@ public class GameView extends BaseView {
 
         @Override
         public void drawView(GL10 gl) {
+            long nowTime = System.currentTimeMillis();
+            LogUtil.e(TAG,Long.toString(nowTime-lastTime));
+            lastTime = nowTime;
             if(!initFlag) {
                 initView();
                 initFlag = true;
@@ -172,15 +187,12 @@ public class GameView extends BaseView {
                 tmpSlide.get(i).drawSelf();
             }
             //view参数固定不动的不需要再次进行重建 应该直接在initView中计算保存在viewlist中
-            String str_score = Integer.toString(GameData.GameScore);
-            int length = str_score.length();
-            float loadX = (GameData.STANDARD_WIDTH-length*GameData.num_W)/2;
-            DrawUtil.drawNumber(loadX,20,(float)GameData.num_W,(float)GameData.num_H,GameData.GameScore);
-            if(viewlist.size()>0) {
-                for(Obj2DRectangle obj:viewlist) {
-                    obj.drawSelf();
-                }
-            }
+            scoreDraw.drawSelf(GameData.GameScore);
+            //if(viewlist.size()>0) {
+            //    for(Obj2DRectangle obj:viewlist) {
+            //        obj.drawSelf();
+            //    }
+            //}
             //在drawView之前进行检查是否已经gameOver   
             // TODO: 2018/3/22 此处延迟一帧
             if(isGameOver) {
@@ -191,4 +203,3 @@ public class GameView extends BaseView {
         }
 
 }
-

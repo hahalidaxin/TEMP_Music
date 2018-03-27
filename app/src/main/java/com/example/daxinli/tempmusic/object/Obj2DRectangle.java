@@ -38,6 +38,7 @@ public class Obj2DRectangle
     boolean initFlag=false;
     float x;
 	float y;
+	float xAngle = 0.0f;
 	boolean isLoad=false;
 	boolean isPure = false;
 
@@ -207,7 +208,7 @@ public class Obj2DRectangle
 		if(spng==1){
 			MatrixState2D.rotate(AngleSpng, 0, 0, 1);
 		}
-		if(spng==2){
+		if(spng==2){		//spng angle2D对于2d图形进行旋转
 			MatrixState2D.rotate(Angle2D, 0, 0, 1);
 		}
 		if(spng==3){
@@ -272,5 +273,9 @@ public class Obj2DRectangle
     	MatrixState2D.popMatrix();
     	GLES30.glDisable(GLES30.GL_BLEND);
     	
+	}
+	public void setRotate2D(int spng,float Angle2D) {
+		this.spng = spng;
+		this.Angle2D = Angle2D;
 	}
 }

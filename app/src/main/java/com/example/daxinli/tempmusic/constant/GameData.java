@@ -58,6 +58,8 @@ public class GameData {
     public static final float[] SlideHeight = {0,480,960,1440,1536};    //不同类型的滑块的默认长度
     public static long gamepauseTime;               //游戏的暂停时间用来保持createSlideTh的节奏
     public static long gamerestartTime;
+    public static int slideT1score = 2;             //点击小滑块获得的分数
+    public static int slideT2score = 4;             //点击长滑块获得的分数
 
     //-------------游戏工具类数据存储
     public static final int initgamerHealth=2;
