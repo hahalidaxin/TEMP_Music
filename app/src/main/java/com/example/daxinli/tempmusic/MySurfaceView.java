@@ -84,8 +84,8 @@ public class MySurfaceView extends GLSurfaceView {
             if(curView == null)  {
                 gameView = new GameView(MySurfaceView.this);
                 gameoverView = new GameoverView(MySurfaceView.this);
-                effView = new EffectView();
-                curView = effView;
+                effView = new EffectView(MySurfaceView.this);
+                curView = gameView;
                 GameData.viewState = GameData.Game_playing;             //设置游戏界面的View号
             }
             curView.drawView(gl);

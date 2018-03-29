@@ -1,13 +1,12 @@
 package com.example.daxinli.tempmusic.object;
 
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.constant.GameData;
-import com.example.daxinli.tempmusic.musicTouch.GameActivity;
 import com.example.daxinli.tempmusic.musicTouch.WelcomeActivity;
 import com.example.daxinli.tempmusic.util.DrawUtil;
 import com.example.daxinli.tempmusic.util.SFUtil;
+import com.example.daxinli.tempmusic.util.effect.ElseEffect.DrawScore;
 import com.example.daxinli.tempmusic.util.elseUtil.Area;
 import com.example.daxinli.tempmusic.util.manager.SoundManager;
 import com.example.daxinli.tempmusic.util.screenscale.Constant;
@@ -34,7 +33,9 @@ public class MainSlide{
     private int touchMode;         //用户触摸状态 0-没有触摸过 1-触摸按下状态 2-触摸过已经抬起
     private float pressCurX;        //长时间按压时需要用的DOWN时候的XY坐标
     private float pressCurY;
-    GameActivity mainActivity;
+    private DrawScore scoredraw;
+
+    int plusScoreTimes;
 
     public MainSlide(float X, float Y, float Width, float Height, int Pitch, int type, String Instru) {
         this.X=X;
@@ -44,15 +45,16 @@ public class MainSlide{
         this.Pitch=Pitch;
         this.Instru=Instru;
         this.type=type;
-        this.speed= GameData.baseHeight/GameData.spanRK[GameData.GameRK];
+        this.speed= GameData.gameSpeed[GameData.GameRK]*GameData.MainSlideTHSpan;
         this.state = 0;
 
         this.ls_minY = Y+Height;
         this.touchMode = 0;
+        this.plusScoreTimes = 1;
     }
     public void go() {                                          //滑块进行下滑
-        this.Y += GameData.gameSpeed[GameData.GameRK]*GameData.MainSlideTHSpan;
-        this.ls_minY += GameData.gameSpeed[GameData.GameRK]*GameData.MainSlideTHSpan;
+        this.Y += this.speed; //GameData.gameSpeed[GameData.GameRK]*GameData.MainSlideTHSpan;
+        this.ls_minY += this.speed; //GameData.gameSpeed[GameData.GameRK]*GameData.MainSlideTHSpan;
         //根据游戏难度决定每sleepSpan时间内滑块下落的高度
     }
 
@@ -73,6 +75,15 @@ public class MainSlide{
                 } else
                 {
                     if(touchMode == 1 && state == 1) ls_minY = Math.max(Y, Math.min(ls_minY,pressCurY));
+                    if(ls_minY-Y<=5 && ls_minY-Y>=0 && plusScoreTimes>0) {       //当一直触摸到长滑块尾部的时候才会算作加分
+                        synchronized (GameData.lock) {
+                            GameData.GameScore += GameData.slideT2score;
+                        }
+                        //一个丑陋的触发score动画的方法
+                        // TODO: 2018/3/28  以后需要该一下这个丑陋的方法
+                        this.scoredraw.runAnim();
+                        plusScoreTimes--;
+                    }
                     DrawUtil.drawLongSlide(X,Y,Width,Height);
                     float finalY = Math.max(Y,ls_minY-20);
                     DrawUtil.drawLongSlideEffect(X,finalY,Width,Height-(finalY-Y));
@@ -98,8 +109,11 @@ public class MainSlide{
                     WelcomeActivity.sound.playGameMusic(SoundManager.PIANO_PITCH[Pitch], 0);
                 }
                 //sound的初始化处于WelcomeActivity中 因此需要提前调用WelcomeActivity
-                synchronized (GameData.lock) {
-                    GameData.GameScore += GameData.slideT1score;
+                if(plusScoreTimes>0) {
+                    synchronized (GameData.lock) {
+                        GameData.GameScore += GameData.slideT1score;
+                    }
+                    plusScoreTimes--;
                 }
                 return true;
             }
@@ -130,9 +144,6 @@ public class MainSlide{
             if(WelcomeActivity.sound!=null) {
                 WelcomeActivity.sound.playGameMusic(SoundManager.PIANO_PITCH[Pitch + 7], 0);      //此处播放长音
             }
-            synchronized (GameData.lock) {
-                GameData.GameScore += GameData.slideT2score;
-            }
             state = 1;
         }
         if(touchMode!=2 && state==1) touchMode = 1;
@@ -148,7 +159,11 @@ public class MainSlide{
     public void onTouchUp(MotionEvent event) {
         if(touchMode==1 && state==1) touchMode = 2;
         //如果触摸抬起 则触摸结束
-        Log.e(TAG, "onTouchUp: '");
     }
-
+    public boolean getIsGetScore() {        //获取滑块是否已经得到分数
+        return plusScoreTimes==0;
+    }
+    public void getScoreDraw(DrawScore scoredraw) {
+        this.scoredraw = scoredraw;
+    }
 }

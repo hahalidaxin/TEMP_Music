@@ -1,8 +1,9 @@
-package com.example.daxinli.tempmusic.object;
+package com.example.daxinli.tempmusic.util.effect.RedHeart;
 
 import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.constant.GameData;
+import com.example.daxinli.tempmusic.object.Obj2DRectangle;
 import com.example.daxinli.tempmusic.util.DrawUtil;
 import com.example.daxinli.tempmusic.util.SFUtil;
 import com.example.daxinli.tempmusic.util.elseUtil.Area;
@@ -17,9 +18,9 @@ import com.example.daxinli.tempmusic.util.screenscale.Constant;
  */
 
 public class RedHeart {
-    static final int stateTimeLimit = 10;       //静止时redheart停止的帧数
+    static final int stateTimeLimit = 30;       //静止时redheart停止的帧数
 
-    static final float speed2 = 20.0f;          //被点击后移动的速度
+    static final float speed2 = 5.0f;          //被点击后移动的速度
     static final float jianshaowidth = 80.0f;   //被点击后减小的大小
     static final float jianshaoheight = 80.0f;
     static final float AngleSpan = 3.5f;        //点击后红心的旋转角度
@@ -34,6 +35,7 @@ public class RedHeart {
     float xAngle;
     int state,state3Time;               //生命周期有三个阶段：1随着下落阶段 2被点击飞走阶段 3落到指定位置显示生命值阶段
     boolean isDead;
+    boolean isDrawable ;                //在创建动画结束后 设置为!isDrawable
     Obj2DRectangle objRedHeart;
 
 
@@ -69,7 +71,7 @@ public class RedHeart {
     }
     public void drawSelf() {
         if(!isDead) {
-            go();                       //每次绘制都会进行位置的改变
+            //go();                       //每次绘制都会进行位置的改变
             if(state==3) {
                 //绘制生命值数字
                 DrawUtil.drawNumber(targetX+width,targetY,GameData.num_W,GameData.num_H,GameData.gamerHealth);
@@ -93,6 +95,9 @@ public class RedHeart {
                 float pressX = Constant.fromRealScreenXToStandardScreenX(e.getX());
                 float pressY = Constant.fromRealScreenYToStandardScreenY(e.getY());
                 if(SFUtil.isin(pressX,pressY,new Area(x,y,width,height))) {
+                    synchronized (GameData.lock) {
+                        GameData.gamerHealth ++;
+                    }
                     runAnim();
                 }
                 break;
@@ -107,5 +112,14 @@ public class RedHeart {
         int length = str_gamerHealth.length();
         this.targetX = GameData.STANDARD_WIDTH-GameData.num_W*length-width-20;
         this.targetY = 20;
+    }
+    public void showHealth() {      //单独在右上角显示一下生命值
+        //绘制中自动对三阶段进行计时
+        isDead = false;
+        isDrawable = true;
+        state3Time = 0;
+    }
+    public boolean getIsDead() {
+        return isDead;
     }
 }

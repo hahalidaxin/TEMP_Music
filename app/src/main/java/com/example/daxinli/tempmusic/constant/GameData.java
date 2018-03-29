@@ -49,7 +49,7 @@ public class GameData {
     public static Queue<Action> aq=new LinkedList<Action>();         //动作队列ActionQueue
     public static int GameRK = 0;                                   //游戏难度
     public static final int [] spanRK={3000,2000,1500};            //不同游戏难度对应的时长
-    public static final float [] gameSpeed = {0.64f,0.96f,1.28f};                  //不同游戏难度对应的速度
+    public static final float [] gameSpeed = {1.0f,1.28f,1.5f};                  //不同游戏难度对应的速度
     public static StringBuffer mainMusicScore;                   //游戏的乐谱信息
     public static String fileMusicScoreName;    //乐谱的文件名
     public static String MusicName;             //乐曲名称
@@ -60,9 +60,11 @@ public class GameData {
     public static long gamerestartTime;
     public static int slideT1score = 2;             //点击小滑块获得的分数
     public static int slideT2score = 4;             //点击长滑块获得的分数
+    public static int sleepSpanPerDiff = 4000;      //各难度之间需要休眠的时间
+    public static long refreshFrameTime ;                   //GameView刷新一帧需要的时间
 
     //-------------游戏工具类数据存储
-    public static final int initgamerHealth=2;
+    public static final int initgamerHealth=1;
     public static int GameScore=0;                        //游戏分数
     public static int gamerHealth=initgamerHealth;                      //玩家生命值
 
@@ -76,4 +78,6 @@ public class GameData {
     public static int num_H = 128;
     public static int btnExit_W = 640;
     public static int btnExit_H = 176;
+    public static float redHeart_W = 250;
+    public static float redHeart_H = 250;
 }

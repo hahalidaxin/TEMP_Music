@@ -3,6 +3,7 @@ package com.example.daxinli.tempmusic.thread;
 
 import com.example.daxinli.tempmusic.constant.GameData;
 import com.example.daxinli.tempmusic.object.MainSlide;
+import com.example.daxinli.tempmusic.util.effect.RedHeart.RedHeart;
 import com.example.daxinli.tempmusic.util.elseUtil.item;
 import com.example.daxinli.tempmusic.view.GameView;
 
@@ -32,13 +33,16 @@ public class CreateSlideThread extends Thread {
     private boolean flag=true;
     private long attachSpan = 0;        //因暂停原因产生的需要补上的睡眠时间
 
+    public int state;               //曲子播放的状态
+    private GameView gameView;
+    int randomInitRedHeartTime;
 
-    public CreateSlideThread() {
+    public CreateSlideThread(GameView gameView) {
+        this.gameView = gameView;
         this.setName("CreateSlideThread");
         attachSpan = 0;
         pause = false;
         flag = true;
-        random = new Random();
     }
 
     @Override
@@ -73,9 +77,13 @@ public class CreateSlideThread extends Thread {
                             currentPitch=0;
                             currentTime=-1;
                         }
-                        //休眠2s 形成空屏的效果
+                        //此处一次播放完成
+                        state++;
+                        //休眠形成空屏效果
                         try {
-                            Thread.sleep(2000);
+                            Thread.sleep(GameData.sleepSpanPerDiff-1000);
+                            broadCastSwitchBG();
+                            Thread.sleep(1000);
                         } catch(InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -83,6 +91,16 @@ public class CreateSlideThread extends Thread {
                     MsPitchInfo = MsArray[currentPitch].split(" ");                     //获得此音节的音节信息
                     thisPitch = new item(Integer.parseInt(MsPitchInfo[0]), Integer.parseInt(MsPitchInfo[1])
                             , Integer.parseInt(MsPitchInfo[2]));
+                }
+                //红心的init初始设定
+                if(loopTimes==2 && currentTime==randomInitRedHeartTime) {
+                    int col;
+                    while((col=random.nextInt(4))==lastRandomInt) {}
+                    float speed = GameData.gameSpeed[GameData.GameRK]*GameData.MainSlideTHSpan;
+                    synchronized (gameView.lock) {
+                        gameView.redHeart = new RedHeart(col * baseSlideWidth + (GameData.baseSlideWidth-GameData.redHeart_W)/2, -GameData.redHeart_H,
+                                GameData.redHeart_W, GameData.redHeart_H, speed);
+                    }
                 }
 
                 long end= System.currentTimeMillis();
@@ -118,6 +136,7 @@ public class CreateSlideThread extends Thread {
             speedRK = GameData.gameSpeed[GameData.GameRK];                                       //当前游戏难度的游戏速度
             baseHight = GameData.STANDARD_HIEGHT;
         }
+        state = 0;
         MusicScore=tmpBuffer.toString();
         MsArray=MusicScore.split("#");
         currentTime=-1;currentPitch=0;loopTimes=0;
@@ -128,6 +147,7 @@ public class CreateSlideThread extends Thread {
                 , Integer.parseInt(MsPitchInfo[2]));
 
         lastSlideHeight = baseSlideHeight;
+        randomInitRedHeartTime = 5;//5+random.nextInt(MsArray.length-5);
     }
 
     public void Pause() { this.pause = true; }
@@ -137,5 +157,11 @@ public class CreateSlideThread extends Thread {
         if(pause) GameData.gamerestartTime = System.currentTimeMillis();
         else GameData.gamepauseTime = System.currentTimeMillis();
         this.pause = !this.pause;
+    }
+    public void broadCastSwitchBG() {
+        GameView.isSwitchBG = true;
+    }
+    public void broadCastRedHeart() {
+
     }
 }
