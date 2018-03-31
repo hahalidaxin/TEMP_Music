@@ -23,7 +23,6 @@ public class CreateSlideThread extends Thread {
     private Random random=new Random();
 
     public float createSpan;
-    private float lastSlideHeight;
     private float baseSlideHeight,baseSlideWidth,baseHight,speedRK;                    //需要获取的GameData中的数据
     private int lastRandomInt=0;
     private int curRandomInt;
@@ -40,14 +39,11 @@ public class CreateSlideThread extends Thread {
     public CreateSlideThread(GameView gameView) {
         this.gameView = gameView;
         this.setName("CreateSlideThread");
-        attachSpan = 0;
-        pause = false;
-        flag = true;
     }
 
     @Override
     public void run() {
-        init();
+        initData();
         while(flag) {                                                   //createSpan应该根据上一个滑块的长度来计算
             if(!pause) {
                 //补足时间
@@ -66,21 +62,28 @@ public class CreateSlideThread extends Thread {
                     createNewSlide(thisPitch);
                     if((++currentPitch)==endPitch) {
                         //如果音乐循环结束
-                        if((++loopTimes)<3) {
+                        if((++loopTimes)<4) {
                             currentPitch = 0;               //重新返回第一个音
                             currentTime = -1;
                             synchronized(GameData.lock) {   //游戏难度提升
-                                speedRK=GameData.gameSpeed[++GameData.GameRK];
+                                if(GameData.GameRK<GameData.gameSpeed.length-1)
+                                    speedRK=GameData.gameSpeed[++GameData.GameRK];
                             }
                         } else {
-                            // TODO: 2018/3/1 游戏胜利的处理
-                            currentPitch=0;
-                            currentTime=-1;
+                            try {
+                                Thread.sleep(GameData.sleepSpanPerDiff);
+                            } catch(InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            broadCastGameVictory();
+                            return ;
                         }
                         //此处一次播放完成
                         state++;
                         //休眠形成空屏效果
                         try {
+                            Thread.sleep(2000);
+                            broadCastShowFirework();
                             Thread.sleep(GameData.sleepSpanPerDiff-1000);
                             broadCastSwitchBG();
                             Thread.sleep(1000);
@@ -93,7 +96,7 @@ public class CreateSlideThread extends Thread {
                             , Integer.parseInt(MsPitchInfo[2]));
                 }
                 //红心的init初始设定
-                if(loopTimes==2 && currentTime==randomInitRedHeartTime) {
+                if(loopTimes>=1 && currentTime==randomInitRedHeartTime) {
                     int col;
                     while((col=random.nextInt(4))==lastRandomInt) {}
                     float speed = GameData.gameSpeed[GameData.GameRK]*GameData.MainSlideTHSpan;
@@ -126,16 +129,20 @@ public class CreateSlideThread extends Thread {
         synchronized (GameView.lock) {
             GameView.mainSlideArrayList.add(slide);
         }
-        lastSlideHeight = GameData.SlideHeight[tp.span];       //获得上一个滑块的长度
     }
-    public void init() {
+    public void initData() {
         synchronized (GameData.lock) {                                              //同步GameData中的游戏数据
             tmpBuffer = new StringBuffer(GameData.mainMusicScore.toString());
             baseSlideHeight = GameData.baseSlideHeight;
             baseSlideWidth = GameData.baseSlideWidth;
+            if(GameData.GameRK!=0) GameData.GameRK = 0;
             speedRK = GameData.gameSpeed[GameData.GameRK];                                       //当前游戏难度的游戏速度
             baseHight = GameData.STANDARD_HIEGHT;
+
         }
+        attachSpan = 0;
+        pause = false;
+        flag = true;
         state = 0;
         MusicScore=tmpBuffer.toString();
         MsArray=MusicScore.split("#");
@@ -146,22 +153,16 @@ public class CreateSlideThread extends Thread {
         thisPitch=new item(Integer.parseInt(MsPitchInfo[0]), Integer.parseInt(MsPitchInfo[1])
                 , Integer.parseInt(MsPitchInfo[2]));
 
-        lastSlideHeight = baseSlideHeight;
-        randomInitRedHeartTime = 5;//5+random.nextInt(MsArray.length-5);
+        randomInitRedHeartTime = 5+random.nextInt(MsArray.length-5);
     }
 
-    public void Pause() { this.pause = true; }
-    public void Resume() { this.pause = false; }
-    public void setFlag(boolean flag) { this.flag = flag ;}
+    public void setFlag(boolean flag) { this.flag = flag ; }
     public void turnPause() {
         if(pause) GameData.gamerestartTime = System.currentTimeMillis();
         else GameData.gamepauseTime = System.currentTimeMillis();
         this.pause = !this.pause;
     }
-    public void broadCastSwitchBG() {
-        GameView.isSwitchBG = true;
-    }
-    public void broadCastRedHeart() {
-
-    }
+    public void broadCastSwitchBG() { GameView.Message = 2; }
+    public void broadCastShowFirework() { GameView.Message = 1; }
+    public void broadCastGameVictory() { GameView.Message = 5; }
 }

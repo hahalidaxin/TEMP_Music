@@ -25,7 +25,7 @@ public class EffectView extends BaseView {
     }
     @Override
     public void initView() {
-        trisys = new tri_ParticleSystem(1);
+        trisys = new tri_ParticleSystem(1,540,1000);
         redheart = new RedHeart(0,0,250,250,10f);
         background = new Background();
         TextureManager.loadingTexture(mv,0,18);
@@ -48,14 +48,6 @@ public class EffectView extends BaseView {
             initView();
             initFlag = true;
         }
-        //DrawUtil.drawNumber(200,20,(float) GameData.num_W,(float)GameData.num_H,GameData.GameScore);
-
-        //Obj2DTriangle tri = new Obj2DTriangle(540f,1800f,50f,
-        //                                                    1f,0f,0f,0f,
-        //                                                        0f,1f, ShaderManager.getShader(6));
-        //tri.drawSelf();
-        //trisys.drawSelf();
-        //redheart.drawSelf();
         background.drawSelf();
     }
 }

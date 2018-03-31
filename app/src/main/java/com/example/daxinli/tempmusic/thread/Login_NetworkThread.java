@@ -27,12 +27,12 @@ public class Login_NetworkThread extends Thread {
     private Activity father;
 
     public Login_NetworkThread() {
-        this.flag = true;
-        this.pause = false;
     }
 
     @Override
     public void run() {
+        this.flag = true;
+        this.pause = false;
         try {
             s = new Socket();
             s.connect(new InetSocketAddress(GameData.serverIP,GameData.sertVerPort),10000);

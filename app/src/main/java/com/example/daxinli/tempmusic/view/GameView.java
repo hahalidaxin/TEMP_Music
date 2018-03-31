@@ -1,6 +1,5 @@
 package com.example.daxinli.tempmusic.view;
 
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.MySurfaceView;
@@ -14,6 +13,7 @@ import com.example.daxinli.tempmusic.thread.MainSlideThread;
 import com.example.daxinli.tempmusic.util.SFUtil;
 import com.example.daxinli.tempmusic.util.effect.ElseEffect.DrawScore;
 import com.example.daxinli.tempmusic.util.effect.RedHeart.RedHeart;
+import com.example.daxinli.tempmusic.util.effect.TriangleFirework.tri_ParticleSystem;
 import com.example.daxinli.tempmusic.util.elseUtil.Area;
 import com.example.daxinli.tempmusic.util.manager.ShaderManager;
 import com.example.daxinli.tempmusic.util.manager.TextureManager;
@@ -21,6 +21,7 @@ import com.example.daxinli.tempmusic.util.screenscale.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -43,12 +44,13 @@ public class GameView extends BaseView {
 
         DrawScore scoreDraw;
         public static RedHeart redHeart;            //暴露出来 需要在MainSlideTH中进行更新
+        public static RedHeart redHeartShowHealth;
         public Background background ;
+        public tri_ParticleSystem trisys;
+        Random random = new Random();
 
         boolean initFlag = false;
-        public static boolean isGameOver = false;
-        public static boolean isSwitchBG = false;
-        public static boolean showHealth = false;
+        public static int Message;          //
         boolean isThClose = false;
 
 
@@ -56,15 +58,14 @@ public class GameView extends BaseView {
 
         public GameView(MySurfaceView father) {
             this.father = father;
-            initThread();
             initView();
+            initThread();
         }
 
         @Override
         public void initView() {
             //设置Area
-            GameData.area_btn_pause = new Area(960,20,120,120);
-            //GameData.area_pic_rheart = new Area(0,20,120,120);
+            GameData.area_btn_pause = new Area(0,0,120,120);
             //初始化纹理
             TextureManager.loadingTexture(father,0,18);           //加载游戏界面相关图片
             scoreDraw = new DrawScore();
@@ -84,15 +85,12 @@ public class GameView extends BaseView {
             mainSlideArrayList.clear();
             redHeart = null;
             background = new Background();
-            isGameOver = false;
-            isSwitchBG = false;
-            showHealth = false;
+            trisys = null;
+            Message = 0;
             GameData.aq.clear();
             GameData.GameScore = 0;
             GameData.GameRK = 0;
             GameData.gamerHealth  = GameData.initgamerHealth;
-
-            isGameOver = false;
         }
         private void initThread() {     //开启游戏线程
             createSlideThread = new CreateSlideThread(this);
@@ -114,13 +112,16 @@ public class GameView extends BaseView {
             mainSlideThread.turnPause();
         }
         public void turnToView(int x) {
+            //关闭所有线程
+            closeThread();
+            isThClose = true;           //设置线程关闭位
             switch(x) {
                 case 1:
-                    //关闭所有线程
-                    closeThread();
-                    isThClose = true;           //设置线程关闭位
                     //将主界面设置为gameoverView
                     MySurfaceView.curView = MySurfaceView.gameoverView;
+                    break;
+                case 2:
+                    MySurfaceView.curView = MySurfaceView.gameVictoryView;
                     break;
             }
         }
@@ -183,18 +184,42 @@ public class GameView extends BaseView {
                 initGameData();
                 isThClose = false;
             }
-            if(isSwitchBG) {
-                background.switchBG();
-                isSwitchBG = false;
-            }
-            if(showHealth) {
-                if(redHeart!=null)  redHeart.showHealth();
-                showHealth = false;
+
+            switch(Message) {
+                case 0:
+                    break;
+                case 1:
+                    //播放烟花特效
+                    int randomInt = random.nextInt(2)+1;
+                    trisys = new tri_ParticleSystem(randomInt,540,1800);
+                    Message = 0;
+                    break;
+                case 2:
+                    //切换游戏背景
+                    background.switchBG();
+                    Message = 0;
+                    break;
+                case 4:
+                    //显示生命值
+                    if(redHeartShowHealth==null) redHeartShowHealth = new RedHeart(GameData.redHeart_W,GameData.redHeart_H);
+                    else if(redHeartShowHealth.getIsDead()) { redHeartShowHealth.restart(); }
+                    Message = 0;
+                    break;
+                case 5:
+                    //游戏胜利
+                    turnToView(2);
+                    break;
             }
 
             //游戏背景类
             background.drawSelf();
-
+            if(trisys!=null) {
+                if(trisys.isSysEnd()) {
+                    trisys = null;
+                } else{
+                    trisys.drawSelf();
+                }
+            }
             tmpSlide.clear();
             synchronized (GameView.lock) {
                 for (int i = 0; i < GameView.mainSlideArrayList.size();i++) {
@@ -209,20 +234,23 @@ public class GameView extends BaseView {
             if(redHeart!=null && !redHeart.getIsDead()) {
                 redHeart.drawSelf();
             }
-
-            // TODO: 2018/3/22 此处延迟一帧
-            if(isGameOver) {
-                isGameOver = false;
-                turnToView(1);
-                return ;
+            if(redHeartShowHealth!=null && !redHeartShowHealth.getIsDead()) {
+                redHeartShowHealth.drawSelf();
             }
-
-            //if(GameData.refreshFrameTime==0)  {
+            for(int i=0;i<viewlist.size();i++) {
+                viewlist.get(i).drawSelf();
+            }
                 synchronized (GameData.lock) {
                     GameData.refreshFrameTime = System.currentTimeMillis()-begin;
                 }
-            Log.e(TAG, Long.toString(GameData.refreshFrameTime));
-            //}
+            // TODO: 2018/3/29 这里可以添加一部分的保留措施
+            //游戏结束时保留最后一帧 这样不会显得太突兀
+            if(Message == 3) {
+                //游戏结束
+                turnToView(1);
+                Message = 0;
+                return;
+            }
         }
 
 }

@@ -66,6 +66,7 @@ public class ScreenScaleUtil {
                 result = new ScreenScaleResult((int) lcuX, (int) lcuY, ratio, so);
             }
         }
+        //result = new ScreenScaleResult (0,0,1, ScreenOrien.SP);
         return result ;
         /*
         //此处使用等比例缩放并剪裁的方案

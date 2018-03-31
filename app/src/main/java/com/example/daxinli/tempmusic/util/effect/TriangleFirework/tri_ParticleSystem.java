@@ -28,11 +28,11 @@ public class tri_ParticleSystem {
     int particleType = 1;
     Random random = new Random();
     boolean isEnd = false;
-    public tri_ParticleSystem(int particleType) {       //粒子系统的类型
+    public tri_ParticleSystem(int particleType,float startX,float startY) {       //粒子系统的类型
         this.particleType = particleType;
-        initData();
+        initData(startX,startY);
     }
-    public void initData() {
+    public void initData(float X,float Y) {
         //第一个三角形粒子
         tris = new ArrayList<tri_ParticleSingle>();           //初始化粒子数组
         int c = random.nextInt(tri_ParticleData.triColor.length);
@@ -41,7 +41,7 @@ public class tri_ParticleSystem {
         float vx = 0 * tri_ParticleData.moveSpan[3];
         float vy = -1 * tri_ParticleData.moveSpan[3];
         tris.add(new tri_ParticleSingle(
-                540,1800,100,
+                X,Y,100,
                 vx,vy,
                 a,r,g,b,
                 tri_ParticleData.AngleSpan[2],1,
@@ -133,7 +133,6 @@ public class tri_ParticleSystem {
                 tri_ParticleSingle tri = tris.get(i);
                 if(tri==null) break;
                 if(lastTime!=0) tri.go(currentTime-lastTime);
-                Log.e(TAG, Float.toString(tri.vg));
                 tri.drawSelf();
             }
             if(currentTime-beginTime>=lifeTime) {

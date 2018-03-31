@@ -29,6 +29,7 @@ public class RedHeart {
     float targetX = 800.0f;        //最终移动到的位置
     float targetY = 20.0f;
 
+    int AnimType;
     float speed;
     float x,y;
     float width,height;
@@ -39,7 +40,7 @@ public class RedHeart {
     Obj2DRectangle objRedHeart;
 
 
-    public RedHeart(float x,float y,float width,float height,float speed) {
+    public RedHeart(float x,float y,float width,float height,float speed) {     //第一种类型的redHeart 下落动画
         this.x = x;
         this.y = y;
         this.width = width;
@@ -49,52 +50,77 @@ public class RedHeart {
         state3Time = 0;
         xAngle = 0.0f;
         isDead = false;
+        AnimType = 0;
+    }
+    public RedHeart(float width,float height) {         //第二种类型的redheart 仅需要显示生命值的动画
+        AnimType = 1;
+        isDead = false;
+        state3Time = 0;
+        this.x = targetX;
+        this.y = targetY;
+        this.width = width-jianshaowidth;
+        this.height = height-jianshaoheight;
     }
     public void go() {
-        if(state == 1)
-            this.y += speed;
-        else if(state==2) {
-            float dh = this.y-targetY;
-            float dw = this.x-targetX;
-            float costheta = dw / (float)Math.sqrt(dw*dw+dh*dh);
-            float sintheta = dh / (float)Math.sqrt(dw*dw+dh*dh);
-            //进行动画的计算 改变xy
-            this.x-=speed2*costheta;
-            this.y-=speed2*sintheta;
-            this.xAngle += this.AngleSpan;
-            if(SFUtil.distance(this.x,this.y,targetX,targetY)<=disLimit) {
-                this.x = targetX;
-                this.y = targetY;
-                state = 3;
+        if(AnimType == 0) {
+            if(state == 1)
+                this.y += speed;
+            else if(state==2) {
+                float dh = this.y-targetY;
+                float dw = this.x-targetX;
+                float costheta = dw / (float)Math.sqrt(dw*dw+dh*dh);
+                float sintheta = dh / (float)Math.sqrt(dw*dw+dh*dh);
+                //进行动画的计算 改变xy
+                this.x-=speed2*costheta;
+                this.y-=speed2*sintheta;
+                this.xAngle += this.AngleSpan;
+                if(SFUtil.distance(this.x,this.y,targetX,targetY)<=disLimit) {
+                    this.x = targetX;
+                    this.y = targetY;
+                    state = 3;
+                }
             }
         }
     }
     public void drawSelf() {
         if(!isDead) {
-            //go();                       //每次绘制都会进行位置的改变
-            if(state==3) {
-                //绘制生命值数字
+
+            if(AnimType==0) {
+                if(state==3) {
+                    //绘制生命值数字
+                    DrawUtil.drawNumber(targetX+width,targetY,GameData.num_W,GameData.num_H,GameData.gamerHealth);
+                    //计算阶段三的时间
+                    if(++state3Time>stateTimeLimit) {
+                        //声明周期结束
+                        isDead = true;
+                    }
+                }
+                objRedHeart = new Obj2DRectangle(x,y,width,height ,
+                        TextureManager.getTextures("pic_rheart_g.png"), ShaderManager.getShader(2));
+                if(state==2) {      //对红心进行旋转
+                    objRedHeart.setRotate2D(2,xAngle);
+                }
+                objRedHeart.drawSelf();
+            } else if(AnimType==1) {
                 DrawUtil.drawNumber(targetX+width,targetY,GameData.num_W,GameData.num_H,GameData.gamerHealth);
                 //计算阶段三的时间
                 if(++state3Time>stateTimeLimit) {
                     //声明周期结束
                     isDead = true;
                 }
+                objRedHeart = new Obj2DRectangle(x,y,width,height,
+                        TextureManager.getTextures("pic_rheart_g.png"),ShaderManager.getShader(2));
+                objRedHeart.drawSelf();
             }
-            objRedHeart = new Obj2DRectangle(x,y,width,height ,
-                    TextureManager.getTextures("pic_rheart_g.png"), ShaderManager.getShader(2));
-            if(state==2) {      //对红心进行旋转
-                objRedHeart.setRotate2D(2,xAngle);
-            }
-            objRedHeart.drawSelf();
         }
+
     }
     public void onTouch(MotionEvent e) {    //内部处理点击事件
         switch(e.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 float pressX = Constant.fromRealScreenXToStandardScreenX(e.getX());
                 float pressY = Constant.fromRealScreenYToStandardScreenY(e.getY());
-                if(SFUtil.isin(pressX,pressY,new Area(x,y,width,height))) {
+                if(SFUtil.isin(pressX,pressY,new Area(x-5,y-5,width+10,height+10))) {
                     synchronized (GameData.lock) {
                         GameData.gamerHealth ++;
                     }
@@ -113,13 +139,19 @@ public class RedHeart {
         this.targetX = GameData.STANDARD_WIDTH-GameData.num_W*length-width-20;
         this.targetY = 20;
     }
+    /*
     public void showHealth() {      //单独在右上角显示一下生命值
         //绘制中自动对三阶段进行计时
         isDead = false;
         isDrawable = true;
         state3Time = 0;
     }
+    */
     public boolean getIsDead() {
         return isDead;
+    }
+    public void restart() {
+        this.isDead = false;
+        state3Time = 0;
     }
 }

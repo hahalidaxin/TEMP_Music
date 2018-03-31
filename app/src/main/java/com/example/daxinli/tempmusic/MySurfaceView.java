@@ -11,9 +11,10 @@ import com.example.daxinli.tempmusic.constant.GameData;
 import com.example.daxinli.tempmusic.musicTouch.GameActivity;
 import com.example.daxinli.tempmusic.util.manager.ShaderManager;
 import com.example.daxinli.tempmusic.view.BaseView;
+import com.example.daxinli.tempmusic.view.EffectView;
+import com.example.daxinli.tempmusic.view.GameVictoryView;
 import com.example.daxinli.tempmusic.view.GameView;
 import com.example.daxinli.tempmusic.view.GameoverView;
-import com.example.daxinli.tempmusic.view.EffectView;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -24,6 +25,7 @@ public class MySurfaceView extends GLSurfaceView {
     public static GameView gameView;
     public static GameoverView gameoverView;
     public static EffectView effView;
+    public static GameVictoryView gameVictoryView;
 
     private SceneRenderer mRenderer;
 
@@ -40,7 +42,6 @@ public class MySurfaceView extends GLSurfaceView {
         mRenderer = new SceneRenderer();
         setRenderer(mRenderer);
         setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
-
     }
 
     @Override
@@ -85,6 +86,7 @@ public class MySurfaceView extends GLSurfaceView {
                 gameView = new GameView(MySurfaceView.this);
                 gameoverView = new GameoverView(MySurfaceView.this);
                 effView = new EffectView(MySurfaceView.this);
+                gameVictoryView = new GameVictoryView(MySurfaceView.this);
                 curView = gameView;
                 GameData.viewState = GameData.Game_playing;             //设置游戏界面的View号
             }

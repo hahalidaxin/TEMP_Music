@@ -20,7 +20,7 @@ public class GameData {
     public static final String serverIP = "172.20.59.20";
     public static final int sertVerPort = 9999;
     //-----------用户登录相关
-    public static String login_InfoQ = null;                // TODO: 2018/3/20 需要定义在具体的类中 为静态变量 
+    public static String login_InfoQ = null;
     public static String register_infoQ = null;
     //----------设备硬件信息
     public static float baseWidth ;                             //需要获得1
@@ -48,11 +48,10 @@ public class GameData {
 
     public static Queue<Action> aq=new LinkedList<Action>();         //动作队列ActionQueue
     public static int GameRK = 0;                                   //游戏难度
-    public static final int [] spanRK={3000,2000,1500};            //不同游戏难度对应的时长
-    public static final float [] gameSpeed = {1.0f,1.28f,1.5f};                  //不同游戏难度对应的速度
+    public static final float [] gameSpeed = {1.2f,1.5f,2.0f,2.4f};                  //不同游戏难度对应的速度
     public static StringBuffer mainMusicScore;                   //游戏的乐谱信息
-    public static String fileMusicScoreName;    //乐谱的文件名
-    public static String MusicName;             //乐曲名称
+    public static String fileMusicScoreName;                    //乐谱的文件名
+    public static String MusicName;                             //乐曲名称
     public static float baseSlideHeight = STANDARD_HIEGHT/4;       //默认大小方块的高
     public static float baseSlideWidth = STANDARD_WIDTH/4;       //默认大小方块的宽
     public static final float[] SlideHeight = {0,480,960,1440,1536};    //不同类型的滑块的默认长度
@@ -64,7 +63,7 @@ public class GameData {
     public static long refreshFrameTime ;                   //GameView刷新一帧需要的时间
 
     //-------------游戏工具类数据存储
-    public static final int initgamerHealth=1;
+    public static final int initgamerHealth=10;
     public static int GameScore=0;                        //游戏分数
     public static int gamerHealth=initgamerHealth;                      //玩家生命值
 

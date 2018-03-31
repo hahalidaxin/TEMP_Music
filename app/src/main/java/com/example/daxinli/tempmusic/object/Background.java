@@ -31,6 +31,7 @@ public class Background {
     int state;
 
     Obj2DRectangle [] BGS = new Obj2DRectangle[4];      //四种不同的背景
+    int clockTime;
 
     public Background() {
         isDead = false;
@@ -39,12 +40,14 @@ public class Background {
         state = 0;
         baseWidth = GameData.STANDARD_WIDTH;
         baseHeight = GameData.STANDARD_HIEGHT;
+        clockTime = 0;
         for(int i=0;i<4;i++) {
             BGS[i] = new Obj2DRectangle(-100,0,baseWidth+200,baseHeight
                     , TextureManager.getTextures(nameF[i]), ShaderManager.getShader(2));
         }
     }
     public void drawSelf() {
+
         if(!isAnim) {
             BGS[rankBG].drawSelf();
         } else {

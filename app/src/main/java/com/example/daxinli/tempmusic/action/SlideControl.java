@@ -36,11 +36,11 @@ public class SlideControl extends Action {
             if(slide.Y>baseHeight)
                 alTemp.remove(i);
             else {
-                if(slide.Y+slide.Height-baseHeight>slide.Height/4 && slide.state==0) { //当滑块进入1/4算作没有触摸
+                if(slide.state==0 && slide.Y+slide.Height-baseHeight>slide.Height/4) { //当滑块进入1/4算作没有触摸
                     synchronized (GameData.lock) {
                         GameData.gamerHealth-=1;
-                        broadCastShowHealth();      //需要提醒主线程显示生命值
                     }
+                    broadCastShowHealth();      //需要提醒主线程显示生命值
                     slide.state=2;
                 }
             }
@@ -53,13 +53,10 @@ public class SlideControl extends Action {
         }
         if (GameData.gamerHealth <= 0) {           //减去生命值
             synchronized (GameData.lock) {
-                //GameData.viewState = GameData.Game_over;            //处理事件放在MysurfaceView中
                 broadCastGameOver();
             }
         }
     }
-    public void broadCastGameOver() {
-        GameView.isGameOver = true;
-    }
-    public void broadCastShowHealth() { GameView.showHealth = true; }
+    public void broadCastGameOver() {   GameView.Message = 3; }
+    public void broadCastShowHealth() { GameView.Message = 4; }
 }

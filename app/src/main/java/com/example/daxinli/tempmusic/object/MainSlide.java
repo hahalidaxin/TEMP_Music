@@ -29,6 +29,7 @@ public class MainSlide{
     public String Instru;
     public int state;          //滑块的状态 0-正常 1-蓝色按压 2-红色没触摸
 
+    private float baseTouchLimit;
     private float ls_minY;            //对于长的滑块进行触摸状态以及特效的判断
     private int touchMode;         //用户触摸状态 0-没有触摸过 1-触摸按下状态 2-触摸过已经抬起
     private float pressCurX;        //长时间按压时需要用的DOWN时候的XY坐标
@@ -100,7 +101,7 @@ public class MainSlide{
         eX = Constant.fromRealScreenXToStandardScreenX(eX);
         eY = Constant.fromRealScreenYToStandardScreenY(eY);
         if(type==1) {
-            if(!SFUtil.isin(event.getX(),event.getY(),new Area(X,Y,Width,Height)))
+            if(!SFUtil.isin(eX,eY,new Area(X,Y,Width,Height)))
             return false;
 
             if(state==0) {
@@ -140,7 +141,8 @@ public class MainSlide{
         pressCurX = Constant.fromRealScreenXToStandardScreenX(pressCurX);
         pressCurY = Constant.fromRealScreenYToStandardScreenY(pressCurY);
 
-        if(state == 0 && pressCurY>=Y+Height*2/3) {
+        baseTouchLimit = Height*(4-GameData.GameRK)/6;
+        if(state == 0 && pressCurY>=Y+baseTouchLimit) {
             if(WelcomeActivity.sound!=null) {
                 WelcomeActivity.sound.playGameMusic(SoundManager.PIANO_PITCH[Pitch + 7], 0);      //此处播放长音
             }
@@ -152,7 +154,9 @@ public class MainSlide{
     public void onTouchMove(MotionEvent event) {
         if(touchMode==1 && state==1) ls_minY = Math.max(Y,(Math.min(ls_minY,event.getY()))); //最小不能小过Y
         //更新Slide信息
-        if(!SFUtil.isin(event.getX(),event.getY(),new Area(X,Y,Width,Height)))
+        float eX = Constant.fromRealScreenXToStandardScreenX(event.getX());
+        float eY = Constant.fromRealScreenYToStandardScreenY(event.getY());
+        if(!SFUtil.isin(eX,eY,new Area(X,Y,Width,Height)))
             if(touchMode == 1) touchMode = 2;               // 只有touchMode为1的时候才会更新信息
         //如果Move出去 则触摸结束
     }
