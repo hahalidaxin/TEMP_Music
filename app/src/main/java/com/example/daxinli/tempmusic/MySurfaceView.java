@@ -51,15 +51,19 @@ public class MySurfaceView extends GLSurfaceView {
                 //建立View之间的跳转
                 if(curView==gameView) {
                     if(isPause) {           //当前游戏是否为暂停
+                        gameView.sorPThread();
+                        this.isPause = !this.isPause;
                     } else {
-                        //exit?
+                        exit();
                     }
                 } else if(curView==gameoverView) {
-                    //exit()
+                    exit();
+                } else if(curView==gameVictoryView) {
+                    exit();
                 }
                 break;
         }
-        return super.onKeyDown(keyCode,event);
+        return true;//super.onKeyDown(keyCode,event);
     }
 
     private static final String TAG = "MySurfaceView";
@@ -72,9 +76,11 @@ public class MySurfaceView extends GLSurfaceView {
         return curView.onTouchEvent(event);
     }
 
+
     public void exit() {
+        gameView.closeThread();
         //结束游戏actviity
-        activity.removeActivity();
+        activity.exit();
     }
     private class SceneRenderer implements GLSurfaceView.Renderer
     {
@@ -94,6 +100,9 @@ public class MySurfaceView extends GLSurfaceView {
         }
         public void onSurfaceChanged(GL10 gl, int width, int height)
         {
+            //设置视口的大小 为当前view的宽高
+            GameData.REAL_WIDTH = width;
+            GameData.REAL_HEIGHT = height;
             GLES30.glViewport
                     (
                             0,
@@ -101,7 +110,6 @@ public class MySurfaceView extends GLSurfaceView {
                             width,
                             height
                     );
-
             float ratio= (float) width/height;
             MatrixState2D.setInitStack();
             MatrixState2D.setCamera(0,0,5,0f,0f,0f,0f,1f,0f);

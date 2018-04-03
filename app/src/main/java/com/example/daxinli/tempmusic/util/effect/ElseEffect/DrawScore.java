@@ -11,10 +11,11 @@ import com.example.daxinli.tempmusic.util.manager.TextureManager;
  */
 
 public class DrawScore {
-    static String[] numsF={"0.png","1.png","2.png","3.png","4.png","5.png","6.png","7.png","8.png","9.png"};
+    static String[] numsF={"0.png","1.png","2.png","3.png","4.png","5.png","6.png","7.png","8.png","9.png",
+                            "r0.png","r1.png","r2.png","r3.png","r4.png","r5.png","r6.png","r7.png","r8.png","r9.png"};
     static int[] idxplus = {0,1,2,3,2,1,0};
     int initWidth = 120;
-    int initHeight = 120;
+    int initHeight = 200;
     int idx;                    //分数绘制的帧序号
     boolean startAnim;
 
@@ -44,7 +45,7 @@ public class DrawScore {
         for(int i=0;i<str_num.length();i++) {
             char c = str_num.charAt(i);
             int ni = c - '0';
-            Obj2DRectangle obj = new Obj2DRectangle(loadX+i*numwidth,loadY,numwidth,numheight, TextureManager.getTextures(numsF[ni]),
+            Obj2DRectangle obj = new Obj2DRectangle(loadX+i*numwidth,loadY,numwidth,numheight, TextureManager.getTextures(numsF[ni+10]),
                     ShaderManager.getShader(2));
             obj.drawSelf();
         }

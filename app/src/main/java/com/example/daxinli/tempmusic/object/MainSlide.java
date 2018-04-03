@@ -8,6 +8,7 @@ import com.example.daxinli.tempmusic.util.DrawUtil;
 import com.example.daxinli.tempmusic.util.SFUtil;
 import com.example.daxinli.tempmusic.util.effect.ElseEffect.DrawScore;
 import com.example.daxinli.tempmusic.util.elseUtil.Area;
+import com.example.daxinli.tempmusic.util.manager.ShaderManager;
 import com.example.daxinli.tempmusic.util.manager.SoundManager;
 import com.example.daxinli.tempmusic.util.screenscale.Constant;
 
@@ -38,20 +39,29 @@ public class MainSlide{
 
     int plusScoreTimes;
 
+    Obj2DRectangle objSlide;
+
     public MainSlide(float X, float Y, float Width, float Height, int Pitch, int type, String Instru) {
-        this.X=X;
-        this.Y=Y;
-        this.Width=Width;
-        this.Height=Height;
-        this.Pitch=Pitch;
-        this.Instru=Instru;
-        this.type=type;
-        this.speed= GameData.gameSpeed[GameData.GameRK]*GameData.MainSlideTHSpan;
+        this.X = X;
+        this.Y = Y;
+        this.Width = Width;
+        this.Height = Height;
+        this.Pitch = Pitch;
+        this.Instru = Instru;
+        this.type = type;
+        this.speed = GameData.gameSpeed[GameData.GameRK] * GameData.MainSlideTHSpan;
         this.state = 0;
 
-        this.ls_minY = Y+Height;
+        this.ls_minY = Y + Height;
         this.touchMode = 0;
         this.plusScoreTimes = 1;
+        if (type == 1) {
+            objSlide = new Obj2DRectangle(X, Y, Width, Height, 1, 0, 0, 0,            // TODO: 2018/3/19 新建一个shader  用于接收argb绘制相应颜色方块
+                    ShaderManager.getShader(6));
+        } else if(type==2){
+            //
+        }
+        if(objSlide!=null) objSlide.setRadiusSpan(GameData.slideAnim1Radius[GameData.GameRK]);
     }
     public void go() {                                          //滑块进行下滑
         this.Y += this.speed; //GameData.gameSpeed[GameData.GameRK]*GameData.MainSlideTHSpan;
@@ -64,7 +74,9 @@ public class MainSlide{
             case 0:
                 if(type==1) {
                     //绘制黑色方块
-                    DrawUtil.drawRect(X,Y,Width,Height,1,0,0,0);
+                    //DrawUtil.drawRect(X,Y,Width,Height,1,0,0,0);
+                    objSlide.setX(X); objSlide.setY(Y);
+                    objSlide.drawSelf();
                 } else if(type==2)
                 {
                     DrawUtil.drawLongSlide(X,Y,Width,Height);                        //绘制长方块
@@ -72,7 +84,18 @@ public class MainSlide{
                 break;
             case 1:
                 if(type==1) {
-                    DrawUtil.drawRect(X,Y,Width,Height,0.2f,0,0,0);
+                    //DrawUtil.drawRect(X,Y,Width,Height,0.2f,0,0,0);
+                    if(objSlide.isAnim) {
+                        objSlide.setX(X);
+                        objSlide.setY(Y);
+                        objSlide.drawSelf();
+                    } else {
+                        if(!objSlide.isEqualColor(0.2f,0,0,0)) {
+                            objSlide.setColor(0.2f, 0, 0, 0);
+                        }
+                        objSlide.setX(X); objSlide.setY(Y);
+                        objSlide.drawSelf();
+                    }
                 } else
                 {
                     if(touchMode == 1 && state == 1) ls_minY = Math.max(Y, Math.min(ls_minY,pressCurY));
@@ -106,6 +129,7 @@ public class MainSlide{
 
             if(state==0) {
                 state = 1;
+                objSlide.runAnim(1);
                 if(WelcomeActivity.sound!=null) {
                     WelcomeActivity.sound.playGameMusic(SoundManager.PIANO_PITCH[Pitch], 0);
                 }

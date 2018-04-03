@@ -23,8 +23,6 @@ public class ScreenScaleUtil {
         } else {
             so = ScreenOrien.SP;
         }
-
-        System.out.println(so);
         float targetRatio;
         float ratio;
         float realTargetWidth;

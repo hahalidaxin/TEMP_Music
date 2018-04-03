@@ -95,13 +95,14 @@ public class CreateSlideThread extends Thread {
                     thisPitch = new item(Integer.parseInt(MsPitchInfo[0]), Integer.parseInt(MsPitchInfo[1])
                             , Integer.parseInt(MsPitchInfo[2]));
                 }
+
                 //红心的init初始设定
                 if(loopTimes>=1 && currentTime==randomInitRedHeartTime) {
                     int col;
                     while((col=random.nextInt(4))==lastRandomInt) {}
                     float speed = GameData.gameSpeed[GameData.GameRK]*GameData.MainSlideTHSpan;
                     synchronized (gameView.lock) {
-                        gameView.redHeart = new RedHeart(col * baseSlideWidth + (GameData.baseSlideWidth-GameData.redHeart_W)/2, -GameData.redHeart_H,
+                        gameView.redHeart = new RedHeart(col * baseSlideWidth + (GameData.baseSlideWidth-GameData.redHeart_W)/2, -GameData.redHeart_H/2-baseSlideHeight/2,
                                 GameData.redHeart_W, GameData.redHeart_H, speed);
                     }
                 }

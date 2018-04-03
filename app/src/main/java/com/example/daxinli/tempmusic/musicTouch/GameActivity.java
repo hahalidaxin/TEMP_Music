@@ -16,7 +16,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class GameActivity extends BaseActivity {
-    public static MySurfaceView mySurfaceView;
+    public  MySurfaceView mySurfaceView;
     public static SharedPreferences.Editor editor;  //保存上次退出的保留
     public static SharedPreferences sp;
 
@@ -31,41 +31,21 @@ public class GameActivity extends BaseActivity {
 
         //加载资源文件
         initScreenData();               //初始化屏幕数据 为后续计算对应点做准备
-        //sinitSound();
         loadSettings();
         initIOFile();
 
         setContentView(mySurfaceView);                          //以SurfaceView作为主界面
     }
-    /*
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(GameActivity.sound.mp!=null) {
-            GameActivity.sound.mp.start();
-        }
-    }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if(GameActivity.sound.mp!=null) {
-            GameActivity.sound.mp.pause();
-        }
+    public void exit() {            //暴露退出函数
+        this.removeActivity();
     }
-    */
     public void initScreenData() {
         DisplayMetrics dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         Constant.ssr= ScreenScaleUtil.calScale(dm.widthPixels, dm.heightPixels);
-        System.out.println(Integer.toString(dm.widthPixels)+" "+Integer.toString(dm.heightPixels));
+        //System.out.println(Integer.toString(dm.widthPixels)+" "+Integer.toString(dm.heightPixels));
     }
-    /*
-    public void initSound() {
-        sound = new SoundManager(this);
-        //sound.playBackGroundMusic(this, R.raw.background);
-    }
-    */
     public void loadSettings() {
         sp = this.getSharedPreferences("settings", Context.MODE_PRIVATE);
         editor = sp.edit();

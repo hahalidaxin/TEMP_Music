@@ -47,6 +47,10 @@ public class Constant {
         return tx*ssr.ratio+ssr.lucX;
     }
     //从标准屏幕到实际屏幕y坐标
+    public static float fromStandardScreenYToRealScreenY2(float ty)
+    {
+        return ty*ssr.ratio-ssr.lucY;
+    }
     public static float fromStandardScreenYToRealScreenY(float ty)
     {
         return ty*ssr.ratio+ssr.lucY;

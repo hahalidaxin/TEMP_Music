@@ -53,8 +53,10 @@ public class GameoverView extends BaseView {
                 if(SFUtil.isin(x,y,GameData.area_btn_restart)) {
                     isInit = false;
                     MySurfaceView.curView = MySurfaceView.gameView;
-                } else if(SFUtil.isin(x,y,GameData.area_btn_exit)) {
+                    btnRestart_isPressed = false;
+                } else if(SFUtil.isin(x,y,GameData.area_btn_exit)) {        //游戏退出//如何处理
                     mv.exit();
+                    btnExit_isPressed = false;
                 }
                 break;
         }

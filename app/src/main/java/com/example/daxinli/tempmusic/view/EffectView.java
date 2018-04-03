@@ -4,6 +4,7 @@ import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.MySurfaceView;
 import com.example.daxinli.tempmusic.object.Background;
+import com.example.daxinli.tempmusic.object.MainSlide;
 import com.example.daxinli.tempmusic.util.effect.RedHeart.RedHeart;
 import com.example.daxinli.tempmusic.util.effect.TriangleFirework.tri_ParticleSystem;
 import com.example.daxinli.tempmusic.util.manager.TextureManager;
@@ -20,6 +21,8 @@ public class EffectView extends BaseView {
     tri_ParticleSystem trisys;
     RedHeart redheart;
     Background background;
+    MainSlide slide;
+    float X=100,Y=100,Width=540,Height=720;
     public EffectView(MySurfaceView mv) {
         this.mv = mv;
     }
@@ -29,6 +32,7 @@ public class EffectView extends BaseView {
         redheart = new RedHeart(0,0,250,250,10f);
         background = new Background();
         TextureManager.loadingTexture(mv,0,18);
+        slide = new MainSlide(X,  Y,  Width,  Height, 1, 1, "paino");
     }
 
     @Override
@@ -39,6 +43,13 @@ public class EffectView extends BaseView {
                 background.switchBG();
                 break;
         }
+        if(e.getAction()== MotionEvent.ACTION_DOWN) {
+            if (slide.state == 0) {
+                slide.onTouchEvent(e);
+            } else {
+                slide = new MainSlide(X,  Y,  Width,  Height, 1, 1, "paino");
+            }
+        }
         return true;
     }
 
@@ -48,6 +59,7 @@ public class EffectView extends BaseView {
             initView();
             initFlag = true;
         }
-        background.drawSelf();
+        slide.drawSelf();
+        //background.drawSelf();
     }
 }

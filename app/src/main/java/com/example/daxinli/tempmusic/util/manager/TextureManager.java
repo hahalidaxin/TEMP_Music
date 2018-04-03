@@ -17,7 +17,8 @@
 	static String[] texturesName={
 			"0.png","1.png","2.png","3.png","4.png","5.png","6.png","7.png","8.png","9.png",
 			"btn_restart1_gov.png","btn_restart2_gov.png","pic_rheart_g.png","btn_pause_g.png",
-			"BGrk1.png","BGrk2.png","BGrk3.png","BGrk4.png",									//游戏界面相关图片//18
+			"BGrk1.png","BGrk2.png","BGrk3.png","BGrk4.png","r0.png","r1.png","r2.png","r3.png",
+			"r4.png","r5.png","r6.png","r7.png","r8.png","r9.png",
 		};
 	
 	static HashMap<String,Integer> texList=new HashMap<String,Integer>();

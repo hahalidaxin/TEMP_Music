@@ -27,6 +27,8 @@ public class GameData {
     public static float baseHeight ;
     public static final int STANDARD_WIDTH = 1080;
     public static final int STANDARD_HIEGHT = 1920;
+    public static int REAL_WIDTH;             //实际屏幕的宽高
+    public static int REAL_HEIGHT;
 
     //-----------游戏界面信息
     public static final int Game_load = 1;      //加载界面编号
@@ -49,6 +51,7 @@ public class GameData {
     public static Queue<Action> aq=new LinkedList<Action>();         //动作队列ActionQueue
     public static int GameRK = 0;                                   //游戏难度
     public static final float [] gameSpeed = {1.2f,1.5f,2.0f,2.4f};                  //不同游戏难度对应的速度
+    public static final float [] slideAnim1Radius = {30.0f,35.0f,40.0f,50.0f};
     public static StringBuffer mainMusicScore;                   //游戏的乐谱信息
     public static String fileMusicScoreName;                    //乐谱的文件名
     public static String MusicName;                             //乐曲名称
@@ -57,8 +60,8 @@ public class GameData {
     public static final float[] SlideHeight = {0,480,960,1440,1536};    //不同类型的滑块的默认长度
     public static long gamepauseTime;               //游戏的暂停时间用来保持createSlideTh的节奏
     public static long gamerestartTime;
-    public static int slideT1score = 2;             //点击小滑块获得的分数
-    public static int slideT2score = 4;             //点击长滑块获得的分数
+    public static int slideT1score = 1;             //点击小滑块获得的分数
+    public static int slideT2score = 2;             //点击长滑块获得的分数
     public static int sleepSpanPerDiff = 4000;      //各难度之间需要休眠的时间
     public static long refreshFrameTime ;                   //GameView刷新一帧需要的时间
 

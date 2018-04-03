@@ -3,6 +3,7 @@ package com.example.daxinli.tempmusic.object;
 import android.opengl.GLES30;
 
 import com.example.daxinli.tempmusic.MatrixState.MatrixState2D;
+import com.example.daxinli.tempmusic.constant.GameData;
 import com.example.daxinli.tempmusic.util.screenscale.Constant;
 
 import java.nio.ByteBuffer;
@@ -11,7 +12,8 @@ import java.nio.FloatBuffer;
 
 public class Obj2DRectangle
 {
-	
+	private static final String TAG = "Obj2DRectangle";
+	private float radiusSpan = 20.0f;
 	public static float loadPosition=90;
 	public static float step=0;
 	public static float AngleSpng=0;
@@ -36,8 +38,10 @@ public class Obj2DRectangle
 	int texId;
 	int vCount;
     boolean initFlag=false;
-    float x;
-	float y;
+    float x,NearX;
+	float y,NearY;
+	float Width;
+	float Height;
 	float xAngle = 0.0f;
 	boolean isLoad=false;
 	boolean isPure = false;
@@ -46,59 +50,50 @@ public class Obj2DRectangle
 	int lie=0;
 	int HZ;
 	int LZ;
-	int muSjFactor;
-	int count=0;
 	int spng=0;
 
 	float a,r,g,b;
+	float rx=0,ry=0;		//矩形方块的中心点[传入]
+	int rXHandle;
+	int rYHandle;
+	int clockTime=0;		//时钟 记录动画开始时间
+	float AnimRadius=0;		//扩大的半径 [传入]
+	float RadiusLimit;
+	boolean isAnim; 		//动画进行的标志位
+	int AnimRadiusHandle;
 	
 	public Obj2DRectangle(float x, float y, float width, float height, float a, float r, float g, float b, int programId) {
 		x+=width/2; y+=height/2;
-		this.x=Constant.fromScreenXToNearX(x);	//将坐标转化为视口坐标
-		this.y=Constant.fromScreenYToNearY(y);
-        this.a = a;
+		//this.x=Constant.fromScreenXToNearX(x);	//将坐标转化为视口坐标
+		//this.y=Constant.fromScreenYToNearY(y);
+        this.NearX = Constant.fromScreenXToNearX(x);
+        this.x = x;
+        this.NearY = Constant.fromScreenYToNearY(y);
+        this.y = y;
+		this.Width = width;
+        this.Height = height;
+		this.a = a;
         this.r = r;
         this.g = g;
         this.b = b;
         this.programId = programId;
         this.isPure = true;
+        this.RadiusLimit = (float)Math.sqrt((width/2)*(width/2)+(height/2)*(height/2))+5.0f;
         initVertexDataRect(width,height);
     }
 	public Obj2DRectangle(float x, float y, float picWidth, float picHeight, int texId, int programId)
 	{
 		x+=picWidth/2; y+=picHeight/2;
-		this.x=Constant.fromScreenXToNearX(x);
-		this.y=Constant.fromScreenYToNearY(y);
+		this.NearX = Constant.fromScreenXToNearX(x);
+		this.x = x;
+		this.NearY = Constant.fromScreenYToNearY(y);
+		this.y = y;
+		this.Width = picWidth;
+		this.Height = picHeight;
 		this.texId=texId;
 		this.programId=programId;
 		initVertexData(picWidth,picHeight);
 	}
-	/*
-	public Obj2DRectangle(float x,float y,float picWidth,float picHeight,int texId,int programId,int spng)
-	{
-		this.spng=spng;
-		this.x= Constant.fromScreenXToNearX(x);;
-		this.y= Constant.fromScreenYToNearY(y);
-		this.texId=texId;
-		this.programId=programId;
-		initVertexData(picWidth,picHeight);
-	}
-
-	public Obj2DRectangle(float x,float y,float width,float height,int han,int lie,int HZ,int LZ,
-			int texId,int programId)
-	{
-		this.x=Constant.fromScreenXToNearX(x);
-		this.y=Constant.fromScreenYToNearY(y);
-		isLoad=true;
-		this.HZ=HZ;
-		this.LZ=LZ;
-		this.han=han;
-		this.lie=lie;
-		this.texId=texId;
-		this.programId=programId;
-		initVertexData(width,height);
-	}
-	*/
 
 	public void initVertexData(float width,float height)
 	{
@@ -175,17 +170,56 @@ public class Obj2DRectangle
         muMVPMatrixHandle = GLES30.glGetUniformLocation(programId, "uMVPMatrix");  
         CLStepHandle=GLES30.glGetUniformLocation(programId, "CLStep");
         xHandle=GLES30.glGetUniformLocation(programId, "xPosition");
+
+        rXHandle=GLES30.glGetUniformLocation(programId,"aCoreX");
+        rYHandle=GLES30.glGetUniformLocation(programId,"aCoreY");
+        AnimRadiusHandle=GLES30.glGetUniformLocation(programId,"aRadius");
 	}
 	public void setY(float y)
 	{
-		this.y=Constant.fromScreenYToNearY(y);
+		y+=Height/2;
+		this.NearY = Constant.fromScreenYToNearY(y);
+		this.y = y;
 	}
 	
 	public void setX(float x)
 	{
-		this.x=Constant.fromScreenXToNearX(x);
+		x+=Width/2;
+		this.NearX = Constant.fromScreenXToNearX(x);
+		this.x = x;
 	}
-	
+	public void setRadiusSpan(float x) {
+		this.radiusSpan = x;
+	}
+
+	public void setColor(float a,float r,float g,float b) {		//重新设置颜色 // 更改缓冲区数据
+		this.a = a;
+		this.r = r; this.g = g; this.b = b;
+		float colors[] = new float[] {
+				r,g,b,a,
+				r,g,b,a,
+				r,g,b,a,
+				r,g,b,a
+		};
+		ByteBuffer cbb=ByteBuffer.allocateDirect(colors.length*4);
+		cbb.order(ByteOrder.nativeOrder());
+		mColorBuffer=cbb.asFloatBuffer();
+		mColorBuffer.put(colors);
+		mColorBuffer.position(0);
+	}
+	public boolean isEqualColor(float a,float r,float g,float b) {
+		return this.a ==a && this.r==r && this.g==g && this.b==b;
+	}
+
+	public void runAnim(int idx) {
+		switch(idx) {
+			case 1:
+				//此处激活扩散特效
+				isAnim = true;
+				clockTime++;
+				break;
+		}
+	}
 	public void drawSelf()
 	{
 		if(!initFlag)
@@ -200,8 +234,27 @@ public class Obj2DRectangle
     	GLES30.glUseProgram(programId);
     	GLES30.glUniform1f(CLStepHandle, step);
     	GLES30.glUniform1f(xHandle, loadPosition);
-    	MatrixState2D.pushMatrix();
-		MatrixState2D.translate(x,y, 0);
+		//--------------------------------------------
+    	if(isAnim) {
+			//向片元着色器中传入全局变量
+			if(AnimRadius>RadiusLimit) {	//边界判定 停止动画
+				isAnim = false;
+				AnimRadius = 0;
+				clockTime = 0;
+				setColor(0.2f,0,0,0);
+			} else {
+				clockTime++;
+				AnimRadius+=radiusSpan;
+			}
+		} else {
+    		AnimRadius = 0;			//Anim动画着色器中的标志位
+		}
+		GLES30.glUniform1f(AnimRadiusHandle,AnimRadius);
+		GLES30.glUniform1f(rXHandle,Constant.fromStandardScreenXToRealScreenX(this.x));
+		GLES30.glUniform1f(rYHandle, Constant.fromStandardScreenYToRealScreenY2(GameData.STANDARD_HIEGHT-this.y));
+		//---------------------------------------------
+		MatrixState2D.pushMatrix();
+		MatrixState2D.translate(this.NearX,this.NearY, 0);
 		if(spng==1){
 			MatrixState2D.scale(step/100,step/100,step/100);
 		}

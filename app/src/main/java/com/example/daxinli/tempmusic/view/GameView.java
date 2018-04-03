@@ -34,9 +34,9 @@ public class GameView extends BaseView {
         public static Object lock = new Object();                 //GameView共享数据的锁
         MySurfaceView father;
 
-        ActionThread actionThread;
-        CreateSlideThread createSlideThread;
-        MainSlideThread mainSlideThread;
+        public ActionThread actionThread;               //将线程暴露给GameActivity
+        public CreateSlideThread createSlideThread;
+        public MainSlideThread mainSlideThread;
 
         List<Obj2DRectangle> viewlist=new ArrayList<Obj2DRectangle>();
         ArrayList<MainSlide> tmpSlide = new ArrayList<MainSlide>();
@@ -60,14 +60,15 @@ public class GameView extends BaseView {
             this.father = father;
             initView();
             initThread();
+            initGameData();
         }
 
         @Override
         public void initView() {
             //设置Area
-            GameData.area_btn_pause = new Area(0,0,120,120);
+            GameData.area_btn_pause = new Area(0,20,120,120);
             //初始化纹理
-            TextureManager.loadingTexture(father,0,18);           //加载游戏界面相关图片
+            TextureManager.loadingTexture(father,0,28);           //加载游戏界面相关图片
             scoreDraw = new DrawScore();
             background = new Background();
             //加载恒参图片)
@@ -75,10 +76,6 @@ public class GameView extends BaseView {
             GameData.area_btn_pause = ar;
             viewlist.add(new Obj2DRectangle(ar.x,ar.y,ar.width,ar.height
                     ,TextureManager.getTextures("btn_pause_g.png"), ShaderManager.getShader(2)));
-            //ar = GameData.area_pic_rheart;
-            //viewlist.add(new Obj2DRectangle(ar.x,ar.y,ar.width,ar.height
-            //       ,TextureManager.getTextures("pic_rheart_g.png"), ShaderManager.getShader(2)));
-
             initFlag = true;
         }
         private void initGameData() {
@@ -101,10 +98,14 @@ public class GameView extends BaseView {
             actionThread.start();
             mainSlideThread.start();
         }
-        private void closeThread() {
-            createSlideThread.setFlag(false);
-            actionThread.setFlag(false);
-            mainSlideThread.setFlag(false);
+        public void closeThread() {
+            if(createSlideThread!=null) createSlideThread.setFlag(false);
+            if(actionThread!=null) actionThread.setFlag(false);
+            if(mainSlideThread!=null) mainSlideThread.setFlag(false);
+            createSlideThread.interrupt();          //解决线程阻塞问题 抛出异常 继续进行
+            actionThread.interrupt();
+            mainSlideThread.interrupt();
+            isThClose = true;
         }
         public void sorPThread() { //对线程的暂停标志位进行翻转
             createSlideThread.turnPause();
@@ -128,7 +129,7 @@ public class GameView extends BaseView {
         @Override
         public boolean onTouchEvent(MotionEvent e) {                //需要将返回值设为true 否则不能继续触发move以及up函数
             //long lastTime = System.currentTimeMillis();
-            //对触摸事件进行检查 首先为otherView的控件 其次为滑块
+            //对触摸事e进行检查 首先为otherView的控件 其次为滑块
             float x = e.getX();
             float y = e.getY();
             x = Constant.fromRealScreenXToStandardScreenX(x);

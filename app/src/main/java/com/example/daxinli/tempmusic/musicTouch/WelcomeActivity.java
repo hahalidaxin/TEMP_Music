@@ -48,7 +48,9 @@ public class WelcomeActivity extends BaseActivity implements View.OnClickListene
                 public void handleMessage(Message msg) {
                 switch(msg.what) {
                     case 0:
+                        //加载资源已经完成
                         setContentView(R.layout.activity_welcome);
+                        sound.playBackGroundMusic(WelcomeActivity.this,R.raw.background);   //播放游戏的背景音乐
                         initViews();                            //setContentView之后调用获得View的实例
                         break;
                 }
@@ -58,16 +60,24 @@ public class WelcomeActivity extends BaseActivity implements View.OnClickListene
     @Override
     protected void onResume() {
         super.onResume();
-        //if(WelcomeActivity.sound!=null) {
-        //    WelcomeActivity.sound.mp.start();
-        //}
+        try {
+            if (WelcomeActivity.sound.mp != null) {
+                WelcomeActivity.sound.mp.start();
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
     @Override
     protected void onPause() {
         super.onPause();
-        //if(WelcomeActivity.sound!=null) {
-        //    WelcomeActivity.sound.mp.pause();
-        //}
+        try {
+            if (WelcomeActivity.sound.mp != null) {
+                WelcomeActivity.sound.mp.pause();
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
     public void initGame() {
         //开启新线程加载音乐
@@ -76,11 +86,9 @@ public class WelcomeActivity extends BaseActivity implements View.OnClickListene
                     @Override
                     public void run() {
                         long ani_startTime = System.currentTimeMillis();
-
-                        sound = new SoundManager(WelcomeActivity.this);                   //初始化音乐
                         //networkThread = new Login_NetworkThread();    //初始化网络线程
                         //networkThread.start();
-
+                        sound = new SoundManager(WelcomeActivity.this);
                         //补全游戏的开场动画
                         long ani_endTime = System.currentTimeMillis();
                         if(ani_endTime-ani_startTime< GameData.ani_Span) {
@@ -115,7 +123,6 @@ public class WelcomeActivity extends BaseActivity implements View.OnClickListene
             case R.id.btn_GameStart:
                 intent.setClass(this,GameActivity.class);
                 this.startActivity(intent);
-                //Log.e(TAG, "onClick: " );
                 break;
             case R.id.btn_MutipleGame:
                 intent.setClass(this,MutiGameActivity.class);
@@ -127,6 +134,7 @@ public class WelcomeActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.btn_GameExit:
                 removeAllActivity();
+                System.exit(0);
                 break;
         }
     }

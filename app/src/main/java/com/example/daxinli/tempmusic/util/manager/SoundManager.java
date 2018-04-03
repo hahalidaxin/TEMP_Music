@@ -90,12 +90,6 @@ public class SoundManager
 	public void playGameMusic(int sound,int loop)
 	{
 		long currTimeStamp=System.nanoTime();
-		/*
-		if(currTimeStamp-preTimeStamp<500000000L)
-		{
-			return;
-		}
-		*/
 		preTimeStamp=currTimeStamp;
 		@SuppressWarnings("static-access")
 		AudioManager am = (AudioManager)activity.getSystemService(activity.AUDIO_SERVICE);
@@ -119,4 +113,3 @@ public class SoundManager
 		sp.setVolume(sound, 0, 0);
 	}
 }
-
