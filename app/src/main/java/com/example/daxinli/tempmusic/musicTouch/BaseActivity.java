@@ -35,6 +35,6 @@ public class BaseActivity extends AppCompatActivity {
         application.RemoveAll();
     }
     public void show_Toast(String text) {   //捆绑实现方法Toast
-        Toast.makeText(mContext, text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, text, Toast.LENGTH_LONG).show();
     }
 }

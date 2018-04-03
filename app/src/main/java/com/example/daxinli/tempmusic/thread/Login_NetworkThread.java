@@ -1,15 +1,16 @@
 package com.example.daxinli.tempmusic.thread;
 
-import android.app.Activity;
-import android.widget.Toast;
-
 import com.example.daxinli.tempmusic.constant.GameData;
+import com.example.daxinli.tempmusic.musicTouch.BaseActivity;
+import com.example.daxinli.tempmusic.musicTouch.LoginActivity;
+import com.example.daxinli.tempmusic.musicTouch.RegisterActivity;
 import com.example.daxinli.tempmusic.util.LogUtil;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketException;
 
 /**
  * Created by Daxin Li on 2018/3/8.
@@ -17,6 +18,7 @@ import java.net.Socket;
  */
 
 public class Login_NetworkThread extends Thread {
+    public static long connectTimeLimit = 1000;       //10s的连接时间
     private boolean flag;
     private boolean pause;
     private Socket s;
@@ -24,27 +26,45 @@ public class Login_NetworkThread extends Thread {
     public DataOutputStream dout;
     private String[] strs;
     private static final String TAG = "Login_NetworkThread";
-    private Activity father;
+    private BaseActivity father;
 
     public Login_NetworkThread() {
     }
-
+    public boolean connectWithServer() {
+        boolean flag  = false;
+        long beginTime = System.currentTimeMillis();
+        while(!flag) {                          //不断连接直到成功为止
+            try {
+                s = new Socket();
+                s.connect(new InetSocketAddress(GameData.serverIP,GameData.sertVerPort),1000);
+                LogUtil.i(TAG,"[INFO] 已经连接服务器");
+                din = new DataInputStream(s.getInputStream());
+                dout = new DataOutputStream(s.getOutputStream());
+                flag = true;
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+            if(System.currentTimeMillis()-beginTime>connectTimeLimit) {
+                //连接失败处理问题
+                if(father instanceof LoginActivity) {
+                    LoginActivity tmpActivity = (LoginActivity)father;
+                    tmpActivity.onNetWorkFailed();
+                } else if(father instanceof RegisterActivity) {
+                    RegisterActivity tempActivity = (RegisterActivity)father;
+                    tempActivity.onNetWorkFailed();
+                }
+                return false;        //这里退出Thread
+            }
+        }
+        return true;
+    }
     @Override
     public void run() {
         this.flag = true;
         this.pause = false;
-        try {
-            s = new Socket();
-            s.connect(new InetSocketAddress(GameData.serverIP,GameData.sertVerPort),10000);
-            LogUtil.i(TAG,"[INFO] 已经连接服务器");
-            din = new DataInputStream(s.getInputStream());
-            dout = new DataOutputStream(s.getOutputStream());
-        } catch(Exception e) {
-            LogUtil.i(TAG,"[ERROR]连接服务器失败");    //如何进一步传参
-            Toast.makeText(father, "咱家服务器崩了无法登陆，请返回(；´д｀)ゞ", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-
+        if(!connectWithServer()) {
+            return ;
+        }                               //【】没有连接成功退出
         //dout的readUTF是实时的，如果没有接受到就停止不进行下一步
         while(flag) {
             if (!pause) {
@@ -64,8 +84,11 @@ public class Login_NetworkThread extends Thread {
                     synchronized (GameData.lock) {
                         if (GameData.lockNetworkThread) GameData.lockNetworkThread = false;
                     }
-                } catch (Exception e) {
-                    // TODO: 2018/3/16 错误处理用户信息提示
+                } catch (SocketException e) {
+                    //服务器进行了重启
+                    if(!connectWithServer()) { return ; }           //【】服务器挂了 退出
+
+                } catch(Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -85,7 +108,7 @@ public class Login_NetworkThread extends Thread {
     public void setPause(boolean flag) {
         this.pause = flag;
     }
-    public void setFather(Activity father) {this.father = father;}
+    public void setFather(BaseActivity father) {this.father = father;}
 
 
 }

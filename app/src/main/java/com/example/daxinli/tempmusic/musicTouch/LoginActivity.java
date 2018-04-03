@@ -41,6 +41,33 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         initToolBar();
         initClickListener();
     }
+    //进行network的暂停 在登陆和注册界面维持一个network生存
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(nt==null) {
+            nt = new Login_NetworkThread();     //新建线程 重启
+            nt.start();
+            nt.setFather(this);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        nt.setFlag(false);      //销毁network
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {       //为ActionBar的返回按钮添加时间监听
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                nt.setFlag(false);
+                nt.interrupt();             //中断堵塞
+                this.removeActivity();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
     public void initToolBar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.login_toolbar);
         setSupportActionBar(toolbar);
@@ -50,17 +77,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {       //为ActionBar的返回按钮添加时间监听
-        switch(item.getItemId()) {
-            case android.R.id.home:
-                this.removeActivity();
-                nt.setFlag(false);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     public void initClickListener() {
         Button login = (Button) findViewById(R.id.login_enter);
         TextView register = (TextView) findViewById(R.id.login_register);
@@ -185,19 +201,27 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         });
         dialog.show();
     }
-
-    //进行network的暂停 在登陆和注册界面维持一个network生存
-    @Override
-    protected void onResume() {
-        super.onResume();
-        nt = new Login_NetworkThread();     //新建线程 重启
-        nt.start();
-        nt.setFather(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        nt.setFlag(false);      //销毁network
+    public void onNetWorkFailed() {
+        //处理网络运行失败的情况
+        //removeActivity
+        //UI显示需要在UI线程中调用进行 因为本身的调用并不在UI线程 所以需要runOnUiThread
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(LoginActivity.this);
+                dialog.setTitle("网络Error");
+                dialog.setMessage("连接网络失败(ಥ_ಥ)，请回退");
+                dialog.setCancelable(false);
+                dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        nt.setFlag(false);
+                        nt.interrupt();
+                        removeActivity();
+                    }
+                });
+                dialog.show();
+            }
+        });
     }
 }

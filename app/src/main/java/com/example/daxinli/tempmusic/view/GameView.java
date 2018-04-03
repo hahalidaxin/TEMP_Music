@@ -68,7 +68,7 @@ public class GameView extends BaseView {
             //设置Area
             GameData.area_btn_pause = new Area(0,20,120,120);
             //初始化纹理
-            TextureManager.loadingTexture(father,0,28);           //加载游戏界面相关图片
+            TextureManager.loadingTexture(father,0,29);           //加载游戏界面相关图片
             scoreDraw = new DrawScore();
             background = new Background();
             //加载恒参图片)
@@ -76,6 +76,8 @@ public class GameView extends BaseView {
             GameData.area_btn_pause = ar;
             viewlist.add(new Obj2DRectangle(ar.x,ar.y,ar.width,ar.height
                     ,TextureManager.getTextures("btn_pause_g.png"), ShaderManager.getShader(2)));
+            viewlist.add(new Obj2DRectangle(ar.x,ar.y,ar.width,ar.height
+                    ,TextureManager.getTextures("btn_start_g.png"), ShaderManager.getShader(2)));
             initFlag = true;
         }
         private void initGameData() {
@@ -237,12 +239,14 @@ public class GameView extends BaseView {
             if(redHeartShowHealth!=null && !redHeartShowHealth.getIsDead()) {
                 redHeartShowHealth.drawSelf();
             }
-            for(int i=0;i<viewlist.size();i++) {
-                viewlist.get(i).drawSelf();
+            if(MySurfaceView.isPause) {
+                viewlist.get(1).drawSelf();
+            } else {
+                viewlist.get(0).drawSelf();
             }
-                synchronized (GameData.lock) {
-                    GameData.refreshFrameTime = System.currentTimeMillis()-begin;
-                }
+            synchronized (GameData.lock) {
+                GameData.refreshFrameTime = System.currentTimeMillis()-begin;
+            }
             // TODO: 2018/3/29 这里可以添加一部分的保留措施
             //游戏结束时保留最后一帧 这样不会显得太突兀
             if(Message == 3) {

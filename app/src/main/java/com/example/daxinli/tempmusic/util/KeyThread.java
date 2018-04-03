@@ -2,10 +2,9 @@ package com.example.daxinli.tempmusic.util;
 
 
 import com.example.daxinli.tempmusic.constant.GameData;
+import com.example.daxinli.tempmusic.musicTouch.BaseActivity;
 import com.example.daxinli.tempmusic.musicTouch.LoginActivity;
 import com.example.daxinli.tempmusic.musicTouch.RegisterActivity;
-
-import java.io.IOException;
 
 /**
  * Created by Daxin Li on 2018/3/16.
@@ -16,7 +15,9 @@ public class KeyThread {
     //外部调用keyThread内部函数的标志位
     //0-没有调用 1-Login 2-Register
 
-    public KeyThread() {
+    BaseActivity father;
+    public KeyThread(BaseActivity father) {
+        this.father = father;
     }
 
     //有了限定 : 如果需要调用KeyThread就必须持有Activity的引用
@@ -30,7 +31,9 @@ public class KeyThread {
                     synchronized (GameData.lock) {
                         father.nt.dout.writeUTF("<#Login#>"+username+"#"+password);
                     }
-                } catch(IOException e) {
+                } catch(Exception e) {
+                    //处理网络错误
+                    father.onNetWorkFailed();
                     e.printStackTrace();
                 }
             }
@@ -44,7 +47,8 @@ public class KeyThread {
             public void run() {
                 try {
                     Rt.nt.dout.writeUTF("<#Register#>"+username+"#"+password);
-                } catch(IOException e) {
+                } catch(Exception e) {
+                    //
                     e.printStackTrace();
                 }
             }

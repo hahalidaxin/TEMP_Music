@@ -134,5 +134,27 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         });
         builder.show();
     }
-
+    public void onNetWorkFailed() {
+        //处理网络运行失败的情况
+        //removeActivity
+        //UI显示需要在UI线程中调用进行 因为本身的调用并不在UI线程 所以需要runOnUiThread
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(RegisterActivity.this);
+                dialog.setTitle("网络Error");
+                dialog.setMessage("连接网络失败(´థ౪థ)σ,请回退");
+                dialog.setCancelable(false);
+                dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        nt.setFlag(false);
+                        nt.interrupt();
+                        removeActivity();
+                    }
+                });
+                dialog.show();
+            }
+        });
+    }
 }
