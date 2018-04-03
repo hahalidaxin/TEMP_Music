@@ -49,9 +49,9 @@ public class GameView extends BaseView {
         public tri_ParticleSystem trisys;
         Random random = new Random();
 
+        public static int Message=0;          //
         boolean initFlag = false;
-        public static int Message;          //
-        boolean isThClose = false;
+        public boolean isThClose = false;
 
 
         long lastTime=0;
@@ -79,7 +79,7 @@ public class GameView extends BaseView {
             initFlag = true;
         }
         private void initGameData() {
-            mainSlideArrayList.clear();
+            mainSlideArrayList = new ArrayList<MainSlide>();
             redHeart = null;
             background = new Background();
             trisys = null;
@@ -87,7 +87,7 @@ public class GameView extends BaseView {
             GameData.aq.clear();
             GameData.GameScore = 0;
             GameData.GameRK = 0;
-            GameData.gamerHealth  = GameData.initgamerHealth;
+            GameData.gamerHealth=GameData.initgamerHealth;
         }
         private void initThread() {     //开启游戏线程
             createSlideThread = new CreateSlideThread(this);
@@ -172,7 +172,11 @@ public class GameView extends BaseView {
             }
             return true;                //返回值设置为true，因此后续的事件可以继续进行
         }
-
+        public void restartInitOp() {       //暴露一个初始化函数 由外部调用
+            initGameData();
+            initThread();
+            isThClose = false;
+        }
         @Override
         public void drawView(GL10 gl) {
             long begin = System.currentTimeMillis();
@@ -180,12 +184,7 @@ public class GameView extends BaseView {
                 initView();
                 initFlag = true;
             }
-            if(isThClose) {     //返回游戏 重新开启游戏线程 清空游戏数据
-                initThread();
-                initGameData();
-                isThClose = false;
-            }
-
+            //捕捉来自其他线程的Message  进行UI界面的相应更新
             switch(Message) {
                 case 0:
                     break;

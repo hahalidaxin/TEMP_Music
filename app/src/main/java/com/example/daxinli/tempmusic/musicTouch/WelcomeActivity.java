@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -118,7 +117,6 @@ public class WelcomeActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void onClick(View v) {
         Intent intent = new Intent();
-        Log.e(TAG, "onClick: ");
         switch(v.getId()) {
             case R.id.btn_GameStart:
                 intent.setClass(this,GameActivity.class);

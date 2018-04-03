@@ -11,6 +11,7 @@ import com.example.daxinli.tempmusic.constant.GameData;
 public class ActionThread extends Thread {
     private boolean pause = false;
     private boolean flag = true;
+    long lastTime=0;
     public ActionThread() {
         this.setName("ActionThread");
     }
@@ -23,6 +24,7 @@ public class ActionThread extends Thread {
                     a = GameData.aq.poll();
                 }
                 if (a != null) {
+                    lastTime = System.currentTimeMillis();
                     try {
                         a.doAction();
                     } catch (Exception e) {

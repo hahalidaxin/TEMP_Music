@@ -46,7 +46,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) {
-            // TODO: 2018/3/18 用户上一次信息进行处理 加载cache
             actionBar.setTitle("");
             actionBar.setDisplayHomeAsUpEnabled(true);
         }

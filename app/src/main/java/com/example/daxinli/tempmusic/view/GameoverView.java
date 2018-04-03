@@ -52,6 +52,7 @@ public class GameoverView extends BaseView {
                 //按键的实际逻辑操作放在抬起事件中完成
                 if(SFUtil.isin(x,y,GameData.area_btn_restart)) {
                     isInit = false;
+                    MySurfaceView.gameView.restartInitOp();
                     MySurfaceView.curView = MySurfaceView.gameView;
                     btnRestart_isPressed = false;
                 } else if(SFUtil.isin(x,y,GameData.area_btn_exit)) {        //游戏退出//如何处理

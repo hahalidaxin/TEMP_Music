@@ -17,14 +17,12 @@ public class GameData {
     //----------文件操作相关
     public static String lastUserFname = "userData";
     //----------服务器相关信息
-    public static final String serverIP = "172.20.59.20";
+    public static final String serverIP = "172.20.74.1";
     public static final int sertVerPort = 9999;
     //-----------用户登录相关
     public static String login_InfoQ = null;
     public static String register_infoQ = null;
     //----------设备硬件信息
-    public static float baseWidth ;                             //需要获得1
-    public static float baseHeight ;
     public static final int STANDARD_WIDTH = 1080;
     public static final int STANDARD_HIEGHT = 1920;
     public static int REAL_WIDTH;             //实际屏幕的宽高

@@ -21,11 +21,12 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class MySurfaceView extends GLSurfaceView {
     public GameActivity  activity;
-    public static BaseView curView;         //在每个子View中对curView进行修改
+    public static BaseView curView;         //注意 这里声明的是static类型 所以一个程序只会创建一次 不会重复进行创建
     public static GameView gameView;
     public static GameoverView gameoverView;
     public static EffectView effView;
     public static GameVictoryView gameVictoryView;
+    private boolean initFlag = false;
 
     private SceneRenderer mRenderer;
 
@@ -78,9 +79,10 @@ public class MySurfaceView extends GLSurfaceView {
 
 
     public void exit() {
+        //curView = null;                 //退出 直接将curView设置为null 这样可以避免curView的不及时绘制
         gameView.closeThread();
         //结束游戏actviity
-        activity.exit();
+        activity.removeActivity();
     }
     private class SceneRenderer implements GLSurfaceView.Renderer
     {
@@ -88,15 +90,17 @@ public class MySurfaceView extends GLSurfaceView {
         {
             GLES30.glClear( GLES30.GL_DEPTH_BUFFER_BIT | GLES30.GL_COLOR_BUFFER_BIT);
             //View的初始化与纹理的加载放在这里 ！！
-            if(curView == null)  {
+            if(!initFlag) {
                 gameView = new GameView(MySurfaceView.this);
                 gameoverView = new GameoverView(MySurfaceView.this);
                 effView = new EffectView(MySurfaceView.this);
                 gameVictoryView = new GameVictoryView(MySurfaceView.this);
                 curView = gameView;
                 GameData.viewState = GameData.Game_playing;             //设置游戏界面的View号
+                initFlag = true;
             }
-            curView.drawView(gl);
+            if(curView!=null)
+                curView.drawView(gl);
         }
         public void onSurfaceChanged(GL10 gl, int width, int height)
         {
@@ -117,7 +121,6 @@ public class MySurfaceView extends GLSurfaceView {
             
             MatrixState2D.setCamera(0,0,5,0f,0f,0f,0f,1f,0f);
             MatrixState2D.setLightLocation(0,50,0);
-
         }
         public void onSurfaceCreated(GL10 gl, EGLConfig config)
         {

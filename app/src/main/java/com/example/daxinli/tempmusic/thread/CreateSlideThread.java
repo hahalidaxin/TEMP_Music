@@ -1,6 +1,8 @@
 package com.example.daxinli.tempmusic.thread;
 
 
+import android.util.Log;
+
 import com.example.daxinli.tempmusic.constant.GameData;
 import com.example.daxinli.tempmusic.object.MainSlide;
 import com.example.daxinli.tempmusic.util.effect.RedHeart.RedHeart;
@@ -43,6 +45,7 @@ public class CreateSlideThread extends Thread {
 
     @Override
     public void run() {
+        Log.e(TAG, "createSpan线程开始了");
         initData();
         while(flag) {                                                   //createSpan应该根据上一个滑块的长度来计算
             if(!pause) {
@@ -108,6 +111,7 @@ public class CreateSlideThread extends Thread {
                 }
 
                 long end= System.currentTimeMillis();
+                //Log.e("createSPan和滑块时间", Float.toString(createSpan)+" "+Long.toString(end-start));
                 if(end-start<createSpan) {
                     try {
                         Thread.sleep((long)createSpan-(end-start));
@@ -120,6 +124,7 @@ public class CreateSlideThread extends Thread {
                 } else attachSpan = 0;
             }
         }
+        Log.e("CreateThread已经停止了", "run: ");
     }
     public void createNewSlide(item tp) {                              //产生一个新的滑块 放入Data的滑块队列
         while ((curRandomInt = random.nextInt(4)) == lastRandomInt) {}
