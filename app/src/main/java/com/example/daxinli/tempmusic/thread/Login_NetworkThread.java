@@ -110,5 +110,4 @@ public class Login_NetworkThread extends Thread {
     }
     public void setFather(BaseActivity father) {this.father = father;}
 
-
 }

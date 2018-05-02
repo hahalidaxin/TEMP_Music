@@ -48,8 +48,6 @@
                 android:textColor="@color/colorWhite"
                 android:text=""
                 />
-
-
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
