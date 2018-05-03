@@ -5,6 +5,8 @@ import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 
 import com.example.daxinli.tempmusic.MatrixState.MatrixState2D;
+import com.example.daxinli.tempmusic.MutigameModule.ViewTool.RhythmTool;
+import com.example.daxinli.tempmusic.util.manager.ShaderManager;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -15,8 +17,11 @@ import javax.microedition.khronos.opengles.GL10;
  */
 
 public class Muti_SurfaceView extends GLSurfaceView{
-    private Renderer mRenderer;
+    private SceneRenderer mRenderer;
     private Context mcontext;
+    private boolean initFlag = false;
+
+    private RhythmTool rhythmTool;
 
     public Muti_SurfaceView(Context context)
     {
@@ -34,13 +39,16 @@ public class Muti_SurfaceView extends GLSurfaceView{
         public void onDrawFrame(GL10 gl)
         {
             GLES30.glClear( GLES30.GL_DEPTH_BUFFER_BIT | GLES30.GL_COLOR_BUFFER_BIT);
-
+            if(!initFlag) {
+                rhythmTool = new RhythmTool(mcontext);
+                initFlag = true;
+            }
+            if(rhythmTool!=null) {
+                rhythmTool.onDraw();
+            }
         }
         public void onSurfaceChanged(GL10 gl, int width, int height)
         {
-            //设置视口的大小 为当前view的宽高
-            width = width;
-            height = height;
             GLES30.glViewport
                     (
                             0,
@@ -60,6 +68,8 @@ public class Muti_SurfaceView extends GLSurfaceView{
         {
             GLES30.glClearColor(255f,255f,255f, 1.0f);
             GLES30.glEnable(GL10.GL_CULL_FACE);
+            ShaderManager.loadCodeFromFile(mcontext.getResources());
+            ShaderManager.compileShader();
         }
     }
 }

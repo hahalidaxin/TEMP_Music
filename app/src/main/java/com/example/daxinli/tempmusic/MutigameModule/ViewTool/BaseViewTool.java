@@ -14,11 +14,13 @@ public abstract class BaseViewTool {
         this.mcontext = context;
     }
     public void onInit(int x,int y,int w,int h) {       //设置view的位置以及大小属性
-        this.viewX = x,this.viewY = y;
-        this.viewHeight = h,this.viewWidth = w;
+        this.viewX = x;
+        this.viewY = y;
+        this.viewHeight = h;
+        this.viewWidth = w;
     }
     public void onDestroy() {}
-    public void onTouch(MotionEvent event) {
+    public boolean onTouch(MotionEvent event) {
         return true;
     }
     public abstract void onDraw();
