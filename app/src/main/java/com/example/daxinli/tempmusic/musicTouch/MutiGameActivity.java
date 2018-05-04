@@ -1,5 +1,6 @@
 package com.example.daxinli.tempmusic.musicTouch;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 
@@ -12,6 +13,8 @@ public class MutiGameActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         initData();
 
         muti_surfaceView = new Muti_SurfaceView(this);

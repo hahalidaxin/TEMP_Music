@@ -3,6 +3,7 @@ package com.example.daxinli.tempmusic.MutigameModule;
 import android.content.Context;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 
 import com.example.daxinli.tempmusic.MatrixState.MatrixState2D;
 import com.example.daxinli.tempmusic.MutigameModule.ViewTool.RhythmTool;
@@ -17,6 +18,7 @@ import javax.microedition.khronos.opengles.GL10;
  */
 
 public class Muti_SurfaceView extends GLSurfaceView{
+    private static final String TAG = "Muti_SurfaceView";
     private SceneRenderer mRenderer;
     private Context mcontext;
     private boolean initFlag = false;
@@ -49,18 +51,12 @@ public class Muti_SurfaceView extends GLSurfaceView{
         }
         public void onSurfaceChanged(GL10 gl, int width, int height)
         {
-            GLES30.glViewport
-                    (
-                            0,
-                            0,
-                            width,
-                            height
-                    );
+
+            Log.e(TAG, "Width : "+Integer.toString(width)+"  Height: "+Integer.toString(height) );
             float ratio= (float) width/height;
             MatrixState2D.setInitStack();
             MatrixState2D.setCamera(0,0,5,0f,0f,0f,0f,1f,0f);
             MatrixState2D.setProjectOrtho(-ratio, ratio, -1, 1, 1, 100);
-
             MatrixState2D.setCamera(0,0,5,0f,0f,0f,0f,1f,0f);
             MatrixState2D.setLightLocation(0,50,0);
         }

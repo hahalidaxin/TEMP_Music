@@ -31,6 +31,12 @@ public class Constant {
     {
         return -(y-SCREEN_HEIGHT_STANDARD/2)/(SCREEN_HEIGHT_STANDARD/2);
     }
+    public static float fromScreenXToNearX_HP(float x) {
+        return (x-SCREEN_HEIGHT_STANDARD/2)/(SCREEN_WIDTH_STANDARD/2);
+    }
+    public static float fromScreenYToNearY_HP(float y) {
+        return -(y-SCREEN_WIDTH_STANDARD/2)/(SCREEN_WIDTH_STANDARD/2);
+    }
     //实际屏幕x坐标到标准屏幕x坐标
     public static float fromRealScreenXToStandardScreenX(float rx)
     {

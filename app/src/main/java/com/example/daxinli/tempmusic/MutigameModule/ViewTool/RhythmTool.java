@@ -22,7 +22,7 @@ public class RhythmTool extends BaseViewTool{
 
     public RhythmTool(Context context) {
         super(context);
-        onInit(10,10,1000,1000);
+        onInit(0,0,1000,1000);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class RhythmTool extends BaseViewTool{
         ptsQueue = new LinkedBlockingQueue<points>();
         lineDrawer = new Obj2DLine(0.2f,0,0,0, ShaderManager.getShader(6));
 
-        int uplineY = (int)(y+0.1f*h);
+        int uplineY = (int)(y);
         int downlineY = (int)(y+0.9f*h);
 
         float ptSpanWidth = 0.8f*w/(numberLimit/2);

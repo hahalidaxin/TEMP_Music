@@ -47,7 +47,7 @@ public class ScreenScaleUtil {
                 result = new ScreenScaleResult((int) lcuX, (int) lcuY, ratio, so);
             }
         }
-
+        System.out.println("de");
         if (so == ScreenOrien.SP) {
             targetRatio = targetWidth / targetHeight;
             if (targetRatio > 0.5625F) {
@@ -66,29 +66,5 @@ public class ScreenScaleUtil {
         }
         //result = new ScreenScaleResult (0,0,1, ScreenOrien.SP);
         return result ;
-        /*
-        //此处使用等比例缩放并剪裁的方案
-        if(so == ScreenOrien.HP) {
-            ratio = targetHeight/sHpHeight;
-            realTargetWidth = sHpWidth*ratio;
-            lcuX = 0;
-            lcuY = 0;
-            if(targetWidth<realTargetWidth) {
-                lcuY = targetHeight - realTargetWidth;
-            }
-            result = new ScreenScaleResult((int)lcuX,(int)lcuY,ratio,so);
-        } else if(so == ScreenOrien.SP){
-            ratio = targetWidth/sSpWidth;
-            realTargetHeight = sSpHeight*ratio;
-            lcuX = 0;
-            lcuY = 0;
-            if(targetHeight<realTargetHeight) {
-                lcuY = targetHeight - realTargetHeight;
-            }
-            result = new ScreenScaleResult((int)lcuX,(int)lcuY,ratio,so);
-        }
-        return result;
-
-        */
     }
 }
