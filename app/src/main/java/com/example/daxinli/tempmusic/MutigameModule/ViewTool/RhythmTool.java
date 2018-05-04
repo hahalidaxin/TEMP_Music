@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.object.Obj2DLine;
+import com.example.daxinli.tempmusic.object.Obj2DPoint;
 import com.example.daxinli.tempmusic.util.manager.ShaderManager;
 
 import java.util.Queue;
@@ -19,6 +20,7 @@ public class RhythmTool extends BaseViewTool{
     private Queue<points> ptsQueue;
     private Queue<points> tmpQueue;
     private Obj2DLine lineDrawer;
+    private Obj2DPoint pointDrawer;
 
     public RhythmTool(Context context) {
         super(context);
@@ -30,6 +32,7 @@ public class RhythmTool extends BaseViewTool{
         super.onInit(x, y, w, h);
         ptsQueue = new LinkedBlockingQueue<points>();
         lineDrawer = new Obj2DLine(0.2f,0,0,0, ShaderManager.getShader(6));
+        pointDrawer = new Obj2DPoint(1,0,0,0,ShaderManager.getShader(7));
 
         int uplineY = (int)(y);
         int downlineY = (int)(y+0.9f*h);
@@ -60,8 +63,8 @@ public class RhythmTool extends BaseViewTool{
             pts[pts_cnt++] = pt.x;
             pts[pts_cnt++] = pt.y;
         }
-        lineDrawer.setLinePoints(numberLimit,pts);
-        lineDrawer.drawSelf();
+        pointDrawer.setPoints(numberLimit,pts,5);
+        pointDrawer.drawSelf();
     }
 
     public class points {
