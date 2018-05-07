@@ -191,6 +191,10 @@ public class Obj2DRectangle
 	public void setRadiusSpan(float x) {
 		this.radiusSpan = x;
 	}
+	public void setAngleRotate(int spng,float angle2D) {		//设置长方形进行旋转的角度信息
+		this.spng = spng;
+		this.Angle2D = angle2D;
+	}
 
 	public void setColor(float a,float r,float g,float b) {		//重新设置颜色 // 更改缓冲区数据
 		this.a = a;

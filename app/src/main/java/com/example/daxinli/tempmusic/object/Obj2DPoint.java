@@ -32,23 +32,22 @@ public class Obj2DPoint {
     float pts[];
     int ptSize ;
 
-    public Obj2DPoint(float a,float r,float g,float b,int programId) {
+    public Obj2DPoint(int programId) {
+        this.programId = programId;
+    }
+    public void setPoints(float a,float r,float g,float b,int pointSize,int pointCount,float[] pts) {
         this.a = a;
         this.r = r;
         this.g = g;
         this.b = b;
-        this.programId = programId;
-    }
-    public void setPoints(int vertexCount,float[] pts,int pointSize) {
-        this.pts = pts;
+        this.vCount = pointCount;
+
+        float vertices[]=new float[vCount*3];
+        float colors[] = new float[vCount*4];
+        int verCnt=0,verColorCnt=0;
         this.ptSize = pointSize;
 
-        vCount=vertexCount;
-        float vertices[]=new float[vertexCount*3];
-        float colors[] = new float[vertexCount*4];
-        int verCnt=0,verColorCnt=0;
-
-        for (int i=0;i<vertexCount;i++) {
+        for (int i=0;i<vCount;i++) {
             vertices[verCnt++] = Constant.fromScreenXToNearX_HP(Constant.fromStandardScreenXToRealScreenX(pts[i<<1]));
             vertices[verCnt++] = Constant.fromScreenYToNearY_HP(Constant.fromStandardScreenYToRealScreenY(pts[(i<<1)+1]));
             vertices[verCnt++] = 0;
@@ -88,48 +87,27 @@ public class Obj2DPoint {
             initShader();
             initFlag=true;
         }
-        GLES30.glEnable(GLES30.GL_BLEND);
+        if(mVertexBuffer==null) {
+            return ;
+        }
 
+        GLES30.glEnable(GLES30.GL_BLEND);
         GLES30.glBlendFunc(GLES30.GL_SRC_ALPHA,GLES30.GL_ONE_MINUS_SRC_ALPHA);
 
         GLES30.glUseProgram(programId);
         MatrixState2D.pushMatrix();
+
         GLES30.glUniform1f(pointSizeHandle,ptSize);
-        GLES30.glUniformMatrix4fv
-                (
-                        muMVPMatrixHandle,
-                        1,
-                        false,
-                        MatrixState2D.getFinalMatrix(),
-                        0
-                );
-        GLES30.glVertexAttribPointer
-                (
-                        maPositionHandle,
-                        3,
-                        GLES30.GL_FLOAT,
-                        false,
-                        3*4,
-                        mVertexBuffer
-                );
-
-
-        GLES30.glVertexAttribPointer
-                (
-                        maColorHandle,
-                        4,
-                        GLES30.GL_FLOAT,
-                        false,
-                        4*4,
-                        mColorBuffer
-                );
-
+        GLES30.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, MatrixState2D.getFinalMatrix(), 0);
+        GLES30.glVertexAttribPointer(maPositionHandle, 3, GLES30.GL_FLOAT, false, 3*4, mVertexBuffer);
+        GLES30.glVertexAttribPointer(maColorHandle, 4, GLES30.GL_FLOAT, false, 4*4, mColorBuffer);
         GLES30.glEnableVertexAttribArray(maPositionHandle);
         GLES30.glEnableVertexAttribArray(maColorHandle);
 
         GLES30.glDrawArrays(GLES30.GL_POINTS, 0, vCount);
 
         MatrixState2D.popMatrix();
+
         GLES30.glDisable(GLES30.GL_BLEND);
 
     }
