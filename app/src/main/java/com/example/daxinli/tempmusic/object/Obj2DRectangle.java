@@ -61,6 +61,8 @@ public class Obj2DRectangle
 	float RadiusLimit;
 	boolean isAnim; 		//动画进行的标志位
 	int AnimRadiusHandle;
+
+	boolean isHP=false;	//是否横屏的标志位
 	
 	public Obj2DRectangle(float x, float y, float width, float height, float a, float r, float g, float b, int programId) {
 		x+=width/2; y+=height/2;
@@ -176,15 +178,26 @@ public class Obj2DRectangle
 	public void setY(float y)
 	{
 		y+=Height/2;
-		this.NearY = Constant.fromScreenYToNearY(y);
+		if(!this.isHP)
+			this.NearY = Constant.fromScreenYToNearY(y);
+		else
+			this.NearY = Constant.fromScreenYToNearY_HP(y);
 		this.y = y;
 	}
 	
 	public void setX(float x)
 	{
 		x+=Width/2;
-		this.NearX = Constant.fromScreenXToNearX(x);
+		if(!this.isHP)
+			this.NearX = Constant.fromScreenXToNearX(x);
+		else
+			this.NearX = Constant.fromScreenXToNearX_HP(x);
 		this.x = x;
+	}
+	public void setHP(boolean isHP) {
+		this.isHP = isHP;
+		this.NearX = Constant.fromScreenXToNearX_HP(this.x);
+		this.NearY = Constant.fromScreenYToNearY_HP(this.y);
 	}
 	public void setRadiusSpan(float x) {
 		this.radiusSpan = x;

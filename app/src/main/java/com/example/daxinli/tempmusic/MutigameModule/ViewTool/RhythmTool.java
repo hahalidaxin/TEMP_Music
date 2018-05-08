@@ -47,6 +47,7 @@ public class RhythmTool extends BaseViewTool{
                                              ptMg.CW,ptMg.CH,
                                              ptMg.Ca,ptMg.Cr,ptMg.Cg,ptMg.Cb,
                                                 ShaderManager.getShader(6));
+        centralPtDrawer.setHP(true);
         this.borderX = x; this.borderY = y;
         this.borderWidth = w; this.borderHeight = h;
     }
@@ -66,8 +67,8 @@ public class RhythmTool extends BaseViewTool{
         lineDrawer.setLinePoints(this.drawLinePtsNum/2,tmpPts);
         lineDrawer.drawSelf();
 
-        centralPtDrawer.setX(10);
-        centralPtDrawer.setY(10);
+        centralPtDrawer.setX(100);
+        centralPtDrawer.setY(100);
         centralPtDrawer.drawSelf();
     }
 
@@ -119,8 +120,8 @@ public class RhythmTool extends BaseViewTool{
         private static final String TAG = "PointsManager";
         private static final int numberLimit = 9;
         public static final float EPS = 5.0f;        //最小Y误差
-        public static final float Ca = 1,Cr = 0,Cg = 0,Cb = 0;   //中心点的颜色
-        public static final float CW = 10,CH = 10;               //中心点的长宽
+        public static final float Ca = 1,Cr = 1,Cg = 0,Cb = 0;   //中心点的颜色
+        public static final float CW = 30,CH = 100;               //中心点的长宽
 
         public Queue<points> linePtsQueue = new LinkedBlockingQueue<points>();         //存储节奏型的点数据
         public points[] linePts = new points[15];
@@ -205,11 +206,6 @@ public class RhythmTool extends BaseViewTool{
             for(int i=0;i<=qcnt;i++) {
                 linePtsQueue.add(linePts[i]);
             }
-            //Log.e(TAG, "queue的size是"+Integer.toString(linePtsQueue.size()));
-            //if(linePtsQueue.isEmpty()) {
-            //    Log.e(TAG, "qcnt是"+Integer.toString(qcnt));
-            //    Log.e(TAG, "qsize是"+Integer.toString(qsize));
-            //}
         }
     }
 }
