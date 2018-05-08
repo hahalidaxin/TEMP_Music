@@ -64,8 +64,6 @@ public class Obj2DRectangle
 	
 	public Obj2DRectangle(float x, float y, float width, float height, float a, float r, float g, float b, int programId) {
 		x+=width/2; y+=height/2;
-		//this.x=Constant.fromScreenXToNearX(x);	//将坐标转化为视口坐标
-		//this.y=Constant.fromScreenYToNearY(y);
         this.NearX = Constant.fromScreenXToNearX(x);
         this.x = x;
         this.NearY = Constant.fromScreenYToNearY(y);

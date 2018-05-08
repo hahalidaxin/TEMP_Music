@@ -18,12 +18,14 @@ import javax.microedition.khronos.opengles.GL10;
  */
 
 public class Muti_SurfaceView extends GLSurfaceView{
-    private static final String TAG = "Muti_SurfaceView";
+    public static final String TAG = "Muti_SurfaceView";
+    public static final long DRAWSPANTIME = 20;
     private SceneRenderer mRenderer;
     private Context mcontext;
     private boolean initFlag = false;
 
     private RhythmTool rhythmTool;
+    private long lastDrawTime;
 
     public Muti_SurfaceView(Context context)
     {
@@ -42,11 +44,22 @@ public class Muti_SurfaceView extends GLSurfaceView{
         {
             GLES30.glClear( GLES30.GL_DEPTH_BUFFER_BIT | GLES30.GL_COLOR_BUFFER_BIT);
             if(!initFlag) {
-                rhythmTool = new RhythmTool(mcontext);
+                rhythmTool = new RhythmTool(mcontext,200,50,1000,1000);
                 initFlag = true;
+                lastDrawTime = System.currentTimeMillis();
             }
+
             if(rhythmTool!=null) {
                 rhythmTool.onDraw();
+            }
+
+            if(System.currentTimeMillis()-lastDrawTime<DRAWSPANTIME) {
+                try {
+                    Thread.sleep(DRAWSPANTIME-(System.currentTimeMillis()-lastDrawTime));
+                    lastDrawTime = System.currentTimeMillis();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
         public void onSurfaceChanged(GL10 gl, int width, int height)

@@ -47,8 +47,8 @@ public class Obj2DLine {
         int verCnt=0,verColorCnt=0;
 
         for (int i=0;i<vertexCount;i++) {
-            vertices[verCnt++] = Constant.fromScreenXToNearX_HP(Constant.fromStandardScreenXToRealScreenX(pts[i<<1]));
-            vertices[verCnt++] = Constant.fromScreenYToNearY_HP(Constant.fromStandardScreenYToRealScreenY(pts[(i<<1)+1]));
+            vertices[verCnt++] = Constant.fromScreenXToNearX_HP(pts[i<<1]);
+            vertices[verCnt++] = Constant.fromScreenYToNearY_HP(pts[(i<<1)+1]);
             vertices[verCnt++] = 0;
 
             colors[verColorCnt++] = r;
