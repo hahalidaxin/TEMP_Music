@@ -33,11 +33,11 @@ public class Obj2DLine {
     float a,r,g,b;
 
     public Obj2DLine(float a,float r,float g,float b,int programId){
-        this.a = a;
-        this.r = a;
-        this.g = g;
-        this.b = b;
+        this.a = a; this.r = r; this.g = g; this.b = b;
         this.programId = programId;
+    }
+    public void setColor(float a,float r,float g,float b) {
+        this.a = a; this.r = r; this.g = g; this.b = b;
     }
     public void setLinePoints(int vertexCount,float[] pts)
     {

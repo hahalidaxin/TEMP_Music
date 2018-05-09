@@ -1,7 +1,6 @@
 package com.example.daxinli.tempmusic.MutigameModule.ViewTool;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.object.Obj2DLine;
@@ -26,6 +25,9 @@ public class RhythmTool extends BaseViewTool{
     private PointsManager ptMg;
 
     private float borderX,borderY,borderWidth,borderHeight;
+    private float[] lineformer = new float[30];
+    private float[] linelater = new float[30];   //绘制线的两条的坐标信息
+    private int lineFormerNum=0,lineLaterNum=0;
 
     private float speed = 5;            //向右移动的总速度
 
@@ -41,7 +43,6 @@ public class RhythmTool extends BaseViewTool{
         super.onInit(x, y, w, h);
         lineDrawer = new Obj2DLine(0.2f,0,0,0, ShaderManager.getShader(6));
         backGround = new Obj2DRectangle(x,y,w,h,0.3f,94/255,1.0f,129/255,ShaderManager.getShader(6));
-        //surPtsDrawer = new Obj2DPoint(ShaderManager.getShader(7));
         ptMg = new PointsManager(x,y,w,h);
         centralPtDrawer = new Obj2DRectangle(ptMg.centralX,ptMg.centralY,
                                              ptMg.CW,ptMg.CH,
@@ -59,22 +60,27 @@ public class RhythmTool extends BaseViewTool{
 
     @Override
     public void onDraw() {
+        backGround.setHP(true);
         backGround.drawSelf();
         ptMg.go();
         Queue<points> tmpQueue = new LinkedBlockingQueue<points>(ptMg.linePtsQueue);
 
-        float [] tmpPts = getLinePtsArray(tmpQueue);
-        lineDrawer.setLinePoints(this.drawLinePtsNum/2,tmpPts);
+        getLinePtsArray(tmpQueue);
+        lineDrawer.setColor(0.2f,0,0,1);
+        lineDrawer.setLinePoints(this.lineFormerNum/2,this.lineformer);
         lineDrawer.drawSelf();
 
-        centralPtDrawer.setX(100);
-        centralPtDrawer.setY(100);
+        lineDrawer.setColor(0.2f,0,0,0);
+        lineDrawer.setLinePoints(this.lineLaterNum/2,this.linelater);
+        lineDrawer.drawSelf();
+
+        centralPtDrawer.setX(ptMg.centralX-ptMg.CW/2);
+        centralPtDrawer.setY(ptMg.centralY-ptMg.CH/2);
         centralPtDrawer.drawSelf();
     }
 
-    public float[] getLinePtsArray(Queue<points> tmpQueue) {        //添加边界节点，返回节点的位置数组
+    public void getLinePtsArray(Queue<points> tmpQueue) {        //添加边界节点，返回节点的位置数组
         float[] tmpPts = new float[30];
-        float[] pts = new float[30];
         int pts_cnt = 0,size;
 
         while(!tmpQueue.isEmpty()) {
@@ -83,27 +89,37 @@ public class RhythmTool extends BaseViewTool{
             tmpPts[pts_cnt++] = pt.y;
         }
 
-        size = pts_cnt; pts_cnt = 0;
+        //构造两条不同颜色线段的位置信息
+        int line1cnt=0,line2cnt=0;
+        size = pts_cnt;
         if(tmpPts[0]!=borderX) {
-            pts[pts_cnt++] =  this.borderX;
+            lineformer[line1cnt++] =  this.borderX;
             int spanY = Math.abs((int)(tmpPts[1]-tmpPts[3]));
             int spanX = Math.abs((int)(tmpPts[0]-tmpPts[2]));
             float tx = tmpPts[1]>tmpPts[3]? tmpPts[0]-borderX : borderX-tmpPts[size-2]+borderWidth;
-            if(tmpPts[1]>tmpPts[3]) {
-                Log.e(TAG, " pts1:pts3 "+Float.toString(pts[1])+" "+Float.toString(pts[3]));
-                Log.e(TAG, "tx: "+Float.toString(tx));
-            }
-            pts[pts_cnt++] =  borderY + borderHeight - spanY * (tx)/spanX;
+            lineformer[line1cnt++] =  borderY + borderHeight - spanY * (tx)/spanX;
         }
-        for(int i=0;i<size;i++) {
-            pts[pts_cnt++] = tmpPts[i];
+        int i;
+        for(i=0;i<size;i+=2) {
+            if(tmpPts[i]>=this.ptMg.centralX) break;
+            lineformer[line1cnt++] = tmpPts[i];
+            lineformer[line1cnt++] = tmpPts[i+1];
+        }
+        lineformer[line1cnt++] = ptMg.centralX;
+        lineformer[line1cnt++] = ptMg.centralY;
+
+
+        linelater[line2cnt++] = ptMg.centralX;
+        linelater[line2cnt++] = ptMg.centralY;
+        for(;i<size;i++) {
+            linelater[line2cnt++] = tmpPts[i];
         }
         if(tmpPts[0]!=borderX) {
-            pts[pts_cnt++] = borderX+borderWidth;
-            pts[pts_cnt++] = pts[1];
+            linelater[line2cnt++] = borderX+borderWidth;
+            linelater[line2cnt++] = lineformer[1];
         }
-        this.drawLinePtsNum = pts_cnt;
-        return pts;
+        this.lineFormerNum = line1cnt;
+        this.lineLaterNum = line2cnt;
     }
 
     public class points {
@@ -121,7 +137,7 @@ public class RhythmTool extends BaseViewTool{
         private static final int numberLimit = 9;
         public static final float EPS = 5.0f;        //最小Y误差
         public static final float Ca = 1,Cr = 1,Cg = 0,Cb = 0;   //中心点的颜色
-        public static final float CW = 30,CH = 100;               //中心点的长宽
+        public static final float CW = 100,CH = 100;               //中心点的长宽
 
         public Queue<points> linePtsQueue = new LinkedBlockingQueue<points>();         //存储节奏型的点数据
         public points[] linePts = new points[15];
@@ -132,10 +148,6 @@ public class RhythmTool extends BaseViewTool{
 
         public Random random = new Random();
         public int borderX,borderY,borderWidth,borderHeight;
-
-        public boolean isFloatEqual(float a,float b) {  //判断两个float是否近似相等
-            return Math.abs(a-b)<EPS;
-        }
 
         public PointsManager(int x,int y,int w,int h) {
             this.borderX = x; this.borderY = y;
@@ -153,9 +165,8 @@ public class RhythmTool extends BaseViewTool{
                 int upx = (int)(x+i*ptSpanWidth);
                 int downx = (int)(upx+0.5*ptSpanWidth);
                 linePtsQueue.add(new points(upx,uplineY));
-                if(linePtsQueue.size()==insertRk+1) {                      //向队列中插入两个中心点坐标
-                    points cPT = new points(upx,uplineY); cPT.type=1;
-                    //linePtsQueue.add(cPT);
+
+                if(linePtsQueue.size()==insertRk+1) {                      //初始时刻中心点的坐标
                     centralX = upx; centralY = uplineY;
                 }
                 if(i!=(numberLimit+1)/2-1)
@@ -168,33 +179,26 @@ public class RhythmTool extends BaseViewTool{
             while(!linePtsQueue.isEmpty()) {
                 linePts[qcnt++] = linePtsQueue.remove();
             }
-
+            //计算中心点的坐标位置
+            centralX+=speed;
+            for(int i=0;i<qsize;i++) {
+                points qn1 = linePts[i],qn2 = linePts[i+1];
+                if(centralX>=qn1.x && centralX<=qn2.x) {
+                    if(qn1.y<qn2.y) {
+                        centralY = qn1.y + (qn2.y - qn1.y) * (centralX - qn1.x) / (qn2.x - qn1.x);
+                    } else {
+                        centralY = qn2.y + (qn1.y - qn2.y) * (qn2.x - centralX) / (qn2.x - qn1.x);
+                    }
+                }
+            }
+            centralX -= speed;
+            //计算线段点的坐标位置
             qcnt=-1;
             for(int i=0;i<qsize;i++) {
                 points qnode = linePts[i];
                 points qn1=linePts[0],qn2=linePts[1];
-                if(qnode.type==1) {
-                    qnode.x+=speed;
-                    int qj;
-                    qn1 = linePts[(i-1 +qsize)%qsize];
-                    qn2 = linePts[(i+1)%qsize];
-                    if(qn1.x>qnode.x) qn1.x-=borderWidth;
-                    if(qn2.x<qnode.x) qn2.x+=borderWidth;
-                    if (!(qnode.x >= qn1.x && qnode.x <= qn2.x)) {
-                        for (qj = i + 1; qj < qsize-1; qj++) {
-                            qn1 = linePts[qj];
-                            qn2 = linePts[qj + 1];
-                            if (qnode.x >= qn1.x && qnode.x <= qn2.x && (qn1.type != 0 && qn2.type != 0))
-                                break;
-                        }
-                    }
-                    qnode.y = qn1.y + (qn2.y - qn1.y) * (qnode.x - qn1.x) / (qn2.x - qn1.x);
-                    qnode.x -= speed;
-                    centralX = qnode.x;
-                } else {
-                    qnode.x -= speed;;
-                    centralY = qnode.y;
-                }
+                qnode.x -= speed;
+
                 if (qnode.x < borderX) {
                     qnode.x += borderWidth;
                     qcnt=i;

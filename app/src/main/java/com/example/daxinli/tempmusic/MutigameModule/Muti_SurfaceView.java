@@ -44,7 +44,7 @@ public class Muti_SurfaceView extends GLSurfaceView{
         {
             GLES30.glClear( GLES30.GL_DEPTH_BUFFER_BIT | GLES30.GL_COLOR_BUFFER_BIT);
             if(!initFlag) {
-                rhythmTool = new RhythmTool(mcontext,200,50,1000,1000);
+                rhythmTool = new RhythmTool(mcontext,100,100,1000,1000);
                 initFlag = true;
                 lastDrawTime = System.currentTimeMillis();
             }
