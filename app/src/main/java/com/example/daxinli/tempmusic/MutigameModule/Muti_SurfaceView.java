@@ -6,7 +6,7 @@ import android.opengl.GLSurfaceView;
 import android.util.Log;
 
 import com.example.daxinli.tempmusic.MatrixState.MatrixState2D;
-import com.example.daxinli.tempmusic.MutigameModule.ViewTool.RhythmTool;
+import com.example.daxinli.tempmusic.MutigameModule.ViewTool.RhythmToolModule.RhythmTool;
 import com.example.daxinli.tempmusic.util.manager.ShaderManager;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -44,7 +44,7 @@ public class Muti_SurfaceView extends GLSurfaceView{
         {
             GLES30.glClear( GLES30.GL_DEPTH_BUFFER_BIT | GLES30.GL_COLOR_BUFFER_BIT);
             if(!initFlag) {
-                rhythmTool = new RhythmTool(mcontext,100,100,1000,1000);
+                rhythmTool = new RhythmTool(mcontext,100,100,1000,1000,500);
                 initFlag = true;
                 lastDrawTime = System.currentTimeMillis();
             }

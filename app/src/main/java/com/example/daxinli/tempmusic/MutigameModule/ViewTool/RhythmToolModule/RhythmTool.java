@@ -1,14 +1,14 @@
-package com.example.daxinli.tempmusic.MutigameModule.ViewTool;
+package com.example.daxinli.tempmusic.MutigameModule.ViewTool.RhythmToolModule;
 
 import android.content.Context;
 import android.view.MotionEvent;
 
+import com.example.daxinli.tempmusic.MutigameModule.ViewTool.BaseViewTool;
 import com.example.daxinli.tempmusic.object.Obj2DLine;
 import com.example.daxinli.tempmusic.object.Obj2DRectangle;
 import com.example.daxinli.tempmusic.util.manager.ShaderManager;
 
 import java.util.Queue;
-import java.util.Random;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -16,25 +16,27 @@ import java.util.concurrent.LinkedBlockingQueue;
  * 多人游戏中的节奏型工具，用来显示节奏型
  */
 
-public class RhythmTool extends BaseViewTool{
+public class RhythmTool extends BaseViewTool {
     private static final String TAG = "RhythmTool";
+    public static final long refreshTimeSpan = 20;
     private Obj2DLine lineDrawer;
     //private Obj2DPoint surPtsDrawer;  //环绕点地绘画对象
     private Obj2DRectangle centralPtDrawer; //中心点的回话对象1
     private Obj2DRectangle backGround;
-    private PointsManager ptMg;
+    public PointsManager ptMg;
+    public RhythmToolThread mrhThread;
 
     private float borderX,borderY,borderWidth,borderHeight;
     private float[] lineformer = new float[30];
     private float[] linelater = new float[30];   //绘制线的两条的坐标信息
     private int lineFormerNum=0,lineLaterNum=0;
-
-    private float speed = 5;            //向右移动的总速度
+    private int thistime;
 
     public int drawLinePtsNum;
 
-    public RhythmTool(Context context,int x,int y,int w,int h) {
+    public RhythmTool(Context context,int x,int y,int w,int h,int time) {
         super(context);
+        thistime = time;
         onInit(x,y,w,h);
     }
 
@@ -43,7 +45,9 @@ public class RhythmTool extends BaseViewTool{
         super.onInit(x, y, w, h);
         lineDrawer = new Obj2DLine(0.2f,0,0,0, ShaderManager.getShader(6));
         backGround = new Obj2DRectangle(x,y,w,h,0.3f,94/255,1.0f,129/255,ShaderManager.getShader(6));
-        ptMg = new PointsManager(x,y,w,h);
+        backGround.setHP(true);
+        backGround.setX(x); backGround.setY(y);
+        ptMg = new PointsManager(x,y,w,h,thistime);
         centralPtDrawer = new Obj2DRectangle(ptMg.centralX,ptMg.centralY,
                                              ptMg.CW,ptMg.CH,
                                              ptMg.Ca,ptMg.Cr,ptMg.Cg,ptMg.Cb,
@@ -51,8 +55,10 @@ public class RhythmTool extends BaseViewTool{
         centralPtDrawer.setHP(true);
         this.borderX = x; this.borderY = y;
         this.borderWidth = w; this.borderHeight = h;
-    }
 
+        //mrhThread = new RhythmToolThread(this);
+        //mrhThread.start();
+    }
     @Override
     public boolean onTouch(MotionEvent event) {
         return super.onTouch(event);
@@ -120,96 +126,5 @@ public class RhythmTool extends BaseViewTool{
         }
         this.lineFormerNum = line1cnt;
         this.lineLaterNum = line2cnt;
-    }
-
-    public class points {
-        public int x,y,type;
-        //type==1 标识中心点
-        public points(int x,int y) {
-            this.x = x;
-            this.y = y;
-            this.type=0;
-        }
-    }
-
-    private class PointsManager {
-        private static final String TAG = "PointsManager";
-        private static final int numberLimit = 9;
-        public static final float EPS = 5.0f;        //最小Y误差
-        public static final float Ca = 1,Cr = 1,Cg = 0,Cb = 0;   //中心点的颜色
-        public static final float CW = 100,CH = 100;               //中心点的长宽
-
-        public Queue<points> linePtsQueue = new LinkedBlockingQueue<points>();         //存储节奏型的点数据
-        public points[] linePts = new points[15];
-
-        public float centralX,centralY;
-        public int uplineY;
-        public int downlineY;
-
-        public Random random = new Random();
-        public int borderX,borderY,borderWidth,borderHeight;
-
-        public PointsManager(int x,int y,int w,int h) {
-            this.borderX = x; this.borderY = y;
-            this.borderWidth = w; this.borderHeight = h;
-
-            uplineY = (int)(y);
-            downlineY = (int)(y+h);
-            float ptSpanWidth = w/(numberLimit/2);
-
-
-
-            int insertRk = (numberLimit+1)/2-1;
-
-            for(int i=0;i<(numberLimit+1)/2;i++) {
-                int upx = (int)(x+i*ptSpanWidth);
-                int downx = (int)(upx+0.5*ptSpanWidth);
-                linePtsQueue.add(new points(upx,uplineY));
-
-                if(linePtsQueue.size()==insertRk+1) {                      //初始时刻中心点的坐标
-                    centralX = upx; centralY = uplineY;
-                }
-                if(i!=(numberLimit+1)/2-1)
-                    linePtsQueue.add(new points(downx,downlineY));
-            }
-        }
-        public void go() {
-            int qsize = linePtsQueue.size();
-            int qcnt = 0;
-            while(!linePtsQueue.isEmpty()) {
-                linePts[qcnt++] = linePtsQueue.remove();
-            }
-            //计算中心点的坐标位置
-            centralX+=speed;
-            for(int i=0;i<qsize;i++) {
-                points qn1 = linePts[i],qn2 = linePts[i+1];
-                if(centralX>=qn1.x && centralX<=qn2.x) {
-                    if(qn1.y<qn2.y) {
-                        centralY = qn1.y + (qn2.y - qn1.y) * (centralX - qn1.x) / (qn2.x - qn1.x);
-                    } else {
-                        centralY = qn2.y + (qn1.y - qn2.y) * (qn2.x - centralX) / (qn2.x - qn1.x);
-                    }
-                }
-            }
-            centralX -= speed;
-            //计算线段点的坐标位置
-            qcnt=-1;
-            for(int i=0;i<qsize;i++) {
-                points qnode = linePts[i];
-                points qn1=linePts[0],qn2=linePts[1];
-                qnode.x -= speed;
-
-                if (qnode.x < borderX) {
-                    qnode.x += borderWidth;
-                    qcnt=i;
-                }
-            }
-            for(int i=qcnt+1;i<qsize;i++) {
-                linePtsQueue.add(linePts[i]);
-            }
-            for(int i=0;i<=qcnt;i++) {
-                linePtsQueue.add(linePts[i]);
-            }
-        }
     }
 }
