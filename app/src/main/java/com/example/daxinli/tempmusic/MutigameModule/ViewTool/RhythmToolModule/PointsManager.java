@@ -1,6 +1,6 @@
 package com.example.daxinli.tempmusic.MutigameModule.ViewTool.RhythmToolModule;
 
-import com.example.daxinli.tempmusic.MutigameModule.Muti_SurfaceView;
+import com.example.daxinli.tempmusic.MutigameModule.View.Muti_SurfaceView;
 
 import java.util.Queue;
 import java.util.Random;

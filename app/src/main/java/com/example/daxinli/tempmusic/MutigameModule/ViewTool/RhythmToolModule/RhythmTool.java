@@ -20,19 +20,15 @@ public class RhythmTool extends BaseViewTool {
     private static final String TAG = "RhythmTool";
     public static final long refreshTimeSpan = 20;
     private Obj2DLine lineDrawer;
-    //private Obj2DPoint surPtsDrawer;  //环绕点地绘画对象
     private Obj2DRectangle centralPtDrawer; //中心点的回话对象1
     private Obj2DRectangle backGround;
     public PointsManager ptMg;
-    public RhythmToolThread mrhThread;
 
     private float borderX,borderY,borderWidth,borderHeight;
     private float[] lineformer = new float[30];
     private float[] linelater = new float[30];   //绘制线的两条的坐标信息
     private int lineFormerNum=0,lineLaterNum=0;
     private int thistime;
-
-    public int drawLinePtsNum;
 
     public RhythmTool(Context context,int x,int y,int w,int h,int time) {
         super(context);
@@ -50,14 +46,13 @@ public class RhythmTool extends BaseViewTool {
         ptMg = new PointsManager(x,y,w,h,thistime);
         centralPtDrawer = new Obj2DRectangle(ptMg.centralX,ptMg.centralY,
                                              ptMg.CW,ptMg.CH,
+                                             ptMg.CW,ptMg.CH,
                                              ptMg.Ca,ptMg.Cr,ptMg.Cg,ptMg.Cb,
                                                 ShaderManager.getShader(6));
         centralPtDrawer.setHP(true);
         this.borderX = x; this.borderY = y;
         this.borderWidth = w; this.borderHeight = h;
 
-        //mrhThread = new RhythmToolThread(this);
-        //mrhThread.start();
     }
     @Override
     public boolean onTouch(MotionEvent event) {

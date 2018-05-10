@@ -24,11 +24,11 @@
         <activity android:name=".musicTouch.GameActivity" />
         <activity android:name=".musicTouch.AboutActivity" />
         <activity android:name=".musicTouch.HelpActivity" />
-        <activity android:name=".musicTouch.WelcomeActivity"/>
-        <activity android:name=".musicTouch.SettingsActivity"></activity>
-        <activity android:name=".musicTouch.LoginActivity"></activity>
-        <activity android:name=".musicTouch.RegisterActivity"></activity>
-
+        <activity android:name=".musicTouch.WelcomeActivity" />
+        <activity android:name=".musicTouch.SettingsActivity" />
+        <activity android:name=".musicTouch.LoginActivity" />
+        <activity android:name=".musicTouch.RegisterActivity" />
+        <activity android:name=".MutigameModule.Activity.MutiGamingActivity" />
     </application>
 
 </manifest>
