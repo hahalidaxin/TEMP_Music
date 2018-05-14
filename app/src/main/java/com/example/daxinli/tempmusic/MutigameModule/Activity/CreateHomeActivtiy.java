@@ -1,5 +1,6 @@
 package com.example.daxinli.tempmusic.MutigameModule.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +31,9 @@ public class CreateHomeActivtiy extends BaseActivity implements View.OnClickList
         switch(v.getId()) {
             case R.id.btn_leader_startgame:
                 //leader决定开始游戏 开启一个activity activity用opengles实现
-
+                // TODO: 2018/5/14 向服务器发送开始游戏信息
+                Intent intent  = new Intent(CreateHomeActivtiy.this,MutiGamingActivity.class);
+                startActivity(intent);
                 break;
         }
     }

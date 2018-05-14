@@ -29,7 +29,8 @@
         <activity android:name=".musicTouch.LoginActivity" />
         <activity android:name=".musicTouch.RegisterActivity" />
         <activity android:name=".MutigameModule.Activity.MutiGamingActivity" />
-        <activity android:name=".MutigameModule.Activity.CreateHomeActivtiy"></activity>
+        <activity android:name=".MutigameModule.Activity.CreateHomeActivtiy" />
+        <activity android:name=".MutigameModule.Activity.EnterAHomeActivity"></activity>
     </application>
 
 </manifest>

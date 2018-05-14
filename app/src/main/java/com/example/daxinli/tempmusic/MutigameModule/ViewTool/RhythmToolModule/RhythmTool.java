@@ -44,11 +44,13 @@ public class RhythmTool extends BaseViewTool {
         backGround.setHP(true);
         backGround.setX(x); backGround.setY(y);
         ptMg = new PointsManager(x,y,w,h,thistime);
+        /*
         centralPtDrawer = new Obj2DRectangle(ptMg.centralX,ptMg.centralY,
                                              ptMg.CW,ptMg.CH,
                                              ptMg.CW,ptMg.CH,
                                              ptMg.Ca,ptMg.Cr,ptMg.Cg,ptMg.Cb,
                                                 ShaderManager.getShader(6));
+        */
         centralPtDrawer.setHP(true);
         this.borderX = x; this.borderY = y;
         this.borderWidth = w; this.borderHeight = h;
