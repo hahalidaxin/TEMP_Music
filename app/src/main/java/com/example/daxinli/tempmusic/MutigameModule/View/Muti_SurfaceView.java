@@ -81,7 +81,6 @@ public class Muti_SurfaceView extends GLSurfaceView {
         public void onSurfaceChanged(GL10 gl, int width, int height)
         {
 
-            Log.e(TAG, "Width : "+Integer.toString(width)+"  Height: "+Integer.toString(height) );
             float ratio= (float) width/height;
             MatrixState2D.setInitStack();
             MatrixState2D.setCamera(0,0,5,0f,0f,0f,0f,1f,0f);

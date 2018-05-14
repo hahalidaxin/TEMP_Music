@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.MutigameModule.ViewTool.RhythmToolModule.RhythmTool;
+import com.example.daxinli.tempmusic.util.elseUtil.Area;
 import com.example.daxinli.tempmusic.view.BaseView;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -15,10 +16,10 @@ import javax.microedition.khronos.opengles.GL10;
 public class CreateHomeView extends BaseView{
     private RhythmTool mrhTool;
     private Context mcontext;
+    private Area
 
     public CreateHomeView(Context context) {
         this.mcontext = context;
-
         initView();
     }
     @Override
@@ -28,6 +29,8 @@ public class CreateHomeView extends BaseView{
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
+        int x = e.getX(),y = e.getY();
+        if()
         return true;
     }
 
