@@ -29,7 +29,9 @@
         <activity android:name=".musicTouch.LoginActivity" />
         <activity android:name=".musicTouch.RegisterActivity" />
         <activity android:name=".MutigameModule.Activity.MutiGamingActivity" />
-        <activity android:name=".MutigameModule.Activity.CreateHomeActivtiy" />
+        <activity android:name=".MutigameModule.Activity.WaitOtherPeopleActivity1" />
+        <activity android:name=".MutigameModule.Activity.WaitOtherPeopleActivity2" />
+        <activity android:name=".MutigameModule.Activity.CreateAHomeActivity" />
         <activity android:name=".MutigameModule.Activity.EnterAHomeActivity"></activity>
     </application>
 

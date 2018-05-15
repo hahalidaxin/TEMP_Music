@@ -10,22 +10,22 @@ import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgSender;
 import com.example.daxinli.tempmusic.R;
 import com.example.daxinli.tempmusic.musicTouch.BaseActivity;
 
-public class EnterAHomeActivity extends BaseActivity implements View.OnClickListener {
-    EditText editText_paswordtoEnter;
-    Button btn_enterYourHome;
+public class CreateAHomeActivity extends BaseActivity implements View.OnClickListener{
+    EditText editText_homePassword;
+    Button btn_createYourHome;
     NetMsgSender netMsgSender;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_enter_ahome);
+        setContentView(R.layout.activity_create_ahome);
 
         initView();
     }
     public void initView() {
-        editText_paswordtoEnter = (EditText) findViewById(R.id.editText_homepassword_toenter);
-        btn_enterYourHome = (Button) findViewById(R.id.btn_enterYourHome);
+        editText_homePassword = (EditText) findViewById(R.id.editText_homepassword);
+        btn_createYourHome = (Button) findViewById(R.id.btn_createYourHome);
 
-        btn_enterYourHome.setOnClickListener(this);
+        btn_createYourHome.setOnClickListener(this);
 
         netMsgSender = new NetMsgSender(this);
     }
@@ -33,10 +33,11 @@ public class EnterAHomeActivity extends BaseActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
-            case R.id.btn_enterYourHome:
-                String requestCode = "pasword "+ editText_paswordtoEnter.getText().toString();
-                netMsgSender.sendMessage(1,requestCode);
-                Intent intent = new Intent(EnterAHomeActivity.this,WaitOtherPeopleActivity2.class);
+            case R.id.btn_createYourHome:
+                String requestCode = "password "+editText_homePassword.getText().toString();
+                netMsgSender.sendMessage(0,requestCode);
+                Intent intent = new Intent(CreateAHomeActivity.this,WaitOtherPeopleActivity1.class);
+                // TODO: 2018/5/15 与服务器进行交互
                 startActivity(intent);
                 break;
         }
