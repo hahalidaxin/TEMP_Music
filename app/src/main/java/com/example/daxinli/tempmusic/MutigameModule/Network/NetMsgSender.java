@@ -15,7 +15,7 @@ public class NetMsgSender {
         netTH = new Muti_NetworkThread();
         netTH.start();
     }
-    public void sendMessage(int type,String requestCode) {
+    public void sendMessage(final int type, final String requestCode) {
         //处理具体的client向server发出的请求
         new Thread(new Runnable() {
             @Override
@@ -33,10 +33,24 @@ public class NetMsgSender {
                         finalCode = "<#CreateHome#> "+requestCode;
                         break;
                     case 3:     //leader选择开始游戏
-                        finalCode = "<#StartGame#>"
+                        finalCode = "<#StartGame#>";
                         break;
                     case 4:     //处理弹幕的发送
                         finalCode = "<#Danmu#> "+requestCode;
+                        break;
+                    case 5:     //身为leader退出房间
+                        finalCode = "<#LeaderExit#>";
+                        break;
+                    case 6:     //身为teamate退出房间
+                        finalCode = "<#TeamateExit#>";
+                        break;
+                    case 7:
+                        break;
+                    case 8:
+                        break;
+                    case 9:
+                        break;
+                    case 10:
                         break;
                 }
             }

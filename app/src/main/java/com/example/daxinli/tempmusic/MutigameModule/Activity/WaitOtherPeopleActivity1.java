@@ -1,7 +1,11 @@
 package com.example.daxinli.tempmusic.MutigameModule.Activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,12 +16,32 @@ import com.example.daxinli.tempmusic.R;
 import com.example.daxinli.tempmusic.musicTouch.BaseActivity;
 import com.example.daxinli.tempmusic.musicTouch.MutiGameActivity;
 
+import master.flame.danmaku.controller.DrawHandler;
+import master.flame.danmaku.danmaku.model.BaseDanmaku;
+import master.flame.danmaku.danmaku.model.DanmakuTimer;
+import master.flame.danmaku.danmaku.model.IDanmakus;
+import master.flame.danmaku.danmaku.model.android.DanmakuContext;
+import master.flame.danmaku.danmaku.model.android.Danmakus;
+import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
+import master.flame.danmaku.ui.widget.DanmakuView;
+
 public class WaitOtherPeopleActivity1 extends BaseActivity implements View.OnClickListener{
     Button btn_startGame;
     Button btn_sendDanmu;
     TextView text_teamateLinked;
     NetMsgSender netMsgSender;
     EditText editText_Danmu;
+
+    private boolean showDanmaku;
+    private DanmakuContext danmakuContext;
+    private DanmakuView danmakuView;
+    private BaseDanmakuParser parser = new BaseDanmakuParser() {
+        @Override
+        protected IDanmakus parse() {
+            return new Danmakus();
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,15 +54,42 @@ public class WaitOtherPeopleActivity1 extends BaseActivity implements View.OnCli
         text_teamateLinked = (TextView) findViewById(R.id.text_amout_peoplein);
         btn_sendDanmu = (Button) findViewById(R.id.btn_danmusend_createhome);
         editText_Danmu = (EditText) findViewById(R.id.edittext_danmu_createhome);
+        danmakuView = (DanmakuView) findViewById(R.id.danmakuview_leader);
 
         btn_startGame.setOnClickListener(this);
         btn_sendDanmu.setOnClickListener(this);
 
         increaseNumPeapleLinked(1);
 
+        //danmaku的初始化基本操作
         netMsgSender = new NetMsgSender(this);
-    }
+        danmakuView.enableDanmakuDrawingCache(true);
+        danmakuView.setCallback(new DrawHandler.Callback() {
+            @Override
+            public void prepared() {
+                danmakuView.start();
+                showDanmaku = true;
+            }
 
+            @Override
+            public void updateTimer(DanmakuTimer timer) {
+
+            }
+
+            @Override
+            public void danmakuShown(BaseDanmaku danmaku) {
+
+            }
+
+            @Override
+            public void drawingFinished() {
+
+            }
+        });
+        danmakuContext = DanmakuContext.create();
+        danmakuView.prepare(parser,danmakuContext);
+
+    }
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
@@ -54,6 +105,62 @@ public class WaitOtherPeopleActivity1 extends BaseActivity implements View.OnCli
                 break;
         }
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode==KeyEvent.KEYCODE_BACK) {
+            ShowAlertDialog();
+            return true;
+        }
+        return super.onKeyDown(keyCode,event);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(danmakuView!=null && danmakuView.isPrepared()) {
+            danmakuView.pause();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(danmakuView!=null && danmakuView.isPrepared() && danmakuView.isPaused()) {
+            danmakuView.resume();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        showDanmaku = false;
+        if(danmakuView != null) {
+            danmakuView.release();
+            danmakuView = null;
+        }
+    }
+
+    public void ShowAlertDialog() {     //用户想要退出显示警告信息框
+        AlertDialog.Builder builder = new AlertDialog.Builder(WaitOtherPeopleActivity1.this);
+        builder.setTitle(">_<");
+        builder.setMessage("您是否确定退出当前房间");
+        builder.setCancelable(false);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //销毁activity 回退activity
+                WaitOtherPeopleActivity1.this.netMsgSender.sendMessage(5,"");
+                WaitOtherPeopleActivity1.this.removeActivity();
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.show();
+    }
     public void increaseNumPeapleLinked(int number) {   //外部调用增加人数 //外部调用需要在OnUIThread中使用
         if(number== MutiGameActivity.TEAMATENUMBETLIMIT) {
             text_teamateLinked.setText("连接人数已满，请开始游戏");
@@ -62,4 +169,21 @@ public class WaitOtherPeopleActivity1 extends BaseActivity implements View.OnCli
             text_teamateLinked.setText(str);
         }
     }
+    private void addDanmaku(String content,boolean withBorder) {    //添加一条弹幕
+        BaseDanmaku danmaku = danmakuContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
+        danmaku.text = content;
+        danmaku.padding = 5;
+        danmaku.textSize = sp2px(20);      //有待修改
+        danmaku.textColor = Color.WHITE;
+        danmaku.setTime(danmakuView.getCurrentTime());
+        if(withBorder) {
+            danmaku.borderColor = Color.GREEN;
+        }
+        danmakuView.addDanmaku(danmaku);
+    }
+    private float sp2px(float spValue) {
+        float fontScale = getResources().getDisplayMetrics().scaledDensity;
+        return (int)(spValue*fontScale*0.5f);
+    }
+
 }
