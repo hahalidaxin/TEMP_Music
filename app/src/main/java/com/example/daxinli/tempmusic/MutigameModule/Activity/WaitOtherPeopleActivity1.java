@@ -16,6 +16,8 @@ import com.example.daxinli.tempmusic.R;
 import com.example.daxinli.tempmusic.musicTouch.BaseActivity;
 import com.example.daxinli.tempmusic.musicTouch.MutiGameActivity;
 
+import java.util.Random;
+
 import master.flame.danmaku.controller.DrawHandler;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
 import master.flame.danmaku.danmaku.model.DanmakuTimer;
@@ -69,6 +71,7 @@ public class WaitOtherPeopleActivity1 extends BaseActivity implements View.OnCli
             public void prepared() {
                 danmakuView.start();
                 showDanmaku = true;
+                generateSomeDanmaku();
             }
 
             @Override
@@ -173,13 +176,30 @@ public class WaitOtherPeopleActivity1 extends BaseActivity implements View.OnCli
         BaseDanmaku danmaku = danmakuContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
         danmaku.text = content;
         danmaku.padding = 5;
-        danmaku.textSize = sp2px(20);      //有待修改
-        danmaku.textColor = Color.WHITE;
+        danmaku.textSize = sp2px(50);      //有待修改
+        danmaku.textColor = Color.BLACK;
         danmaku.setTime(danmakuView.getCurrentTime());
         if(withBorder) {
             danmaku.borderColor = Color.GREEN;
         }
         danmakuView.addDanmaku(danmaku);
+    }
+    private void generateSomeDanmaku() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                    while(showDanmaku) {
+                        int time = new Random().nextInt(300);
+                        String content  = ""+time+time;
+                        addDanmaku(content,false);
+                        try {
+                            Thread.sleep(time);
+                        } catch(Exception e) {
+                            e.printStackTrace();
+                        }
+                }
+            }
+        }).start();
     }
     private float sp2px(float spValue) {
         float fontScale = getResources().getDisplayMetrics().scaledDensity;

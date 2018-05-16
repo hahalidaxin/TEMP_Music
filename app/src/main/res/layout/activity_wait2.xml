@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <master.flame.danmaku.ui.widget.DanmakuView
-            android:id="@+id/danmakuview_leader"
+            android:id="@+id/danmakuview_teamate"
             android:layout_width="match_parent"
             android:layout_height="222dp" />
         <com.wang.avi.AVLoadingIndicatorView
