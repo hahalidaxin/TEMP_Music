@@ -29,17 +29,47 @@ public class CreateAHomeActivity extends BaseActivity implements View.OnClickLis
 
         netMsgSender = new NetMsgSender(this);
     }
-
+    //外部调用 针对创建房间返回的信息作出不同的调用处理
+    public void netWaitTolaunchActivity(final boolean flag,final int clockID,final int sessionID) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(flag) {
+                    Intent intent = new Intent(CreateAHomeActivity.this,WaitOtherPeopleActivity1.class);
+                    intent.putExtra("clockID",clockID);
+                    intent.putExtra("sessionID",sessionID);
+                    startActivity(intent);
+                } else {
+                    showAlerDialog();
+                }
+            }
+        });
+    }
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.btn_createYourHome:
-                String requestCode = "password "+editText_homePassword.getText().toString();
+                String requestCode = editText_homePassword.getText().toString();
                 netMsgSender.sendMessage(0,requestCode);
-                Intent intent = new Intent(CreateAHomeActivity.this,WaitOtherPeopleActivity1.class);
-                // TODO: 2018/5/15 与服务器进行交互
-                startActivity(intent);
+                netWaitTolaunchActivity();
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        //netMsgSender = new NetMsgSender(this);
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        if(netMsgSender!=null) {
+            netMsgSender.setFlag(false);
+        }
+        super.onStop();
+    }
+    public void showAlerDialog() {
+
     }
 }
