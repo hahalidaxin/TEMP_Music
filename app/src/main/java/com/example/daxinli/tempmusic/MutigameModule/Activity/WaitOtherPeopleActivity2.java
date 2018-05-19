@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgSender;
 import com.example.daxinli.tempmusic.R;
 import com.example.daxinli.tempmusic.musicTouch.BaseActivity;
 
@@ -27,7 +26,7 @@ import master.flame.danmaku.ui.widget.DanmakuView;
 public class WaitOtherPeopleActivity2 extends BaseActivity implements View.OnClickListener {
     Button btn_sendDanmu;
     EditText editText_Danmu;
-    NetMsgSender netMsgSender;
+  //  NetMsgSender netMsgSender;
     private boolean showDanmaku;
     private DanmakuContext danmakuContext;
     private DanmakuView danmakuView;
@@ -52,7 +51,7 @@ public class WaitOtherPeopleActivity2 extends BaseActivity implements View.OnCli
         danmakuView = (DanmakuView) findViewById(R.id.danmakuview_teamate);
 
         btn_sendDanmu.setOnClickListener(this);
-        netMsgSender = new NetMsgSender(this);
+   //     netMsgSender = new NetMsgSender(this);
 
         danmakuView.enableDanmakuDrawingCache(true);
         danmakuView.setCallback(new DrawHandler.Callback() {
@@ -96,7 +95,7 @@ public class WaitOtherPeopleActivity2 extends BaseActivity implements View.OnCli
         switch(v.getId()) {
             case R.id.btn_danmusend_enterhome:
                 String requestCode = editText_Danmu.getText().toString();
-                netMsgSender.sendMessage(4,requestCode);
+         //       netMsgSender.sendMessage(4,requestCode);
                 break;
         }
     }
@@ -133,7 +132,7 @@ public class WaitOtherPeopleActivity2 extends BaseActivity implements View.OnCli
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                WaitOtherPeopleActivity2.this.netMsgSender.sendMessage(6,"");
+         //       WaitOtherPeopleActivity2.this.netMsgSender.sendMessage(6,"");
                 WaitOtherPeopleActivity2.this.removeActivity();
             }
         });
@@ -152,7 +151,7 @@ public class WaitOtherPeopleActivity2 extends BaseActivity implements View.OnCli
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                WaitOtherPeopleActivity2.this.netMsgSender.sendMessage(6,"");
+             //   WaitOtherPeopleActivity2.this.netMsgSender.sendMessage(6,"");
                 WaitOtherPeopleActivity2.this.removeActivity();
             }
         });

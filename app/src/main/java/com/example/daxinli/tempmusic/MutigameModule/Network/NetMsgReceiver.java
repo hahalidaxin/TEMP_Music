@@ -1,6 +1,9 @@
 package com.example.daxinli.tempmusic.MutigameModule.Network;
 
+import android.content.Intent;
 import android.util.Log;
+
+import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -22,10 +25,11 @@ public class NetMsgReceiver extends Thread {
     public DataOutputStream dout;
     public Socket sc;
 
+    private NetworkService mcontext;
     boolean flag =  true;
 
-    public NetMsgReceiver() {
-
+    public NetMsgReceiver(NetworkService mcontext) {
+        this.mcontext = mcontext;
     }
     public boolean connectWithServer() {
         boolean flag  = false;
@@ -36,9 +40,9 @@ public class NetMsgReceiver extends Thread {
                 sc.connect(new InetSocketAddress(SERVER_IP,SERVER_PORT),1000);
                 din = new DataInputStream(sc.getInputStream());
                 dout = new DataOutputStream(sc.getOutputStream());
-                flag = true;
             } catch(Exception e) {
                 e.printStackTrace();
+                return false;
             }
             /*
             if(System.currentTimeMillis()-beginTime>connectTimeLimit) {
@@ -53,38 +57,75 @@ public class NetMsgReceiver extends Thread {
     @Override
     public void run() {
         String[] msgSplits;
-        if(!connectWithServer()) return ;
-        Log.e(TAG, "已经连接成功啦！！！！！！！ ");
-        while(flag) {
+
+        if(!connectWithServer()) {
+            Intent mintent = new Intent();
+            mintent.setAction("com.example.daxinli.tempmusic.networkBroadCastAction");
+            mintent.putExtra("type","ERROR");
+            mintent.putExtra("errortype","DISCONNECT");
+            mcontext.sendBroadcast(mintent);
+        }
+        /*
+        try {
+            String msg = din.readUTF();
+            Log.e(TAG, "已经收到了信息"+msg);
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+        */
+        Log.e(TAG, "服务器连接成功");
+        //while(flag) {
             try {
+                Log.e(TAG, "run: 我在这里等着一个msg的出现");
                 String msg = din.readUTF();
+                Log.e(TAG, "已经收到了发送来的信息 "+msg);
                 //处理读来的返回信息
-                if(msg.startsWith("<#CONNECT#>")) {
-                    msg.substring(11);
-                    msgSplits =  msg.split("#");
-                    if(msg.equals("SUCCESS")) {
-                        //client创建成功 //返回clockId和sessionID信息
-                        int clockID = Integer.parseInt(msgSplits[0]);
-                        int sessionID = Integer.parseInt(msgSplits[1]);
+                try {
+                    if(msg.startsWith("<#CONNECT#>")) {
+                        msg = msg.substring(11);
+                        msgSplits =  msg.split("#");
+                        //创建或进入房间失败
+                        if(msg.equals("ERROR1")) {
+                            Intent intent = new Intent();
+                            intent.setAction("com.example.daxinli.tempmusic.networkBroadCastAction");
+                            intent.putExtra("type","ERROR");
+                            intent.putExtra("errortype","HOMEFAULT");
+                            mcontext.sendBroadcast(intent);
+                        } else if(msg.equals("ERROR2")) {
+                            Intent intent = new Intent();
+                            intent.setAction("com.example.daxinli.tempmusic.networkBroadCastAction");
+                            intent.putExtra("errortype","HOMEFAULT");
+                            mcontext.sendBroadcast(intent);
+                        } else {
+                            //client创建成功 //返回clockId和sessionID信息
+                            int clockID = Integer.parseInt(msgSplits[0]);
+                            int sessionID = Integer.parseInt(msgSplits[1]);
+                            Intent intent = new Intent();
+                            intent.setAction("com.example.daxinli.tempmusic.networkBroadCastAction");
+                            intent.putExtra("type","CONNECT");
+                            intent.putExtra("clockID",clockID);
+                            intent.putExtra("sessionID",sessionID);
+                            mcontext.sendBroadcast(intent);
+                        }
 
+                    } else if(msg.startsWith("<#DESTROY#>")) {
+                        //当前的client被消灭，显示alertDialog并强制退出
+                        Intent intent = new Intent();
+                        intent.setAction("com.example.daxinli.tempmusic.networkBroadCastAction");
+                        intent.putExtra("type","DESTROY");
+                        mcontext.sendBroadcast(intent);
                     }
-                } else if(msg.startsWith("<#DESTROY#>")) {
-                   //当前的client被消灭，显示alertDialog并强制退出
-
-                }
-                else if(msg.startsWith("<#ERROR#>")) {       //服务器返回网络错误信息
-                    msg.substring(9);
-                    if(msg.equals("TYPE1")) {
-                        //LEADER创建client失败
-                    } else if(msg.equals("TYPE2")) {
-                        //TEAMATE创建client失败
-
+                    else if(msg.startsWith("<#ERROR#>")) {       //服务器返回网络错误信息
                     }
+                }catch(Exception e){
+                    Log.e(TAG, "错误发生在分析字符串的额过程中");
+                    e.printStackTrace();
                 }
             } catch(Exception e) {
+                Log.e(TAG, "出现了错误");
                 e.printStackTrace();
             }
-        }
+        //}
     }
     public void setFlag (boolean flag ) {
         this.flag = flag;

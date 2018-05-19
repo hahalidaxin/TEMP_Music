@@ -32,7 +32,12 @@
         <activity android:name=".MutigameModule.Activity.WaitOtherPeopleActivity1" />
         <activity android:name=".MutigameModule.Activity.WaitOtherPeopleActivity2" />
         <activity android:name=".MutigameModule.Activity.CreateAHomeActivity" />
-        <activity android:name=".MutigameModule.Activity.EnterAHomeActivity"></activity>
+        <activity android:name=".MutigameModule.Activity.EnterAHomeActivity" />
+
+        <service
+            android:name=".MutigameModule.service.NetworkService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

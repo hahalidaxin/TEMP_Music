@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgSender;
 import com.example.daxinli.tempmusic.R;
 import com.example.daxinli.tempmusic.musicTouch.BaseActivity;
 import com.example.daxinli.tempmusic.musicTouch.MutiGameActivity;
@@ -31,7 +30,7 @@ public class WaitOtherPeopleActivity1 extends BaseActivity implements View.OnCli
     Button btn_startGame;
     Button btn_sendDanmu;
     TextView text_teamateLinked;
-    NetMsgSender netMsgSender;
+  //  NetMsgSender netMsgSender;
     EditText editText_Danmu;
 
     private boolean showDanmaku;
@@ -44,10 +43,17 @@ public class WaitOtherPeopleActivity1 extends BaseActivity implements View.OnCli
         }
     };
 
+    public int clockID;
+    public int sessionID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wait1);
+
+        Intent intent = getIntent();
+        clockID = Integer.parseInt(intent.getStringExtra("clockID"));
+        sessionID = Integer.parseInt(intent.getStringExtra("sessionID"));     //保存作为一名成员的身份信息
 
         initView();
     }
@@ -64,7 +70,7 @@ public class WaitOtherPeopleActivity1 extends BaseActivity implements View.OnCli
         increaseNumPeapleLinked(1);
 
         //danmaku的初始化基本操作
-        netMsgSender = new NetMsgSender(this);
+       // netMsgSender = new NetMsgSender(this);
         danmakuView.enableDanmakuDrawingCache(true);
         danmakuView.setCallback(new DrawHandler.Callback() {
             @Override
@@ -98,13 +104,13 @@ public class WaitOtherPeopleActivity1 extends BaseActivity implements View.OnCli
         switch(v.getId()) {
             case R.id.btn_leader_startgame:
                 //leader决定开始游戏 开启一个activity activity用opengles实现
-                netMsgSender.sendMessage(3,"");
+               // netMsgSender.sendMessage(3,"");
                 Intent intent  = new Intent(WaitOtherPeopleActivity1.this,MutiGamingActivity.class);
                 startActivity(intent);
                 break;
             case R.id.btn_danmusend_createhome:
                 String requestCode = editText_Danmu.getText().toString();
-                netMsgSender.sendMessage(4,requestCode);
+              //  netMsgSender.sendMessage(4,requestCode);
                 break;
         }
     }
@@ -113,6 +119,7 @@ public class WaitOtherPeopleActivity1 extends BaseActivity implements View.OnCli
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode==KeyEvent.KEYCODE_BACK) {
             ShowAlertDialog();
+            // TODO: 2018/5/19 需要通知客户端
             return true;
         }
         return super.onKeyDown(keyCode,event);
@@ -153,7 +160,7 @@ public class WaitOtherPeopleActivity1 extends BaseActivity implements View.OnCli
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //销毁activity 回退activity
-                WaitOtherPeopleActivity1.this.netMsgSender.sendMessage(5,"");
+               //WaitOtherPeopleActivity1.this.netMsgSender.sendMessage(5,"");
                 WaitOtherPeopleActivity1.this.removeActivity();
             }
         });
