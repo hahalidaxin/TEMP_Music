@@ -7,6 +7,6 @@ import com.example.daxinli.tempmusic.musicTouch.BaseActivity;
  */
 
 public abstract class AbHomeActivity extends BaseActivity {
-    public abstract void showAlerDialog(String title,String Msg,int type) ;
+    public abstract void showAlerDialog(String title,String Msg,final int type) ;
     public abstract void netWaitTolaunchActivity(final boolean flag,final int clockID,final int sessionID) ;
 }

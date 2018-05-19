@@ -13,6 +13,7 @@ import android.widget.Toast;
 public class BaseActivity extends AppCompatActivity {
     private myApplication application;
     private BaseActivity mContext;
+    private Toast toast;
 
     protected void onCreate(Bundle savedInstanceState) {
         //隐藏状态栏和虚拟按键
@@ -43,6 +44,6 @@ public class BaseActivity extends AppCompatActivity {
         application.RemoveAll();
     }
     public void show_Toast(String text) {   //捆绑实现方法Toast
-        Toast.makeText(mContext, text, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 }

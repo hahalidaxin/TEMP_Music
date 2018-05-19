@@ -8,25 +8,27 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.daxinli.tempmusic.MutigameModule.Network.BroadCastReceiver;
+import com.example.daxinli.tempmusic.MutigameModule.Network.HomeACReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
 import com.example.daxinli.tempmusic.R;
 
 public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickListener{
+    private static final String TAG = "CreateAHomeActivity";
     private EditText editText_homePassword;
     private Button btn_createYourHome;
-    //NetMsgSender netMsgSender;
-    private NetworkService.MyBinder myBinder;
-    private BroadCastReceiver breceiver;
 
+    private NetworkService.MyBinder myBinder;
+    private HomeACReceiver breceiver;
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             //通过binder建立activity与service之间的连接
+            Log.e(TAG, "onServiceConnected: 已经被掉用了");
             CreateAHomeActivity.this.myBinder = (NetworkService.MyBinder)service;
         }
 
@@ -49,11 +51,6 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
         btn_createYourHome = (Button) findViewById(R.id.btn_createYourHome);
 
         btn_createYourHome.setOnClickListener(this);
-
-        //初始化service
-        Intent intent = new Intent (CreateAHomeActivity.this,NetworkService.class);
-        startService(intent);
-        bindService(intent,connection,BIND_AUTO_CREATE);
     }
     //外部调用 针对创建房间返回的信息作出不同的调用处理
     public void netWaitTolaunchActivity(final boolean flag,final int clockID,final int sessionID) {
@@ -66,8 +63,8 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
                     intent.putExtra("sessionID",Integer.toString(sessionID));
                     startActivity(intent);
                 } else {
-                    //CreateAHomeActivity.this.showAlerDialog("创建失败", "请更换您的密码", 0);
-                    show_Toast("请更换您的房间密码>_<");
+                    CreateAHomeActivity.this.showAlerDialog("创建失败", "请更换您的密码", 2);
+                    //show_Toast("请更换您的房间密码>_<");
                 }
             }
         });
@@ -86,21 +83,26 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
     protected void onResume() {
         super.onResume();
         //注册广播//初始化广播接收器
-        breceiver = new BroadCastReceiver(this);
+        breceiver = new HomeACReceiver(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.example.daxinli.tempmusic.networkBroadCastAction");
         registerReceiver(breceiver,intentFilter);
+        //初始化service
+        Intent intent = new Intent (CreateAHomeActivity.this,NetworkService.class);
+        startService(intent);
+        bindService(intent,connection,BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        //unbindService(connection);
         unregisterReceiver(breceiver);
         //动态注册 有注册就得有注销 否则会造成内存泄漏
     }
 
     //alertDialog 提示框 ：网络交互信息 提示回退
-    public void showAlerDialog(String title,String Msg,int type) {
+    public void showAlerDialog(String title,String Msg,final int type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(title);
         builder.setMessage(Msg);
@@ -109,7 +111,11 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //关闭线程 回退activity
-                CreateAHomeActivity.this.removeActivity();
+                if(type==0||type==1) {
+                    CreateAHomeActivity.this.removeActivity();
+                } else if(type==2) {
+
+                }
             }
         });
         if(type==1) {

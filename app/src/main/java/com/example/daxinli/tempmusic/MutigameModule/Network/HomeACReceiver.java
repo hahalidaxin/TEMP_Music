@@ -10,9 +10,9 @@ import com.example.daxinli.tempmusic.MutigameModule.Activity.AbHomeActivity;
  * Created by Daxin Li on 2018/5/19.
  */
 
-public class BroadCastReceiver extends BroadcastReceiver {
+public class HomeACReceiver extends BroadcastReceiver {
     AbHomeActivity mcontext;
-    public BroadCastReceiver(AbHomeActivity mcontext) {
+    public HomeACReceiver(AbHomeActivity mcontext) {
         this.mcontext = mcontext;
     }
     @Override

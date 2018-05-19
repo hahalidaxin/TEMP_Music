@@ -1,18 +1,24 @@
 package com.example.daxinli.tempmusic.MutigameModule.Activity;
 
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.daxinli.tempmusic.MutigameModule.Network.WaitACReceiver;
+import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
 import com.example.daxinli.tempmusic.R;
-import com.example.daxinli.tempmusic.musicTouch.BaseActivity;
 import com.example.daxinli.tempmusic.musicTouch.MutiGameActivity;
 
 import java.util.Random;
@@ -26,12 +32,27 @@ import master.flame.danmaku.danmaku.model.android.Danmakus;
 import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
 import master.flame.danmaku.ui.widget.DanmakuView;
 
-public class WaitOtherPeopleActivity1 extends BaseActivity implements View.OnClickListener{
+public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnClickListener{
+    private static final String TAG = "WaitOtherPeopleActivity";
     Button btn_startGame;
     Button btn_sendDanmu;
     TextView text_teamateLinked;
-  //  NetMsgSender netMsgSender;
     EditText editText_Danmu;
+
+    private NetworkService.MyBinder myBinder;
+    private WaitACReceiver breceiver;
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            //通过binder建立activity与service之间的连接
+            WaitOtherPeopleActivity1.this.myBinder = (NetworkService.MyBinder)service;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
 
     private boolean showDanmaku;
     private DanmakuContext danmakuContext;
@@ -68,6 +89,13 @@ public class WaitOtherPeopleActivity1 extends BaseActivity implements View.OnCli
         btn_sendDanmu.setOnClickListener(this);
 
         increaseNumPeapleLinked(1);
+
+        //初始化service
+        Intent intent = new Intent (WaitOtherPeopleActivity1.this,NetworkService.class);
+        //startService(intent);
+        bindService(intent,connection,BIND_AUTO_CREATE);
+        Log.e(TAG, "完成了绑定的语句");
+        //myBinder.sendMessage(10,"13124123");
 
         //danmaku的初始化基本操作
        // netMsgSender = new NetMsgSender(this);
@@ -131,6 +159,8 @@ public class WaitOtherPeopleActivity1 extends BaseActivity implements View.OnCli
         if(danmakuView!=null && danmakuView.isPrepared()) {
             danmakuView.pause();
         }
+        unregisterReceiver(breceiver);
+        //动态注册 有注册就得有注销 否则会造成内存泄漏
     }
 
     @Override
@@ -139,6 +169,11 @@ public class WaitOtherPeopleActivity1 extends BaseActivity implements View.OnCli
         if(danmakuView!=null && danmakuView.isPrepared() && danmakuView.isPaused()) {
             danmakuView.resume();
         }
+        //注册广播//初始化广播接收器
+        breceiver = new WaitACReceiver(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.example.daxinli.tempmusic.networkBroadCastAction");
+        registerReceiver(breceiver,intentFilter);
     }
 
     @Override

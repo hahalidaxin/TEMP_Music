@@ -74,7 +74,7 @@ public class NetMsgReceiver extends Thread {
         }
         */
         Log.e(TAG, "服务器连接成功");
-        //while(flag) {
+        while(flag) {
             try {
                 Log.e(TAG, "run: 我在这里等着一个msg的出现");
                 String msg = din.readUTF();
@@ -125,7 +125,7 @@ public class NetMsgReceiver extends Thread {
                 Log.e(TAG, "出现了错误");
                 e.printStackTrace();
             }
-        //}
+        }
     }
     public void setFlag (boolean flag ) {
         this.flag = flag;

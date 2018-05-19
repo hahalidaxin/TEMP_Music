@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.daxinli.tempmusic.R;
-import com.example.daxinli.tempmusic.musicTouch.BaseActivity;
 
 import java.util.Random;
 
@@ -23,7 +22,7 @@ import master.flame.danmaku.danmaku.model.android.Danmakus;
 import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
 import master.flame.danmaku.ui.widget.DanmakuView;
 
-public class WaitOtherPeopleActivity2 extends BaseActivity implements View.OnClickListener {
+public class WaitOtherPeopleActivity2 extends AbWaitActivity implements View.OnClickListener {
     Button btn_sendDanmu;
     EditText editText_Danmu;
   //  NetMsgSender netMsgSender;

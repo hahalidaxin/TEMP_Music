@@ -20,24 +20,31 @@ public class NetworkService extends Service {
     @Override
     public void onCreate() {
         //无论是start还是bind的方法都会被调用
+        Log.e(TAG, "onCreate: service onCreate发生");
         super.onCreate();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //开启新的网络线程
-        receiver = new NetMsgReceiver(this);
-        receiver.start();
+
         return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public void onDestroy() {
+        this.receiver.interrupt();
+        this.receiver.setFlag(false);
         super.onDestroy();
     }
 
     @Override
     public IBinder onBind(Intent intent) {
+        if(receiver == null) {
+            receiver = new NetMsgReceiver(this);
+            receiver.start();
+        }
+        Log.e(TAG, "onBind: service Bind发生");
         return myBinder;
     }
     public class MyBinder extends Binder {
@@ -78,8 +85,10 @@ public class NetworkService extends Service {
                 case 9:
                     break;
                 case 10:
+                    finalCode = requestCode;
                     break;
             }
+            Log.e(TAG, requestCode);
             final String finalCodetoSend = finalCode;
             //另开一个线程进行数据的发送
             new Thread(new Runnable() {
