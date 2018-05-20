@@ -16,6 +16,9 @@ import java.net.Socket;
  */
 
 public class NetMsgReceiver extends Thread {
+    public static final String HOME_AC_ACTION="com.example.daxinli.tempmusic.homeacaction";
+    public static final String NORMAL_AC_ACTION="com.example.daxinli.tempmusic.normalacaction";
+    public static final String WAIT_AC_ACTION="com.example.daxinli.tempmusic.waitacaction";
     private static final String TAG = "NetMsgReceiver";
     public static final String SERVER_IP = "192.168.137.1";
     public static final long connectTimeLimit = 3000;
@@ -26,10 +29,12 @@ public class NetMsgReceiver extends Thread {
     public Socket sc;
 
     private NetworkService mcontext;
+    private boolean broadCastDown;
     boolean flag =  true;
 
     public NetMsgReceiver(NetworkService mcontext) {
         this.mcontext = mcontext;
+        this.broadCastDown = false;
     }
     public boolean connectWithServer() {
         boolean flag  = false;
@@ -60,10 +65,10 @@ public class NetMsgReceiver extends Thread {
 
         if(!connectWithServer()) {
             Intent mintent = new Intent();
-            mintent.setAction("com.example.daxinli.tempmusic.networkBroadCastAction");
-            mintent.putExtra("type","ERROR");
-            mintent.putExtra("errortype","DISCONNECT");
+            mintent.setAction(HOME_AC_ACTION);
+            mintent.putExtra("msg","<#ERROR#>DISCONNECT");
             mcontext.sendBroadcast(mintent);
+            this.setFlag(false);
         }
         /*
         try {
@@ -82,48 +87,38 @@ public class NetMsgReceiver extends Thread {
                 //处理读来的返回信息
                 try {
                     if(msg.startsWith("<#CONNECT#>")) {
-                        msg = msg.substring(11);
-                        msgSplits =  msg.split("#");
-                        //创建或进入房间失败
-                        if(msg.equals("ERROR1")) {
-                            Intent intent = new Intent();
-                            intent.setAction("com.example.daxinli.tempmusic.networkBroadCastAction");
-                            intent.putExtra("type","ERROR");
-                            intent.putExtra("errortype","HOMEFAULT");
-                            mcontext.sendBroadcast(intent);
-                        } else if(msg.equals("ERROR2")) {
-                            Intent intent = new Intent();
-                            intent.setAction("com.example.daxinli.tempmusic.networkBroadCastAction");
-                            intent.putExtra("errortype","HOMEFAULT");
-                            mcontext.sendBroadcast(intent);
-                        } else {
-                            //client创建成功 //返回clockId和sessionID信息
-                            int clockID = Integer.parseInt(msgSplits[0]);
-                            int sessionID = Integer.parseInt(msgSplits[1]);
-                            Intent intent = new Intent();
-                            intent.setAction("com.example.daxinli.tempmusic.networkBroadCastAction");
-                            intent.putExtra("type","CONNECT");
-                            intent.putExtra("clockID",clockID);
-                            intent.putExtra("sessionID",sessionID);
-                            mcontext.sendBroadcast(intent);
-                        }
-
+                        Intent intent = new Intent();
+                        intent.setAction(HOME_AC_ACTION);
+                        intent.putExtra("msg",msg);
+                        mcontext.sendBroadcast(intent);
                     } else if(msg.startsWith("<#DESTROY#>")) {
                         //当前的client被消灭，显示alertDialog并强制退出
                         Intent intent = new Intent();
-                        intent.setAction("com.example.daxinli.tempmusic.networkBroadCastAction");
-                        intent.putExtra("type","DESTROY");
+                        intent.setAction(NORMAL_AC_ACTION);
+                        intent.putExtra("msg",msg);
+                        mcontext.sendBroadcast(intent);
+                    } else if(msg.startsWith("<#DANMAKU#>")) {
+                        Intent intent = new Intent();
+                        intent.setAction(WAIT_AC_ACTION);
+                        intent.putExtra("msg",msg);
                         mcontext.sendBroadcast(intent);
                     }
-                    else if(msg.startsWith("<#ERROR#>")) {       //服务器返回网络错误信息
-                    }
-                }catch(Exception e){
+                }catch(Exception e) {
                     Log.e(TAG, "错误发生在分析字符串的额过程中");
                     e.printStackTrace();
                 }
             } catch(Exception e) {
-                Log.e(TAG, "出现了错误");
+                //Log.e(TAG, "出现了错误");
+                if(!broadCastDown) {
+                    Intent intent = new Intent();
+                    intent.setAction(NetMsgReceiver.NORMAL_AC_ACTION);
+                    intent.putExtra("msg", "<#NETWORK_DOWN#>");
+                    mcontext.sendBroadcast(intent);
+                    broadCastDown = true;
+                }
                 e.printStackTrace();
+                this.interrupt();
+                this.setFlag(false);
             }
         }
     }

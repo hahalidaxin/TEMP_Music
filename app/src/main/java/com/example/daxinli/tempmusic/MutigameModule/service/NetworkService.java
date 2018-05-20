@@ -12,8 +12,10 @@ import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 //activity发送广播
 public class NetworkService extends Service {
     private static final String TAG = "NetworkService";
+    public static final long HEART_BEAT_RATE = 3000;
     public MyBinder myBinder = new MyBinder();
     public NetMsgReceiver receiver;
+
     public NetworkService() {
     }
 
@@ -43,6 +45,7 @@ public class NetworkService extends Service {
         if(receiver == null) {
             receiver = new NetMsgReceiver(this);
             receiver.start();
+           // mHandler.postDelayed(mrunnable,HEART_BEAT_RATE);
         }
         Log.e(TAG, "onBind: service Bind发生");
         return myBinder;
@@ -52,55 +55,30 @@ public class NetworkService extends Service {
             //返回当前的service实例
             return NetworkService.this;
         }
-        public void sendMessage(final int type, final String requestCode) {
-            String finalCode="";
-            //线程内部进行操作
-            Log.e(TAG, "sendMessage: 这里已经发送了消息"+requestCode);
-            switch(type) {
-                case 0:     //新建一个房间
-                    finalCode = "<#CONNECT#>LEADER#"+requestCode;
-                    break;
-                case 1:     //进入一个房间
-                    finalCode = "<#CONNECT#>NORMAL#"+requestCode;
-                    break;
-                case 2:
-                    finalCode = "<#CreateHome#> "+requestCode;
-                    break;
-                case 3:     //leader选择开始游戏
-                    finalCode = "<#StartGame#>";
-                    break;
-                case 4:     //处理弹幕的发送
-                    finalCode = "<#Danmu#> "+requestCode;
-                    break;
-                case 5:     //身为leader退出房间
-                    finalCode = "<#EXIT#>"+requestCode; //退出需要提供clockID
-                    break;
-                case 6:     //身为teamate退出房间
-                    finalCode = "<#TeamateExit#>";
-                    break;
-                case 7:
-                    break;
-                case 8:
-                    break;
-                case 9:
-                    break;
-                case 10:
-                    finalCode = requestCode;
-                    break;
-            }
-            Log.e(TAG, requestCode);
-            final String finalCodetoSend = finalCode;
+        public boolean sendMessage(final String requestCode) {
+            Log.e(TAG, "向服务器发送消息："+requestCode);
             //另开一个线程进行数据的发送
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        receiver.dout.writeUTF(finalCodetoSend);
+                        Log.e(TAG, "run: 这里发送了msg："+requestCode);
+                        receiver.dout.writeUTF(requestCode);
+                        //lastSendTime =System.currentTimeMillis();
                     } catch(Exception e) {
                         e.printStackTrace();
                     }
                 }
             }).start();
+            return true;
+        }
+        public void restartNetThread() {    //负责重新启动网络线程
+            if(receiver!=null) {
+                receiver.interrupt();
+                receiver.setFlag(false);
+            }
+            receiver = new NetMsgReceiver(NetworkService.this);
+            receiver.start();
         }
     }
 }

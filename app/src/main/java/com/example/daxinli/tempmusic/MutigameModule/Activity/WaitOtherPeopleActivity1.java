@@ -9,19 +9,17 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.Network.WaitACReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
 import com.example.daxinli.tempmusic.R;
 import com.example.daxinli.tempmusic.musicTouch.MutiGameActivity;
-
-import java.util.Random;
 
 import master.flame.danmaku.controller.DrawHandler;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
@@ -44,7 +42,6 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            //通过binder建立activity与service之间的连接
             WaitOtherPeopleActivity1.this.myBinder = (NetworkService.MyBinder)service;
         }
 
@@ -90,13 +87,6 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
 
         increaseNumPeapleLinked(1);
 
-        //初始化service
-        Intent intent = new Intent (WaitOtherPeopleActivity1.this,NetworkService.class);
-        //startService(intent);
-        bindService(intent,connection,BIND_AUTO_CREATE);
-        Log.e(TAG, "完成了绑定的语句");
-        //myBinder.sendMessage(10,"13124123");
-
         //danmaku的初始化基本操作
        // netMsgSender = new NetMsgSender(this);
         danmakuView.enableDanmakuDrawingCache(true);
@@ -105,7 +95,7 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
             public void prepared() {
                 danmakuView.start();
                 showDanmaku = true;
-                generateSomeDanmaku();
+                //generateSomeDanmaku();
             }
 
             @Override
@@ -138,7 +128,7 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
                 break;
             case R.id.btn_danmusend_createhome:
                 String requestCode = editText_Danmu.getText().toString();
-              //  netMsgSender.sendMessage(4,requestCode);
+                myBinder.sendMessage("<#DANMAKU#>"+Integer.toString(clockID)+"#"+requestCode);
                 break;
         }
     }
@@ -147,7 +137,6 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode==KeyEvent.KEYCODE_BACK) {
             ShowAlertDialog();
-            // TODO: 2018/5/19 需要通知客户端
             return true;
         }
         return super.onKeyDown(keyCode,event);
@@ -159,8 +148,9 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
         if(danmakuView!=null && danmakuView.isPrepared()) {
             danmakuView.pause();
         }
+
         unregisterReceiver(breceiver);
-        //动态注册 有注册就得有注销 否则会造成内存泄漏
+        unbindService(connection);
     }
 
     @Override
@@ -172,8 +162,12 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
         //注册广播//初始化广播接收器
         breceiver = new WaitACReceiver(this);
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("com.example.daxinli.tempmusic.networkBroadCastAction");
+        intentFilter.addAction(NetMsgReceiver.NORMAL_AC_ACTION);
+        intentFilter.addAction(NetMsgReceiver.WAIT_AC_ACTION);
         registerReceiver(breceiver,intentFilter);
+        //初始化service
+        Intent intent = new Intent (WaitOtherPeopleActivity1.this,NetworkService.class);
+        bindService(intent,connection,BIND_AUTO_CREATE);
     }
 
     @Override
@@ -194,8 +188,7 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //销毁activity 回退activity
-               //WaitOtherPeopleActivity1.this.netMsgSender.sendMessage(5,"");
+                myBinder.sendMessage("<#EXIT#>"+Integer.toString(WaitOtherPeopleActivity1.this.clockID));
                 WaitOtherPeopleActivity1.this.removeActivity();
             }
         });
@@ -212,9 +205,10 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
         } else {
             String str = "现在连接的人数："+Integer.toString(number);
             text_teamateLinked.setText(str);
+            text_teamateLinked.setText(str);
         }
     }
-    private void addDanmaku(String content,boolean withBorder) {    //添加一条弹幕
+    public void addDanmaku(String content,boolean withBorder) {    //添加一条弹幕
         BaseDanmaku danmaku = danmakuContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
         danmaku.text = content;
         danmaku.padding = 5;
@@ -226,6 +220,7 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
         }
         danmakuView.addDanmaku(danmaku);
     }
+    /*
     private void generateSomeDanmaku() {
         new Thread(new Runnable() {
             @Override
@@ -243,9 +238,13 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
             }
         }).start();
     }
+    */
     private float sp2px(float spValue) {
         float fontScale = getResources().getDisplayMetrics().scaledDensity;
         return (int)(spValue*fontScale*0.5f);
+    }
+    public int getclockID() {
+        return this.clockID;
     }
 
 }

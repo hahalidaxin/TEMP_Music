@@ -8,12 +8,12 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.daxinli.tempmusic.MutigameModule.Network.HomeACReceiver;
+import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
 import com.example.daxinli.tempmusic.R;
 
@@ -24,11 +24,11 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
 
     private NetworkService.MyBinder myBinder;
     private HomeACReceiver breceiver;
+    private Intent serviceIntent;
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             //通过binder建立activity与service之间的连接
-            Log.e(TAG, "onServiceConnected: 已经被掉用了");
             CreateAHomeActivity.this.myBinder = (NetworkService.MyBinder)service;
         }
 
@@ -74,7 +74,7 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
         switch(v.getId()) {
             case R.id.btn_createYourHome:
                 String requestCode = editText_homePassword.getText().toString();
-                myBinder.sendMessage(0,requestCode);
+                myBinder.sendMessage("<#CONNECT#>LEADER#"+requestCode);
                 break;
         }
     }
@@ -85,20 +85,27 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
         //注册广播//初始化广播接收器
         breceiver = new HomeACReceiver(this);
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("com.example.daxinli.tempmusic.networkBroadCastAction");
+        intentFilter.addAction(NetMsgReceiver.HOME_AC_ACTION);
+        intentFilter.addAction(NetMsgReceiver.NORMAL_AC_ACTION);
         registerReceiver(breceiver,intentFilter);
         //初始化service
-        Intent intent = new Intent (CreateAHomeActivity.this,NetworkService.class);
-        startService(intent);
-        bindService(intent,connection,BIND_AUTO_CREATE);
+        serviceIntent = new Intent (CreateAHomeActivity.this,NetworkService.class);
+        startService(serviceIntent);
+        bindService(serviceIntent,connection,BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //unbindService(connection);
+        unbindService(connection);
         unregisterReceiver(breceiver);
         //动态注册 有注册就得有注销 否则会造成内存泄漏
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(serviceIntent);         //结束service
     }
 
     //alertDialog 提示框 ：网络交互信息 提示回退
@@ -107,6 +114,17 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
         builder.setTitle(title);
         builder.setMessage(Msg);
         builder.setCancelable(false);
+        if(type==1 || type==2) {
+            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if(type==2) {
+                        //取消重新连接网络 直接回退到上一个activity
+                        CreateAHomeActivity.this.removeActivity();
+                    }
+                }
+            });
+        }
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -114,18 +132,11 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
                 if(type==0||type==1) {
                     CreateAHomeActivity.this.removeActivity();
                 } else if(type==2) {
-
+                    //重新建立servece的net连接
+                    myBinder.restartNetThread();
                 }
             }
         });
-        if(type==1) {
-            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            });
-        }
         builder.show();
     }
 }

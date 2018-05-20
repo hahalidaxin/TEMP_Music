@@ -12,15 +12,24 @@ import com.example.daxinli.tempmusic.MutigameModule.Activity.AbWaitActivity;
  */
 
 public class WaitACReceiver extends BroadcastReceiver {
+    private static final String TAG = "WaitACReceiver";
     public AbWaitActivity mcontext ;
     public WaitACReceiver(AbWaitActivity mcontext){
         this.mcontext = mcontext;
     }
     @Override
     public void onReceive(Context context, Intent intent) {
-        String type = intent.getStringExtra("type");
-        switch(type) {
-
+        String msg = intent.getStringExtra("msg");
+        String[] msgSplits ;
+        if(msg.startsWith("<#DANMAKU#>")) {
+            msg = msg.substring(11);
+            msgSplits = msg.split("#");
+            boolean flag = false;
+            //判断是否是自己发出的弹幕
+            if(Integer.parseInt(msgSplits[0])==mcontext.getclockID()) {
+                flag = true;
+            }
+            mcontext.addDanmaku(msgSplits[1],flag);
         }
     }
 }

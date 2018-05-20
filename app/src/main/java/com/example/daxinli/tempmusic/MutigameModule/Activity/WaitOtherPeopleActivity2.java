@@ -36,6 +36,9 @@ public class WaitOtherPeopleActivity2 extends AbWaitActivity implements View.OnC
         }
     };
 
+    public int clockID;
+    public int sessionID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -188,5 +191,8 @@ public class WaitOtherPeopleActivity2 extends AbWaitActivity implements View.OnC
     private float sp2px(float spValue) {
         float fontScale = getResources().getDisplayMetrics().scaledDensity;
         return (int)(spValue*fontScale*0.5f);
+    }
+    public int getclockID() {
+        return this.clockID;
     }
 }
