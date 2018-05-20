@@ -11,21 +11,24 @@
         android:orientation="vertical">
         <master.flame.danmaku.ui.widget.DanmakuView
             android:id="@+id/danmakuview_teamate"
+            android:layout_marginTop="80dp"
             android:layout_width="match_parent"
-            android:layout_height="222dp" />
+            android:layout_height="150dp" />
         <com.wang.avi.AVLoadingIndicatorView
             android:layout_marginTop="25dp"
             android:layout_gravity="center"
             app:indicatorColor="@color/colorAccent"
+            app:indicatorName="LineScaleIndicator"
             android:layout_width="100dp"
             android:layout_height="100dp" />
         <TextView
+            android:id="@+id/text_showPeople_wait2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="等待你的小伙伴..."/>
         <LinearLayout
-            android:layout_marginTop="135dp"
+            android:layout_marginTop="140dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -35,10 +38,10 @@
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:gravity="center"
+                android:gravity="left"
                 android:hint="听说会发弹幕的都有女朋友哦~"
                 android:textColor="@color/colorBlue"
-                android:textSize="10dp" />
+                android:textSize="15dp" />
             <Button
                 android:id="@+id/btn_danmusend_enterhome"
                 android:layout_width="wrap_content"

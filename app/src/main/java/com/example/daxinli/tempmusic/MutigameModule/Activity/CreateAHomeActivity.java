@@ -19,6 +19,7 @@ import com.example.daxinli.tempmusic.R;
 
 public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickListener{
     private static final String TAG = "CreateAHomeActivity";
+    public static final int HOMEMATELIMIT = 4;
     private EditText editText_homePassword;
     private Button btn_createYourHome;
 

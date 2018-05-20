@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.example.daxinli.tempmusic.MutigameModule.Activity.AbWaitActivity;
+import com.example.daxinli.tempmusic.MutigameModule.Activity.WaitOtherPeopleActivity2;
 
 /**
  * Created by Daxin Li on 2018/5/19.
@@ -30,6 +31,12 @@ public class WaitACReceiver extends BroadcastReceiver {
                 flag = true;
             }
             mcontext.addDanmaku(msgSplits[1],flag);
+        } else if(msg.startsWith("<#SHOWNUMBER#>")) {
+            msg = msg.substring(14);
+            mcontext.setNumbertoShow(Integer.parseInt(msg));
+        } else if(msg.startsWith("<#DESTROY#>")) {
+            //显示警示信息 强制确定 销毁当前组员的activity
+            ((WaitOtherPeopleActivity2)mcontext).ShowAlertDialog(1);
         }
     }
 }

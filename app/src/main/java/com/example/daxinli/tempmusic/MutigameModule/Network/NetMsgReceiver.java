@@ -70,18 +70,9 @@ public class NetMsgReceiver extends Thread {
             mcontext.sendBroadcast(mintent);
             this.setFlag(false);
         }
-        /*
-        try {
-            String msg = din.readUTF();
-            Log.e(TAG, "已经收到了信息"+msg);
-        }catch(Exception e) {
-            e.printStackTrace();
-        }
-        */
         Log.e(TAG, "服务器连接成功");
         while(flag) {
             try {
-                Log.e(TAG, "run: 我在这里等着一个msg的出现");
                 String msg = din.readUTF();
                 Log.e(TAG, "已经收到了发送来的信息 "+msg);
                 //处理读来的返回信息
@@ -97,7 +88,8 @@ public class NetMsgReceiver extends Thread {
                         intent.setAction(NORMAL_AC_ACTION);
                         intent.putExtra("msg",msg);
                         mcontext.sendBroadcast(intent);
-                    } else if(msg.startsWith("<#DANMAKU#>")) {
+                    } else if(msg.startsWith("<#DANMAKU#>")
+                            || msg.startsWith("<#SHOWNUMBER#>")) {
                         Intent intent = new Intent();
                         intent.setAction(WAIT_AC_ACTION);
                         intent.putExtra("msg",msg);

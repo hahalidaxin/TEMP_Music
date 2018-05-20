@@ -1,6 +1,7 @@
 package com.example.daxinli.tempmusic.MutigameModule.Activity;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -11,6 +12,7 @@ import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,7 +21,6 @@ import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.Network.WaitACReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
 import com.example.daxinli.tempmusic.R;
-import com.example.daxinli.tempmusic.musicTouch.MutiGameActivity;
 
 import master.flame.danmaku.controller.DrawHandler;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
@@ -85,7 +86,7 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
         btn_startGame.setOnClickListener(this);
         btn_sendDanmu.setOnClickListener(this);
 
-        increaseNumPeapleLinked(1);
+        setNumbertoShow(1);
 
         //danmaku的初始化基本操作
        // netMsgSender = new NetMsgSender(this);
@@ -121,14 +122,38 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.btn_leader_startgame:
-                //leader决定开始游戏 开启一个activity activity用opengles实现
-               // netMsgSender.sendMessage(3,"");
-                Intent intent  = new Intent(WaitOtherPeopleActivity1.this,MutiGamingActivity.class);
-                startActivity(intent);
+                //Intent intent  = new Intent(WaitOtherPeopleActivity1.this,MutiGamingActivity.class);
+                //startActivity(intent);
+                myBinder.sendMessage("<#STARTGAME#>");
                 break;
             case R.id.btn_danmusend_createhome:
+                HideKeyboard(editText_Danmu);
                 String requestCode = editText_Danmu.getText().toString();
                 myBinder.sendMessage("<#DANMAKU#>"+Integer.toString(clockID)+"#"+requestCode);
+                editText_Danmu.setText("");
+                break;
+        }
+    }
+    //显示虚拟键盘
+    public static void showInputMethod(Context context, View view) {
+        InputMethodManager im = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        im.showSoftInput(view, 0);
+    }
+    //隐藏虚拟键盘
+    public static void HideKeyboard(View v){
+        InputMethodManager imm = ( InputMethodManager) v.getContext( ).getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isActive()) {
+            imm.hideSoftInputFromWindow( v.getApplicationWindowToken() , 0 );
+        }
+    }
+    public void onActivityTrans(int type) {
+        //进行activity之间的切换
+        Intent intent = null;
+        switch(type) {
+            case 0:
+                //开始游戏
+                //intent = new Intent(WaitOtherPeopleActivity1.this,)
+                startActivity(intent);
                 break;
         }
     }
@@ -188,6 +213,7 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                //向服务器发送退出的命令   //此处是一个leader的命令
                 myBinder.sendMessage("<#EXIT#>"+Integer.toString(WaitOtherPeopleActivity1.this.clockID));
                 WaitOtherPeopleActivity1.this.removeActivity();
             }
@@ -195,50 +221,37 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
             }
         });
         builder.show();
     }
-    public void increaseNumPeapleLinked(int number) {   //外部调用增加人数 //外部调用需要在OnUIThread中使用
-        if(number== MutiGameActivity.TEAMATENUMBETLIMIT) {
-            text_teamateLinked.setText("连接人数已满，请开始游戏");
-        } else {
-            String str = "现在连接的人数："+Integer.toString(number);
-            text_teamateLinked.setText(str);
-            text_teamateLinked.setText(str);
-        }
-    }
-    public void addDanmaku(String content,boolean withBorder) {    //添加一条弹幕
-        BaseDanmaku danmaku = danmakuContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
-        danmaku.text = content;
-        danmaku.padding = 5;
-        danmaku.textSize = sp2px(50);      //有待修改
-        danmaku.textColor = Color.BLACK;
-        danmaku.setTime(danmakuView.getCurrentTime());
-        if(withBorder) {
-            danmaku.borderColor = Color.GREEN;
-        }
-        danmakuView.addDanmaku(danmaku);
-    }
-    /*
-    private void generateSomeDanmaku() {
-        new Thread(new Runnable() {
+    public void addDanmaku(final String content,final boolean withBorder) {    //添加一条弹幕
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                    while(showDanmaku) {
-                        int time = new Random().nextInt(300);
-                        String content  = ""+time+time;
-                        addDanmaku(content,false);
-                        try {
-                            Thread.sleep(time);
-                        } catch(Exception e) {
-                            e.printStackTrace();
-                        }
+                BaseDanmaku danmaku = danmakuContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
+                danmaku.text = content;
+                danmaku.padding = 5;
+                danmaku.textSize = sp2px(50);      //有待修改
+                danmaku.textColor = Color.BLACK;
+                danmaku.setTime(danmakuView.getCurrentTime());
+                if (withBorder) {
+                    danmaku.borderColor = Color.GREEN;
                 }
+                danmakuView.addDanmaku(danmaku);
             }
-        }).start();
+        });
     }
-    */
+    public void setNumbertoShow(final int number) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                WaitOtherPeopleActivity1.this.text_teamateLinked.setText(
+                        String.format("找呀找呀找胖友...(%d/%d)",number, CreateAHomeActivity.HOMEMATELIMIT));
+            }
+        });
+    }
     private float sp2px(float spValue) {
         float fontScale = getResources().getDisplayMetrics().scaledDensity;
         return (int)(spValue*fontScale*0.5f);
