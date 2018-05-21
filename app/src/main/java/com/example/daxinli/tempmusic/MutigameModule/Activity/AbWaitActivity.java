@@ -11,6 +11,7 @@ public abstract class AbWaitActivity extends BaseActivity {
 
     public abstract int getclockID();
 
-    public abstract void onActivityTrans(int type);
     public abstract void setNumbertoShow(final int text) ;
+
+    public abstract void ShowAlertDialog(final String tititle,final String msg,final int type);
 }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.example.daxinli.tempmusic.MutigameModule.Activity.AbWaitActivity;
-import com.example.daxinli.tempmusic.MutigameModule.Activity.WaitOtherPeopleActivity2;
 
 /**
  * Created by Daxin Li on 2018/5/19.
@@ -36,7 +35,10 @@ public class WaitACReceiver extends BroadcastReceiver {
             mcontext.setNumbertoShow(Integer.parseInt(msg));
         } else if(msg.startsWith("<#DESTROY#>")) {
             //显示警示信息 强制确定 销毁当前组员的activity
-            ((WaitOtherPeopleActivity2)mcontext).ShowAlertDialog(1);
+            mcontext.ShowAlertDialog(
+                    "o(▼皿▼メ;)o","房主带着他的小姨子和三点五个亿跑啦,啊啊... TAT",1);
+        } else if(msg.startsWith("<#NETWORKDOWN#>")) {
+            mcontext.ShowAlertDialog("555...","我们的服务器牺牲了，请您回退TAT",3);
         }
     }
 }

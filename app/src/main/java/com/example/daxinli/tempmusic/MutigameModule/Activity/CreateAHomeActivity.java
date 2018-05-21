@@ -106,12 +106,16 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //向service发送停止网络处理线程的信息
+        myBinder.sendMessage("<#DESTROYTHREAD#>");
         stopService(serviceIntent);         //结束service
     }
 
     //alertDialog 提示框 ：网络交互信息 提示回退
+    AlertDialog.Builder builder;
     public void showAlerDialog(String title,String Msg,final int type) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if(builder!=null) return ;
+        builder = new AlertDialog.Builder(this);
         builder.setTitle(title);
         builder.setMessage(Msg);
         builder.setCancelable(false);
@@ -123,6 +127,7 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
                         //取消重新连接网络 直接回退到上一个activity
                         CreateAHomeActivity.this.removeActivity();
                     }
+                    builder = null;
                 }
             });
         }
@@ -136,6 +141,7 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
                     //重新建立servece的net连接
                     myBinder.restartNetThread();
                 }
+                builder = null;
             }
         });
         builder.show();

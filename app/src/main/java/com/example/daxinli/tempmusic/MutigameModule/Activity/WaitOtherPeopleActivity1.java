@@ -161,7 +161,7 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode==KeyEvent.KEYCODE_BACK) {
-            ShowAlertDialog();
+            ShowAlertDialog("黄鹤大人","您真的要解散该房间吗？",0);
             return true;
         }
         return super.onKeyDown(keyCode,event);
@@ -205,25 +205,33 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
         }
     }
 
-    public void ShowAlertDialog() {     //用户想要退出显示警告信息框
-        AlertDialog.Builder builder = new AlertDialog.Builder(WaitOtherPeopleActivity1.this);
-        builder.setTitle(">_<");
-        builder.setMessage("您是否确定退出当前房间");
+    AlertDialog.Builder builder;
+    public void ShowAlertDialog(final String tititle,final String msg,final int type) {     //用户想要退出显示警告信息框
+        if(builder!=null) return ;
+        builder = new AlertDialog.Builder(WaitOtherPeopleActivity1.this);
+        builder.setTitle(tititle);
+        builder.setMessage(msg);
         builder.setCancelable(false);
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //向服务器发送退出的命令   //此处是一个leader的命令
-                myBinder.sendMessage("<#EXIT#>"+Integer.toString(WaitOtherPeopleActivity1.this.clockID));
-                WaitOtherPeopleActivity1.this.removeActivity();
+                if(type==0) {
+                    myBinder.sendMessage("<#EXIT#>"));
+                    WaitOtherPeopleActivity1.this.removeActivity();
+                } else if(type==3) {
+                    WaitOtherPeopleActivity1.this.removeActivity();
+                }
+                builder = null;
             }
         });
+        /*
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                builder = null;
             }
         });
+        */
         builder.show();
     }
     public void addDanmaku(final String content,final boolean withBorder) {    //添加一条弹幕

@@ -72,6 +72,7 @@ public class EnterAHomeActivity extends AbHomeActivity implements View.OnClickLi
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        myBinder.sendMessage("<#DESTROYTHREAD#>");
         stopService(serviceIntent);         //结束service
     }
 
@@ -110,8 +111,10 @@ public class EnterAHomeActivity extends AbHomeActivity implements View.OnClickLi
         });
     }
     //alertDialog 提示框 ：网络交互信息 提示回退
+    AlertDialog.Builder builder;
     public void showAlerDialog(String title,String Msg,final int type) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if(builder!=null) return ;
+        builder = new AlertDialog.Builder(this);
         builder.setTitle(title);
         builder.setMessage(Msg);
         builder.setCancelable(false);
@@ -126,6 +129,7 @@ public class EnterAHomeActivity extends AbHomeActivity implements View.OnClickLi
                     //重新建立servece的net连接
                     myBinder.restartNetThread();
                 }
+                builder = null;
             }
         });
         if(type==1||type==2) {
@@ -135,6 +139,7 @@ public class EnterAHomeActivity extends AbHomeActivity implements View.OnClickLi
                     if(type==2) {
                         EnterAHomeActivity.this.removeActivity();
                     }
+                    builder = null;
                 }
             });
         }

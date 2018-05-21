@@ -118,7 +118,7 @@ public class WaitOtherPeopleActivity2 extends AbWaitActivity implements View.OnC
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode==KeyEvent.KEYCODE_BACK) {
-            ShowAlertDialog(0);
+            ShowAlertDialog(">_<","您是否确定退出当前房间",0);
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -183,37 +183,36 @@ public class WaitOtherPeopleActivity2 extends AbWaitActivity implements View.OnC
             danmakuView = null;
         }
     }
-    public void ShowAlertDialog(final int type) {     //用户想要退出显示警告信息框
+    AlertDialog.Builder builder;
+    public void ShowAlertDialog(final String titile,final String msg,final int type) {     //用户想要退出显示警告信息框
+        if(builder != null) return ;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                AlertDialog.Builder builder = new AlertDialog.Builder(WaitOtherPeopleActivity2.this);
-                if(type==0) {
-                    builder.setTitle(">_<");
-                    builder.setMessage("您是否确定退出当前房间");
-                } else if(type==1) {
-                    builder.setTitle("o(▼皿▼メ;)o");
-                    builder.setMessage("房主带着他的小姨子和三点五个亿跑啦,啊啊... TAT");
-                }
+                builder = new AlertDialog.Builder(WaitOtherPeopleActivity2.this);
+                builder.setTitle(titile);
+                builder.setMessage(msg);
                 builder.setCancelable(false);
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //       WaitOtherPeopleActivity2.this.netMsgSender.sendMessage(6,"");
-                        if(type==0||type==1) {
+                        if(type==0||type==1||type==3) {
                             WaitOtherPeopleActivity2.this.removeActivity();
                             if(type==0) {
                                 //向服务器发送退出的信息
-                                myBinder.sendMessage("<#EXIT#>"+Integer.toString(clockID));
+                                myBinder.sendMessage("<#EXIT#>");
                             }
                         } else {
                         }
+                        builder = null;
                     }
                 });
                 if(type==0) {
                     builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            builder = null;
                         }
                     });
                 }
@@ -250,7 +249,6 @@ public class WaitOtherPeopleActivity2 extends AbWaitActivity implements View.OnC
         }
     }
     public void setNumbertoShow(final int num) {
-        Log.e(TAG,"这里进行num显示 "+Integer.toString(num));
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

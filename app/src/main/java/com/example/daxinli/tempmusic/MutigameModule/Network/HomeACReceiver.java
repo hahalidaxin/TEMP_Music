@@ -39,9 +39,8 @@ public class HomeACReceiver extends BroadcastReceiver {
             if(msg.equals("DISCONNECT")) {
                 mcontext.showAlerDialog("网络故障TAT","服务器好像睡着啦...请回退",0);
             }
-        } else if(msg.startsWith("<#NETWORK_DOWN#>")) {
-            Log.e(TAG, "收到了广播的action" );
-            mcontext.showAlerDialog("服务器挂了","请重新连接",2);
+        } else if(msg.startsWith("<#NETWORKDOWN#>")) {
+            mcontext.showAlerDialog("(;´༎ຶД༎ຶ`)","我们的服务器挂了，请重新连接",2);
         }
     }
 }

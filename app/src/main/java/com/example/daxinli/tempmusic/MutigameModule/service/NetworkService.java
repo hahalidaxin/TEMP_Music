@@ -3,6 +3,7 @@ package com.example.daxinli.tempmusic.MutigameModule.service;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -13,23 +14,34 @@ import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 public class NetworkService extends Service {
     private static final String TAG = "NetworkService";
     public static final long HEART_BEAT_RATE = 3000;
+    public static final String HEART_BEAT_MESSAGE = "HEART_BEAT_MSG";
     public MyBinder myBinder = new MyBinder();
     public NetMsgReceiver receiver;
+
+    private long lastSendTime;
+    private Handler mHandler = new Handler();
+    private Runnable mrunnable = new Runnable() {
+        @Override
+        public void run() {
+            if(System.currentTimeMillis()-lastSendTime>=HEART_BEAT_RATE) {
+                //定时间发送心跳连接 验证网络是否依然连接
+                myBinder.sendMessage(HEART_BEAT_MESSAGE);
+            }
+            mHandler.postDelayed(mrunnable,HEART_BEAT_RATE);
+        }
+    };
 
     public NetworkService() {
     }
 
     @Override
     public void onCreate() {
-        //无论是start还是bind的方法都会被调用
-        Log.e(TAG, "onCreate: service onCreate发生");
         super.onCreate();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //开启新的网络线程
-
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -37,6 +49,7 @@ public class NetworkService extends Service {
     public void onDestroy() {
         this.receiver.interrupt();
         this.receiver.setFlag(false);
+        mHandler.removeCallbacks(mrunnable);    //移除心跳线程
         super.onDestroy();
     }
 
@@ -45,9 +58,7 @@ public class NetworkService extends Service {
         if(receiver == null) {
             receiver = new NetMsgReceiver(this);
             receiver.start();
-           // mHandler.postDelayed(mrunnable,HEART_BEAT_RATE);
         }
-        Log.e(TAG, "onBind: service Bind发生");
         return myBinder;
     }
     public class MyBinder extends Binder {
@@ -56,16 +67,21 @@ public class NetworkService extends Service {
             return NetworkService.this;
         }
         public boolean sendMessage(final String requestCode) {
-            Log.e(TAG, "向服务器发送消息："+requestCode);
+            Log.e(TAG, "SEND TO SERVER ："+requestCode);
             //另开一个线程进行数据的发送
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        Log.e(TAG, "run: 这里发送了msg："+requestCode);
                         receiver.dout.writeUTF(requestCode);
-                        //lastSendTime =System.currentTimeMillis();
+                        lastSendTime =System.currentTimeMillis();
                     } catch(Exception e) {
+                        //处理网络连接错误 需要重新连接网络线程   //发送广播线程
+                        Intent intent = new Intent();
+                        intent.setAction(receiver.NORMAL_AC_ACTION);
+                        intent.putExtra("msg","<#NETWORKDOWN#>");
+                        sendBroadcast(intent);
+
                         e.printStackTrace();
                     }
                 }
@@ -79,6 +95,9 @@ public class NetworkService extends Service {
             }
             receiver = new NetMsgReceiver(NetworkService.this);
             receiver.start();
+        }
+        public void startHeartBeat() {      //开启心跳连接线程
+            mHandler.postDelayed(mrunnable,HEART_BEAT_RATE);
         }
     }
 }

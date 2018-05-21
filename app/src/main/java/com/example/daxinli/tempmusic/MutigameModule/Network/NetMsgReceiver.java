@@ -37,44 +37,30 @@ public class NetMsgReceiver extends Thread {
         this.broadCastDown = false;
     }
     public boolean connectWithServer() {
-        boolean flag  = false;
-        long beginTime = System.currentTimeMillis();
-        //while(!flag) {                          //不断连接直到成功为止
-            try {
-                sc= new Socket();
-                sc.connect(new InetSocketAddress(SERVER_IP,SERVER_PORT),1000);
-                din = new DataInputStream(sc.getInputStream());
-                dout = new DataOutputStream(sc.getOutputStream());
-            } catch(Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-            /*
-            if(System.currentTimeMillis()-beginTime>connectTimeLimit) {
-                //连接失败处理问题
-                Log.e(TAG, "connectWithServer: "+"some errors happended in connection");
-                return false;        //这里退出Thread
-            }
+        try {
+            sc= new Socket();
+            sc.connect(new InetSocketAddress(SERVER_IP,SERVER_PORT),1000);
+            din = new DataInputStream(sc.getInputStream());
+            dout = new DataOutputStream(sc.getOutputStream());
+        } catch(Exception e) {
+            e.printStackTrace();
+            Intent mintent = new Intent();
+            mintent.setAction(HOME_AC_ACTION);
+            mintent.putExtra("msg","<#NETWORKDOWN#>");
+            mcontext.sendBroadcast(mintent);
+            return false;
         }
-        */
         return true;
     }
     @Override
     public void run() {
-        String[] msgSplits;
-
-        if(!connectWithServer()) {
-            Intent mintent = new Intent();
-            mintent.setAction(HOME_AC_ACTION);
-            mintent.putExtra("msg","<#ERROR#>DISCONNECT");
-            mcontext.sendBroadcast(mintent);
-            this.setFlag(false);
-        }
-        Log.e(TAG, "服务器连接成功");
+        if(!connectWithServer()) return ;
+        //启动成功 这时候开启一个心跳连接线程
+        mcontext.myBinder.startHeartBeat();
         while(flag) {
             try {
                 String msg = din.readUTF();
-                Log.e(TAG, "已经收到了发送来的信息 "+msg);
+                Log.e(TAG, "MSG FROM SERVER : "+msg);
                 //处理读来的返回信息
                 try {
                     if(msg.startsWith("<#CONNECT#>")) {
@@ -96,18 +82,9 @@ public class NetMsgReceiver extends Thread {
                         mcontext.sendBroadcast(intent);
                     }
                 }catch(Exception e) {
-                    Log.e(TAG, "错误发生在分析字符串的额过程中");
                     e.printStackTrace();
                 }
             } catch(Exception e) {
-                //Log.e(TAG, "出现了错误");
-                if(!broadCastDown) {
-                    Intent intent = new Intent();
-                    intent.setAction(NetMsgReceiver.NORMAL_AC_ACTION);
-                    intent.putExtra("msg", "<#NETWORK_DOWN#>");
-                    mcontext.sendBroadcast(intent);
-                    broadCastDown = true;
-                }
                 e.printStackTrace();
                 this.interrupt();
                 this.setFlag(false);
