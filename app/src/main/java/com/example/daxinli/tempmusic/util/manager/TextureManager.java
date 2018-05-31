@@ -2,15 +2,14 @@
 
 
  import android.graphics.Bitmap;
- import android.graphics.BitmapFactory;
- import android.opengl.GLES30;
- import android.opengl.GLUtils;
+import android.graphics.BitmapFactory;
+import android.opengl.GLES30;
+import android.opengl.GLSurfaceView;
+import android.opengl.GLUtils;
 
- import com.example.daxinli.tempmusic.MySurfaceView;
-
- import java.io.IOException;
- import java.io.InputStream;
- import java.util.HashMap;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
 
  public class TextureManager
 {
@@ -18,11 +17,13 @@
 			"0.png","1.png","2.png","3.png","4.png","5.png","6.png","7.png","8.png","9.png",
 			"btn_restart1_gov.png","btn_restart2_gov.png","pic_rheart_g.png","btn_pause_g.png",
 			"BGrk1.png","BGrk2.png","BGrk3.png","BGrk4.png","r0.png","r1.png","r2.png","r3.png",
-			"r4.png","r5.png","r6.png","r7.png","r8.png","r9.png","btn_start_g.png"					//29
+			"r4.png","r5.png","r6.png","r7.png","r8.png","r9.png","btn_start_g.png",					//29
+            "pic_kb_r1","pic_kb_r2","pic_kb_r3","pic_kb_r4","pic_kb_r5","pic_kb_r6","pic_kb_r7",
+            "pic_kb_r8","pic_kb_r9","pic_kb_r10","pic_kb_r11","pic_kb_r12","pic_kb_r13",        //42
 		};
 	
 	static HashMap<String,Integer> texList=new HashMap<String,Integer>();
-	public static int initTexture(MySurfaceView mv, String texName, boolean isRepeat)
+	public static int initTexture(GLSurfaceView mv, String texName, boolean isRepeat)
 	{
 		int[] textures=new int[1];
 		GLES30.glGenTextures
@@ -98,7 +99,7 @@
 		return textures[0];
 	}
 	
-	public static void loadingTexture(MySurfaceView mv,int start,int picNum)
+	public static void loadingTexture(GLSurfaceView mv, int start, int picNum)
 	{
 		for(int i=start;i<start+picNum;i++)
 		{

@@ -216,7 +216,7 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(type==0) {
-                    myBinder.sendMessage("<#EXIT#>"));
+                    myBinder.sendMessage("<#EXIT#>");
                     WaitOtherPeopleActivity1.this.removeActivity();
                 } else if(type==3) {
                     WaitOtherPeopleActivity1.this.removeActivity();

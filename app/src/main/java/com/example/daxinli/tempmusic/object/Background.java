@@ -77,25 +77,6 @@ public class Background {
             if(state!=0 && yVel >0) {   //没有达到上面条件的一种情况
                 state = 2;
             }
-            /*
-            if(!isDropDown && downLimit<(baseHeight*2/3)) {
-                yVel = yg;
-            }
-            if(Math.abs(downLimit-baseHeight)<10.0f || downLimit>baseHeight) {   //落到最低点进行反弹
-                if(yVel>0 && yVel>yVelDec) {
-                    yVel -= yVelDec;      //反弹减损
-                }
-                yVel = -yVel;       //反弹效果
-                if(yVelDec-4.0f>0) yVelDec -= 4.0f;
-                isDropDown = false;
-            }
-            Log.e(TAG, Float.toString(yVel));
-            if(yVel<0 && yVel>-5.0f) {
-                Log.e(TAG, Float.toString(yVel));
-                if(baseHeight-downLimit<10.0f) isAnim = false;       //结束动画  //下一帧渲染静止
-            }
-            downLimit += yVel;
-            */
         }
     }
     public void switchBG() {
