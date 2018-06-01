@@ -18,8 +18,9 @@ import java.util.HashMap;
 			"btn_restart1_gov.png","btn_restart2_gov.png","pic_rheart_g.png","btn_pause_g.png",
 			"BGrk1.png","BGrk2.png","BGrk3.png","BGrk4.png","r0.png","r1.png","r2.png","r3.png",
 			"r4.png","r5.png","r6.png","r7.png","r8.png","r9.png","btn_start_g.png",					//29
-            "pic_kb_r1","pic_kb_r2","pic_kb_r3","pic_kb_r4","pic_kb_r5","pic_kb_r6","pic_kb_r7",
-            "pic_kb_r8","pic_kb_r9","pic_kb_r10","pic_kb_r11","pic_kb_r12","pic_kb_r13",        //42
+            "pic_kb_r1.png","pic_kb_r2.png","pic_kb_r3.png","pic_kb_r4.png","pic_kb_r5.png","pic_kb_r6.png","pic_kb_r7.png",
+            "pic_kb_r8.png","pic_kb_r9.png","pic_kb_r10.png","pic_kb_r11.png","pic_kb_r12.png","pic_kb_r13.png",        //42
+			"btn_startGame_pre.png",    //43
 		};
 	
 	static HashMap<String,Integer> texList=new HashMap<String,Integer>();

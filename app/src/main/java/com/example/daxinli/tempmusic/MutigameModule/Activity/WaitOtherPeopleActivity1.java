@@ -152,7 +152,8 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
         switch(type) {
             case 0:
                 //开始游戏
-                //intent = new Intent(WaitOtherPeopleActivity1.this,)
+                intent = new Intent(WaitOtherPeopleActivity1.this,MutiGamingActivity.class);
+                intent.putExtra("type",TYPE_LEADER);
                 startActivity(intent);
                 break;
         }

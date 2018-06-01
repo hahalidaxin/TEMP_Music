@@ -1,12 +1,14 @@
 package com.example.daxinli.tempmusic.MutigameModule.ViewTool.KeyBoardToolModule;
 
-import android.content.Context;
 import android.view.MotionEvent;
 
+import com.example.daxinli.tempmusic.MutigameModule.Activity.Manager.MusicScoreManager;
+import com.example.daxinli.tempmusic.MutigameModule.View.Muti_SurfaceView;
 import com.example.daxinli.tempmusic.MutigameModule.ViewTool.BaseViewTool;
 import com.example.daxinli.tempmusic.object.Obj2DRectangle;
+import com.example.daxinli.tempmusic.util.DrawUtil;
+import com.example.daxinli.tempmusic.util.SFUtil;
 import com.example.daxinli.tempmusic.util.elseUtil.Area;
-import com.example.daxinli.tempmusic.util.manager.ShaderManager;
 
 /**
  * Created by Daxin Li on 2018/5/31.
@@ -14,20 +16,32 @@ import com.example.daxinli.tempmusic.util.manager.ShaderManager;
  */
 
 public class KeyboardView extends BaseViewTool {
+    static final float BLACKKEYWIDTHRATIO = 0.0609f;
+    static final float BLACKKEYHEIGHTRATIO = 0.61461;
+    static final float WHITEKEYWIDThRATIO = 0.125f;
+    Muti_SurfaceView mcontext;
     Obj2DRectangle imgKeyboard;
-    Area imgArea;
-    public KeyboardView(Context context,Area imgArea) {
-        super(context);
-        this.imgArea = imgArea;
-        onInit(imgArea.x,imgArea.y,imgArea.width,imgArea,height);
+    MusicScoreManager scoreManager;
+    private float bckW ;
+    private float bckHdown ;
+    private float whiW ;
+    private float[] blackkeylocX = [2.79f,8.04f,15.42,20.21,24.94];
+    private float imgVirW = 36.16;
+    Area Ar;
+    public KeyboardView(Muti_SurfaceView context, Area imgArea) {
+        this.mcontext = context;
+        this.Ar = imgArea;
+        onInit((int)(imgArea.x),(int)(imgArea.y),(int)(imgArea.width),(int)(imgArea.height));
     }
 
     @Override
     public void onInit(int x, int y, int w, int h) {
         super.onInit(x, y, w, h);
-        imgKeyboard = new Obj2DRectangle(x,y,w,h,1f,0,0,0,
-                ShaderManager.getShader(6));
-        imgArea = new Area(x,y,w,h);
+        scoreManager = new MusicScoreManager();
+        Ar = new Area(x,y,w,h);
+        bckW = w*BLACKKEYWIDTHRATIO;
+        bckHdown = h*BLACKKEYHEIGHTRATIO;
+        whiW = w*WHITEKEYWIDThRATIO;
     }
 
     @Override
@@ -37,12 +51,46 @@ public class KeyboardView extends BaseViewTool {
 
     @Override
     public boolean onTouch(MotionEvent event) {
-        return super.onTouch(event);
+        float x = event.getX();
+        float y = event.getY();
+        switch(event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                //触摸按下
+                int ans = -1;
+                //检查是否是黑键
+                int i;
+                for (i = 0; i < 5; i++)
+                    if (SFUtil.isin(x, y, new Area(Ar.x + blackkeylocX[i] / imgVirW * Ar.width, Ar.y, bckW, bckHdown))) {
+                        break;
+                    }
+                if (i != 5) ans = i + 9;
+
+                for (i = 0; i < 8; i++)
+                    if (SFUtil.isin(x, y, new Area(Ar.x + i * whiW, Ar.y, whiW, Ar.height))) break;
+                if (i != 8) ans = i + 1;
+                //点中了琴键 需要产生乐谱并且反馈一个音节
+                onKeyPress(ans);
+                break;
+            case MotionEvent.ACTION_UP:
+                //触摸抬起
+                // TODO: 2018/6/1  终止音效播放
+                //向viewTool中传入一个音节已经完成的信息 停止显示
+                //将此音节信息传入产生的乐谱文件
+                scoreManager.onWrite();
+                break;
+        }
+        return true;
     }
 
     @Override
     public void onDraw() {
-        imgKeyboard.drawSelf();
+        DrawUtil.drawBitmap(Ar,x,Ar.y,Ar.width,Ar.height,"btn_startGame_pre.png");
+    }
+
+    public void onKeyPress(int key) {
+        //播放音效
+        mcontext.mcontext.sound.playBackGroundMusic(key);
+
     }
 }
 

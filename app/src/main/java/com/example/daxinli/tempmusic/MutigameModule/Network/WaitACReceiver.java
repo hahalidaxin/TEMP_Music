@@ -39,6 +39,8 @@ public class WaitACReceiver extends BroadcastReceiver {
                     "o(▼皿▼メ;)o","房主带着他的小姨子和三点五个亿跑啦,啊啊... TAT",1);
         } else if(msg.startsWith("<#NETWORKDOWN#>")) {
             mcontext.ShowAlertDialog("555...","我们的服务器牺牲了，请您回退TAT",3);
+        } else if(msg.startsWith("<#BUTTONPRESSED#>")) {    //按下按钮 切换activity
+
         }
     }
 }

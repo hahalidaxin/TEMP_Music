@@ -1,6 +1,5 @@
 package com.example.daxinli.tempmusic.MutigameModule.ViewTool;
 
-import android.content.Context;
 import android.view.MotionEvent;
 
 /**
@@ -9,10 +8,7 @@ import android.view.MotionEvent;
 
 public abstract class BaseViewTool {
     public int viewX,viewY,viewWidth,viewHeight;
-    public Context mcontext;
-    public BaseViewTool(Context context) {
-        this.mcontext = context;
-    }
+    public BaseViewTool() {}
     public void onInit(int x,int y,int w,int h) {       //设置view的位置以及大小属性
         this.viewX = x;
         this.viewY = y;

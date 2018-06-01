@@ -1,11 +1,12 @@
 package com.example.daxinli.tempmusic.MutigameModule.ViewTool.RhythmToolModule;
 
-import android.content.Context;
+import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.MutigameModule.ViewTool.BaseViewTool;
 import com.example.daxinli.tempmusic.object.Obj2DLine;
 import com.example.daxinli.tempmusic.object.Obj2DRectangle;
+import com.example.daxinli.tempmusic.util.elseUtil.Area;
 import com.example.daxinli.tempmusic.util.manager.ShaderManager;
 
 import java.util.Queue;
@@ -17,6 +18,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 
 public class RhythmTool extends BaseViewTool {
+    private GLSurfaceView mcontext;
     private static final String TAG = "RhythmTool";
     public static final long refreshTimeSpan = 20;
     private Obj2DLine lineDrawer;
@@ -30,10 +32,10 @@ public class RhythmTool extends BaseViewTool {
     private int lineFormerNum=0,lineLaterNum=0;
     private int thistime;
 
-    public RhythmTool(Context context,int x,int y,int w,int h,int time) {
-        super(context);
+    public RhythmTool(GLSurfaceView context, Area area, int time) {
+        mcontext = context;
         thistime = time;
-        onInit(x,y,w,h);
+        onInit((int)(area.x),(int)(area.y),(int)(area.width),(int)(area.height));
     }
 
     @Override
@@ -44,13 +46,6 @@ public class RhythmTool extends BaseViewTool {
         backGround.setHP(true);
         backGround.setX(x); backGround.setY(y);
         ptMg = new PointsManager(x,y,w,h,thistime);
-        /*
-        centralPtDrawer = new Obj2DRectangle(ptMg.centralX,ptMg.centralY,
-                                             ptMg.CW,ptMg.CH,
-                                             ptMg.CW,ptMg.CH,
-                                             ptMg.Ca,ptMg.Cr,ptMg.Cg,ptMg.Cb,
-                                                ShaderManager.getShader(6));
-        */
         centralPtDrawer.setHP(true);
         this.borderX = x; this.borderY = y;
         this.borderWidth = w; this.borderHeight = h;
