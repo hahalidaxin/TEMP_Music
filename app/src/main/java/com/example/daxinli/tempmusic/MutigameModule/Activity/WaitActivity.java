@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -22,8 +23,8 @@ import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.Network.WaitACReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
 import com.example.daxinli.tempmusic.R;
+import com.example.daxinli.tempmusic.musicTouch.BaseActivity;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import master.flame.danmaku.controller.DrawHandler;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
 import master.flame.danmaku.danmaku.model.DanmakuTimer;
@@ -33,22 +34,32 @@ import master.flame.danmaku.danmaku.model.android.Danmakus;
 import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
 import master.flame.danmaku.ui.widget.DanmakuView;
 
-public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnClickListener{
-    public final String[] InstruName = { "钢琴","钢琴","钢琴","钢琴" }
+public class WaitActivity extends BaseActivity implements View.OnClickListener {
+    public static final int TYPE_LEADER = 0;
     private static final String TAG = "WaitOtherPeopleActivity";
     Button btn_startGame;
     Button btn_sendDanmu;
     TextView text_teamateLinked;
     EditText editText_Danmu;
-    CircleImageView img_Instru1,img_Instru2,img_Instru3,img_Instru4;
-    TextView text_Instru1,text_Instru2,text_Instru3,text_Instru4;
+
+    public final String[] instruNametoShow = { "钢琴","钢琴","钢琴","钢琴" };
+    int[] RID_imgInstru = {R.id.img_Instru1_wait1,R.id.img_Instru2_wait1,
+            R.id.img_Instru3_wait1,R.id.img_Instru4_wait1};
+    int[] RID_textInstri =  {R.id.text_instruSelect1_wait1,R.id.text_instruSelect2_wait1,
+            R.id.text_instruSelect3_wait1,R.id.text_instruSelect4_wait1};
+    int[] RDRAW_img={R.drawable.pic_instru1_p0,R.drawable.pic_instru1_p1,
+            R.drawable.pic_instru2_p0,R.drawable.pic_instru2_p1,
+            R.drawable.pic_instru3_p0,R.drawable.pic_instru3_p1,
+            R.drawable.pic_instru4_p0,R.drawable.pic_instru4_p1};
+    de.hdodenhof.circleimageview.CircleImageView[] img_stru= new de.hdodenhof.circleimageview.CircleImageView[4];
+    TextView[] text_instru = new TextView[4];
 
     private NetworkService.MyBinder myBinder;
     private WaitACReceiver breceiver;
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            WaitOtherPeopleActivity1.this.myBinder = (NetworkService.MyBinder)service;
+            WaitActivity.this.myBinder = (NetworkService.MyBinder)service;
         }
 
         @Override
@@ -69,15 +80,17 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
 
     public int clockID;
     public int sessionID;
+    public int activityType;            //leader和teamate显示不同的view
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wait1);
 
         Intent intent = getIntent();
-        clockID = Integer.parseInt(intent.getStringExtra("clockID"));
-        sessionID = Integer.parseInt(intent.getStringExtra("sessionID"));     //保存作为一名成员的身份信息
+        clockID = intent.getIntExtra("clockID",-1);
+        sessionID = intent.getIntExtra("sessionID",-1);
+        this.activityType = intent.getIntExtra("activityType",-1);
+        setContentView(R.layout.activity_wait1);
 
         initView();
     }
@@ -87,29 +100,20 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
         btn_sendDanmu = (Button) findViewById(R.id.btn_danmusend_createhome);
         editText_Danmu = (EditText) findViewById(R.id.edittext_danmu_createhome);
         danmakuView = (DanmakuView) findViewById(R.id.danmakuview_leader);
-        img_Instru1 = (CircleImageView) findViewById(R.id.img_Instru1_wait1);
-        img_Instru2 = (CircleImageView) findViewById(R.id.img_Instru2_wait1);
-        img_Instru3 = (CircleImageView) findViewById(R.id.img_Instru3_wait1);
-        img_Instru4 = (CircleImageView) findViewById(R.id.img_Instru4_wait1);
-        text_Instru1 = (TextView) findViewById(R.id.text_instruSelect1_wait1);
-        text_Instru2 = (TextView) findViewById(R.id.text_instruSelect2_wait1);
-        text_Instru3 = (TextView) findViewById(R.id.text_instruSelect3_wait1);
-        text_Instru4 = (TextView) findViewById(R.id.text_instruSelect4_wait1);
-
-        btn_startGame.setOnClickListener(this);
+        if(activityType==1) {
+            btn_startGame.setVisibility(View.INVISIBLE);    //将btn设置为不可见
+        } else {
+            btn_startGame.setOnClickListener(this);
+        }
         btn_sendDanmu.setOnClickListener(this);
-        img_Instru1.setOnClickListener(this);
-        img_Instru2.setOnClickListener(this);
-        img_Instru3.setOnClickListener(this);
-        img_Instru4.setOnClickListener(this);
-
-        Glide.with(this).load(R.drawable.pic_instru1_p0).into(img_Instru1);
-        Glide.with(this).load(R.drawable.pic_instru2_p0).into(img_Instru2);
-        Glide.with(this).load(R.drawable.pic_instru3_p0).into(img_Instru3);
-        Glide.with(this).load(R.drawable.pic_instru4_p0).into(img_Instru4);
-
-        setNumbertoShow(1);
-
+        //通过提前设计变量可以进行统一的设计
+        for(int i=0;i<4;i++) {
+            img_stru[i] = (de.hdodenhof.circleimageview.CircleImageView) findViewById(RID_imgInstru[i]);
+            img_stru[i].setOnClickListener(this);
+            Glide.with(this).load(RDRAW_img[i*2]).into(img_stru[i]);
+            text_instru[i] = (TextView) findViewById(RID_textInstri[i]);
+            text_instru[i].setText("");
+        }
         //danmaku的初始化基本操作
        // netMsgSender = new NetMsgSender(this);
         danmakuView.enableDanmakuDrawingCache(true);
@@ -140,8 +144,6 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.btn_leader_startgame:
-                //Intent intent  = new Intent(WaitOtherPeopleActivity1.this,MutiGamingActivity.class);
-                //startActivity(intent);
                 myBinder.sendMessage("<#STARTGAME#>");
                 break;
             case R.id.btn_danmusend_createhome:
@@ -150,29 +152,17 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
                 myBinder.sendMessage("<#DANMAKU#>"+Integer.toString(clockID)+"#"+requestCode);
                 editText_Danmu.setText("");
                 break;
-            case R.id.img_Instru1_wait1:
-                if(text_Instru1.getText().toString().equals("")) {
-                    //选择当前的instru
-                    text_Instru1.setText(InstruName[0]);
-                    Glide.with(this).load(R.drawable.pic_instru1_p1).into(img_Instru1);
-                    //向组内成员发送信号 同时需要考虑多线程同时调用的问题
-                    myBinder.sendMessage("<WAITVIEW>INSTRU1#SELECTED");
+        }
+        for(int i=0;i<4;i++) {
+            if(v.getId()==RID_imgInstru[i]) {
+                //当点击按钮之后 向服务进行申请点击事件 由服务器负责判断是否能够选择当前instru
+                Log.e(TAG, "已经点击了 ");
+                if(text_instru[i].getText().toString()=="") {
+                    myBinder.sendMessage(String.format("<#WAITVIEW#>%d#INSTRU%d#SELECT",clockID,i));
                 } else {
-                    //取消选择当前的instru
-                    text_Instru1.setText("");
-                    Glide.with(this).load(R.drawable.pic_instru1_p0).into(img_Instru1);
-                    myBinder.sendMessage("<WAITVIEW>INSTRU1#UNSELECTED");
+                    myBinder.sendMessage(String.format("<#WAITVIEW#>%d#INSTRU%d#UNSELECT",clockID,i));
                 }
-                break;
-            case R.id.img_Instru2_wait1:
-                text_Instru1.setText(InstruName[1]);
-                break;
-            case R.id.img_Instru3_wait1:
-                text_Instru1.setText(InstruName[2]);
-                break;
-            case R.id.img_Instru4_wait1:
-                text_Instru1.setText(InstruName[3]);
-                break;
+            }
         }
     }
     //显示虚拟键盘
@@ -193,7 +183,7 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
         switch(type) {
             case 0:
                 //开始游戏
-                intent = new Intent(WaitOtherPeopleActivity1.this,MutiGamingActivity.class);
+                intent = new Intent(WaitActivity.this,MutiGamingActivity.class);
                 intent.putExtra("type",TYPE_LEADER);
                 startActivity(intent);
                 break;
@@ -203,7 +193,11 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode==KeyEvent.KEYCODE_BACK) {
-            ShowAlertDialog("黄鹤大人","您真的要解散该房间吗？",0);
+            if(activityType==0) {
+                ShowAlertDialog("黄鹤大人","您真的要解散该房间吗？",0);
+            } else {
+                ShowAlertDialog(">_<","您是否确定退出当前房间",0);
+            }
             return true;
         }
         return super.onKeyDown(keyCode,event);
@@ -233,7 +227,7 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
         intentFilter.addAction(NetMsgReceiver.WAIT_AC_ACTION);
         registerReceiver(breceiver,intentFilter);
         //初始化service
-        Intent intent = new Intent (WaitOtherPeopleActivity1.this,NetworkService.class);
+        Intent intent = new Intent (WaitActivity.this,NetworkService.class);
         bindService(intent,connection,BIND_AUTO_CREATE);
     }
 
@@ -247,10 +241,10 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
         }
     }
 
-    AlertDialog.Builder builder;
+    AlertDialog.Builder builder;            //用来处理多个builder重叠出现的情况
     public void ShowAlertDialog(final String tititle,final String msg,final int type) {     //用户想要退出显示警告信息框
         if(builder!=null) return ;
-        builder = new AlertDialog.Builder(WaitOtherPeopleActivity1.this);
+        builder = new AlertDialog.Builder(WaitActivity.this);
         builder.setTitle(tititle);
         builder.setMessage(msg);
         builder.setCancelable(false);
@@ -259,21 +253,15 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
             public void onClick(DialogInterface dialog, int which) {
                 if(type==0) {
                     myBinder.sendMessage("<#EXIT#>");
-                    WaitOtherPeopleActivity1.this.removeActivity();
-                } else if(type==3) {
-                    WaitOtherPeopleActivity1.this.removeActivity();
+                    WaitActivity.this.removeActivity();
+                } else if(type==3||type==1) {
+                    WaitActivity.this.removeActivity();
+                } else if(type==4) {
+
                 }
                 builder = null;
             }
         });
-        /*
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                builder = null;
-            }
-        });
-        */
         builder.show();
     }
     public void addDanmaku(final String content,final boolean withBorder) {    //添加一条弹幕
@@ -297,7 +285,7 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                WaitOtherPeopleActivity1.this.text_teamateLinked.setText(
+                WaitActivity.this.text_teamateLinked.setText(
                         String.format("找呀找呀找胖友...(%d/%d)",number, CreateAHomeActivity.HOMEMATELIMIT));
             }
         });
@@ -308,6 +296,19 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
     }
     public int getclockID() {
         return this.clockID;
+    }
+    public void setInstruSelect(final int type,final int state,final int flag) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //设置当前的选择状态
+                Glide.with(WaitActivity.this).load(RDRAW_img[type*2+state]).into(img_stru[type]);
+                //img_stru[type].setImageResource(RDRAW_img[type*2+state]);
+                String text = state==0? "":instruNametoShow[type];
+                if(flag==1 && state==1) text=text+"(You)";
+                text_instru[type].setText(text);
+            }
+        });
     }
 
 }

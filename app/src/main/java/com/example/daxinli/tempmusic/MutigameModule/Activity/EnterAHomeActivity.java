@@ -100,9 +100,10 @@ public class EnterAHomeActivity extends AbHomeActivity implements View.OnClickLi
             @Override
             public void run() {
                 if(flag) {
-                    Intent intent = new Intent(EnterAHomeActivity.this,WaitOtherPeopleActivity2.class);
+                    Intent intent = new Intent(EnterAHomeActivity.this,WaitActivity.class);
                     intent.putExtra("clockID",clockID);
                     intent.putExtra("sessionID",sessionID);
+                    intent.putExtra("activityType",1);
                     startActivity(intent);
                 } else {
                     EnterAHomeActivity.this.showAlerDialog("进入失败", "没有找到匹配房间", 0);

@@ -9,8 +9,8 @@ import android.os.IBinder;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import com.example.daxinli.tempmusic.MutigameModule.Network.MutiGamingReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
-import com.example.daxinli.tempmusic.MutigameModule.Network.WaitACReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.View.Muti_SurfaceView;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
 import com.example.daxinli.tempmusic.musicTouch.BaseActivity;
@@ -24,11 +24,11 @@ public class MutiGamingActivity extends BaseActivity {
     public SoundManager sound;
 
     public NetworkService.MyBinder myBinder;
-    public WaitACReceiver breceiver;
+    public MutiGamingReceiver breceiver;
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            WaitOtherPeopleActivity1.this.myBinder = (NetworkService.MyBinder)service;
+            MutiGamingActivity.this.myBinder = (NetworkService.MyBinder)service;
         }
 
         @Override
@@ -43,7 +43,7 @@ public class MutiGamingActivity extends BaseActivity {
         initData();
         Log.e(TAG, "onCreate: 已经执行了");
         Intent intent = getIntent();
-        int type = intent.getIntExtra("type");      //获取多人游戏加载的类型
+        int type = intent.getIntExtra("type",0);      //获取多人游戏加载的类型
         msurfaceView = new Muti_SurfaceView(this,type);
         setContentView(msurfaceView);
     }
@@ -60,13 +60,13 @@ public class MutiGamingActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         //注册广播//初始化广播接收器
-        breceiver = new WaitACReceiver(this);
+        breceiver = new MutiGamingReceiver(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(NetMsgReceiver.NORMAL_AC_ACTION);
         intentFilter.addAction(NetMsgReceiver.WAIT_AC_ACTION);
         registerReceiver(breceiver,intentFilter);
         //初始化service
-        Intent intent = new Intent (WaitOtherPeopleActivity1.this,NetworkService.class);
+        Intent intent = new Intent (MutiGamingActivity.this,NetworkService.class);
         bindService(intent,connection,BIND_AUTO_CREATE);
     }
 

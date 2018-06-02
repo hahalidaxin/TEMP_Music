@@ -30,7 +30,7 @@ public class PrepareView extends BaseView {
     @Override
     public void initView() {
         TextureManager.loadingTexture(mcontext,43,1);
-        arBtnStartGame = new Area();
+        //arBtnStartGame = new Area();
     }
 
     @Override

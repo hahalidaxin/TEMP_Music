@@ -18,4 +18,6 @@ public abstract class AbWaitActivity extends BaseActivity {
     public abstract void ShowAlertDialog(final String tititle,final String msg,final int type);
 
     public abstract void onActivityTrans(int type) ;
+
+    public abstract void setInstruSelect(final int type,final int state) ;
 }

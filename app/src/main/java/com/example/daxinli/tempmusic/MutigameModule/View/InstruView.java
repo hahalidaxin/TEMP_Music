@@ -1,6 +1,5 @@
 package com.example.daxinli.tempmusic.MutigameModule.View;
 
-import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.MutigameModule.ViewTool.KeyBoardToolModule.KeyboardView;
@@ -22,8 +21,11 @@ public class InstruView extends BaseView {
     RhythmTool rhyview;
     Area areaKB;
     Area areaRHY;
-    public InstruView(GLSurfaceView context,int instruType) {
+
+    public int instruType;
+    public InstruView(Muti_SurfaceView context,int instruType) {
         this.mcontext = context;
+        this.instruType = instruType;
         initView();
     }
 
@@ -31,7 +33,7 @@ public class InstruView extends BaseView {
     public void initView() {
         areaKB = new Area(10,500,540,300);
         areaRHY = new Area(10,10,540,200);
-        kbview = new KeyboardView(mcontext,areaKB,intruType);
+        kbview = new KeyboardView(mcontext,areaKB,instruType);
         rhyview = new RhythmTool(mcontext,areaRHY,50);
         TextureManager.loadingTexture(mcontext,27,13);
     }

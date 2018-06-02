@@ -59,13 +59,13 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
             @Override
             public void run() {
                 if(flag) {
-                    Intent intent = new Intent(CreateAHomeActivity.this,WaitOtherPeopleActivity1.class);
-                    intent.putExtra("clockID",Integer.toString(clockID));
-                    intent.putExtra("sessionID",Integer.toString(sessionID));
+                    Intent intent = new Intent(CreateAHomeActivity.this,WaitActivity.class);
+                    intent.putExtra("clockID",clockID);
+                    intent.putExtra("sessionID",sessionID);
+                    intent.putExtra("activityType",0);
                     startActivity(intent);
                 } else {
                     CreateAHomeActivity.this.showAlerDialog("创建失败", "请更换您的密码", 2);
-                    //show_Toast("请更换您的房间密码>_<");
                 }
             }
         });

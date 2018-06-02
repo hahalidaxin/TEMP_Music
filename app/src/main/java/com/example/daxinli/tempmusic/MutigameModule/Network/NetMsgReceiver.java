@@ -75,8 +75,9 @@ public class NetMsgReceiver extends Thread {
                         intent.putExtra("msg",msg);
                         mcontext.sendBroadcast(intent);
                     } else if(msg.startsWith("<#DANMAKU#>")
-                            || msg.startsWith("<#SHOWNUMBER#>"
-                            || msg.startsWith("<#BUTTONPRESSED#>"))) {
+                            || msg.startsWith("<#SHOWNUMBER#>")
+                            || msg.startsWith("<#BUTTONPRESSED#>")
+                            || msg.startsWith("<#WAITVIEW#>")) {
                         Intent intent = new Intent();
                         intent.setAction(WAIT_AC_ACTION);
                         intent.putExtra("msg", msg);

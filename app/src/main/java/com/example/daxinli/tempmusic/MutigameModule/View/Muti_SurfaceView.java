@@ -49,10 +49,10 @@ public class Muti_SurfaceView extends GLSurfaceView {
             Log.e(TAG, "onDrawFrame: 已经执行了" );
             GLES30.glClear( GLES30.GL_DEPTH_BUFFER_BIT | GLES30.GL_COLOR_BUFFER_BIT);
             if(!initFlag) {
-                pianoView = new InstruView(Muti_SurfaceView.this);
-                switch(initFlag>>1) {
+                pianoView = new InstruView(Muti_SurfaceView.this,0);
+                //switch(initFlag/2) {
 
-                }
+                //}
                 curView = pianoView;
                 lastDrawTime = System.currentTimeMillis();
             }
@@ -88,10 +88,10 @@ public class Muti_SurfaceView extends GLSurfaceView {
             ShaderManager.compileShader();
         }
     }
-    public startGame() {
+    public void startGame() {
         //将curView切换
         synchronized (this.curView) {
-            this.curView =
+            //this.curView =
         }
     }
 }

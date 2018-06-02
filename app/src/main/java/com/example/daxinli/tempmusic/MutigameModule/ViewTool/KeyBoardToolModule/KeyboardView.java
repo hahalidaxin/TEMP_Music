@@ -17,7 +17,7 @@ import com.example.daxinli.tempmusic.util.elseUtil.Area;
 
 public class KeyboardView extends BaseViewTool {
     static final float BLACKKEYWIDTHRATIO = 0.0609f;
-    static final float BLACKKEYHEIGHTRATIO = 0.61461;
+    static final float BLACKKEYHEIGHTRATIO = 0.61461f;
     static final float WHITEKEYWIDThRATIO = 0.125f;
     Muti_SurfaceView mcontext;
     Obj2DRectangle imgKeyboard;
@@ -27,8 +27,8 @@ public class KeyboardView extends BaseViewTool {
     private float bckW ;
     private float bckHdown ;
     private float whiW ;
-    private float[] blackkeylocX = [2.79f,8.04f,15.42f,20.21f,24.94f];
-    private float imgVirW = 36.16;
+    private float[] blackkeylocX = {2.79f,8.04f,15.42f,20.21f,24.94f};
+    private float imgVirW = 36.16f;
     Area Ar;
 
 
@@ -42,7 +42,7 @@ public class KeyboardView extends BaseViewTool {
     @Override
     public void onInit(int x, int y, int w, int h) {
         super.onInit(x, y, w, h);
-        scoreManager = new MusicScoreManager();
+        scoreManager = new MusicScoreManager(mcontext);
         Ar = new Area(x,y,w,h);
         bckW = w*BLACKKEYWIDTHRATIO;
         bckHdown = h*BLACKKEYHEIGHTRATIO;
