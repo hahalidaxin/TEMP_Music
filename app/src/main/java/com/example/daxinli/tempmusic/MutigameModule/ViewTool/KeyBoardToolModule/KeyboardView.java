@@ -22,15 +22,20 @@ public class KeyboardView extends BaseViewTool {
     Muti_SurfaceView mcontext;
     Obj2DRectangle imgKeyboard;
     MusicScoreManager scoreManager;
+
+    private int instruType;
     private float bckW ;
     private float bckHdown ;
     private float whiW ;
-    private float[] blackkeylocX = [2.79f,8.04f,15.42,20.21,24.94];
+    private float[] blackkeylocX = [2.79f,8.04f,15.42f,20.21f,24.94f];
     private float imgVirW = 36.16;
     Area Ar;
-    public KeyboardView(Muti_SurfaceView context, Area imgArea) {
+
+
+    public KeyboardView(Muti_SurfaceView context, Area imgArea,int intruType) {
         this.mcontext = context;
         this.Ar = imgArea;
+        this.instruType = intruType;
         onInit((int)(imgArea.x),(int)(imgArea.y),(int)(imgArea.width),(int)(imgArea.height));
     }
 
@@ -84,13 +89,27 @@ public class KeyboardView extends BaseViewTool {
 
     @Override
     public void onDraw() {
-        DrawUtil.drawBitmap(Ar,x,Ar.y,Ar.width,Ar.height,"btn_startGame_pre.png");
+        DrawUtil.drawBitmap(Ar.x,Ar.y,Ar.width,Ar.height,"btn_startGame_pre.png");
     }
 
     public void onKeyPress(int key) {
-        //播放音效
-        mcontext.mcontext.sound.playBackGroundMusic(key);
-
+        //播放音效 调用不同的特效
+        switch(this.instruType) {
+            case 0:
+                //piano
+                break;
+            case 1:
+                //instru1
+                break;
+            case 2:
+                //instru2
+                break;
+            case 3:
+                //instru3
+                break;
+        }
+        //切换显示图片
+        //同时需要结合抬起动作
     }
 }
 

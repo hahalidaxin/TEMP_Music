@@ -17,11 +17,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.Network.WaitACReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
 import com.example.daxinli.tempmusic.R;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import master.flame.danmaku.controller.DrawHandler;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
 import master.flame.danmaku.danmaku.model.DanmakuTimer;
@@ -32,11 +34,14 @@ import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
 import master.flame.danmaku.ui.widget.DanmakuView;
 
 public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnClickListener{
+    public final String[] InstruName = { "钢琴","钢琴","钢琴","钢琴" }
     private static final String TAG = "WaitOtherPeopleActivity";
     Button btn_startGame;
     Button btn_sendDanmu;
     TextView text_teamateLinked;
     EditText editText_Danmu;
+    CircleImageView img_Instru1,img_Instru2,img_Instru3,img_Instru4;
+    TextView text_Instru1,text_Instru2,text_Instru3,text_Instru4;
 
     private NetworkService.MyBinder myBinder;
     private WaitACReceiver breceiver;
@@ -82,9 +87,26 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
         btn_sendDanmu = (Button) findViewById(R.id.btn_danmusend_createhome);
         editText_Danmu = (EditText) findViewById(R.id.edittext_danmu_createhome);
         danmakuView = (DanmakuView) findViewById(R.id.danmakuview_leader);
+        img_Instru1 = (CircleImageView) findViewById(R.id.img_Instru1_wait1);
+        img_Instru2 = (CircleImageView) findViewById(R.id.img_Instru2_wait1);
+        img_Instru3 = (CircleImageView) findViewById(R.id.img_Instru3_wait1);
+        img_Instru4 = (CircleImageView) findViewById(R.id.img_Instru4_wait1);
+        text_Instru1 = (TextView) findViewById(R.id.text_instruSelect1_wait1);
+        text_Instru2 = (TextView) findViewById(R.id.text_instruSelect2_wait1);
+        text_Instru3 = (TextView) findViewById(R.id.text_instruSelect3_wait1);
+        text_Instru4 = (TextView) findViewById(R.id.text_instruSelect4_wait1);
 
         btn_startGame.setOnClickListener(this);
         btn_sendDanmu.setOnClickListener(this);
+        img_Instru1.setOnClickListener(this);
+        img_Instru2.setOnClickListener(this);
+        img_Instru3.setOnClickListener(this);
+        img_Instru4.setOnClickListener(this);
+
+        Glide.with(this).load(R.drawable.pic_instru1_p0).into(img_Instru1);
+        Glide.with(this).load(R.drawable.pic_instru2_p0).into(img_Instru2);
+        Glide.with(this).load(R.drawable.pic_instru3_p0).into(img_Instru3);
+        Glide.with(this).load(R.drawable.pic_instru4_p0).into(img_Instru4);
 
         setNumbertoShow(1);
 
@@ -98,26 +120,22 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
                 showDanmaku = true;
                 //generateSomeDanmaku();
             }
-
             @Override
             public void updateTimer(DanmakuTimer timer) {
 
             }
-
             @Override
             public void danmakuShown(BaseDanmaku danmaku) {
 
             }
-
             @Override
             public void drawingFinished() {
-
             }
         });
         danmakuContext = DanmakuContext.create();
         danmakuView.prepare(parser,danmakuContext);
-
     }
+
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
@@ -131,6 +149,29 @@ public class WaitOtherPeopleActivity1 extends AbWaitActivity implements View.OnC
                 String requestCode = editText_Danmu.getText().toString();
                 myBinder.sendMessage("<#DANMAKU#>"+Integer.toString(clockID)+"#"+requestCode);
                 editText_Danmu.setText("");
+                break;
+            case R.id.img_Instru1_wait1:
+                if(text_Instru1.getText().toString().equals("")) {
+                    //选择当前的instru
+                    text_Instru1.setText(InstruName[0]);
+                    Glide.with(this).load(R.drawable.pic_instru1_p1).into(img_Instru1);
+                    //向组内成员发送信号 同时需要考虑多线程同时调用的问题
+                    myBinder.sendMessage("<WAITVIEW>INSTRU1#SELECTED");
+                } else {
+                    //取消选择当前的instru
+                    text_Instru1.setText("");
+                    Glide.with(this).load(R.drawable.pic_instru1_p0).into(img_Instru1);
+                    myBinder.sendMessage("<WAITVIEW>INSTRU1#UNSELECTED");
+                }
+                break;
+            case R.id.img_Instru2_wait1:
+                text_Instru1.setText(InstruName[1]);
+                break;
+            case R.id.img_Instru3_wait1:
+                text_Instru1.setText(InstruName[2]);
+                break;
+            case R.id.img_Instru4_wait1:
+                text_Instru1.setText(InstruName[3]);
                 break;
         }
     }

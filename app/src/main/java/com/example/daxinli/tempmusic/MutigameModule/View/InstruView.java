@@ -16,14 +16,13 @@ import javax.microedition.khronos.opengles.GL10;
  * 多人游戏中使用钢琴进行游戏制作的界面
  */
 
-public class PianoPlayerView extends BaseView {
+public class InstruView extends BaseView {
     Muti_SurfaceView mcontext;
     KeyboardView kbview;
     RhythmTool rhyview;
     Area areaKB;
     Area areaRHY;
-
-    public PianoPlayerView(GLSurfaceView context) {
+    public InstruView(GLSurfaceView context,int instruType) {
         this.mcontext = context;
         initView();
     }
@@ -32,7 +31,7 @@ public class PianoPlayerView extends BaseView {
     public void initView() {
         areaKB = new Area(10,500,540,300);
         areaRHY = new Area(10,10,540,200);
-        kbview = new KeyboardView(mcontext,areaKB);
+        kbview = new KeyboardView(mcontext,areaKB,intruType);
         rhyview = new RhythmTool(mcontext,areaRHY,50);
         TextureManager.loadingTexture(mcontext,27,13);
     }

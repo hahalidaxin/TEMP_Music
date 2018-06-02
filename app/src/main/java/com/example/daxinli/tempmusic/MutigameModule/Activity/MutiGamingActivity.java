@@ -23,8 +23,8 @@ public class MutiGamingActivity extends BaseActivity {
     private Muti_SurfaceView msurfaceView;
     public SoundManager sound;
 
-    private NetworkService.MyBinder myBinder;
-    private WaitACReceiver breceiver;
+    public NetworkService.MyBinder myBinder;
+    public WaitACReceiver breceiver;
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -43,10 +43,12 @@ public class MutiGamingActivity extends BaseActivity {
         initData();
         Log.e(TAG, "onCreate: 已经执行了");
         Intent intent = getIntent();
-        int type = intent.getIntExtra("type");
+        int type = intent.getIntExtra("type");      //获取多人游戏加载的类型
         msurfaceView = new Muti_SurfaceView(this,type);
         setContentView(msurfaceView);
     }
+
+
     public void initData() {
         DisplayMetrics dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -82,6 +84,6 @@ public class MutiGamingActivity extends BaseActivity {
 
     public void onStartGame() { //当游戏开始的时候
         //切换view到gameView
-
+        msurfaceView.startGame();
     }
 }
