@@ -14,13 +14,13 @@ import java.util.HashMap;
  public class TextureManager
 {
 	static String[] texturesName={
-			"0.png","1.png","2.png","3.png","4.png","5.png","6.png","7.png","8.png","9.png",
-			"btn_restart1_gov.png","btn_restart2_gov.png","pic_rheart_g.png","btn_pause_g.png",
-			"BGrk1.png","BGrk2.png","BGrk3.png","BGrk4.png","r0.png","r1.png","r2.png","r3.png",
+			"0.png","1.png","2.png","3.png","4.png","5.png","6.png","7.png","8.png","9.png",	//10
+			"btn_restart1_gov.png","btn_restart2_gov.png","pic_rheart_g.png","btn_pause_g.png",	//14
+			"BGrk1.png","BGrk2.png","BGrk3.png","BGrk4.png","r0.png","r1.png","r2.png","r3.png",	//22
 			"r4.png","r5.png","r6.png","r7.png","r8.png","r9.png","btn_start_g.png",					//29
-            "pic_kb_r1.png","pic_kb_r2.png","pic_kb_r3.png","pic_kb_r4.png","pic_kb_r5.png","pic_kb_r6.png","pic_kb_r7.png",
-            "pic_kb_r8.png","pic_kb_r9.png","pic_kb_r10.png","pic_kb_r11.png","pic_kb_r12.png","pic_kb_r13.png",        //42
-			"btn_startGame_pre.png",    //43
+            "pic_kb_r0.png","pic_kb_r1.png","pic_kb_r2.png","pic_kb_r3.png","pic_kb_r4.png","pic_kb_r5.png","pic_kb_r6.png", //36
+			"pic_kb_r7.png","pic_kb_r8.png","pic_kb_r9.png","pic_kb_r10.png","pic_kb_r11.png","pic_kb_r12.png","pic_kb_r13.png",        //43
+			"btn_startGame_pre.png",    //44-
 		};
 	
 	static HashMap<String,Integer> texList=new HashMap<String,Integer>();

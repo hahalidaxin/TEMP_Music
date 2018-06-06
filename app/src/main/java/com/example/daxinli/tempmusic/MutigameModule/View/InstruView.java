@@ -16,6 +16,7 @@ import javax.microedition.khronos.opengles.GL10;
  */
 
 public class InstruView extends BaseView {
+    private static final String TAG = "InstruView";
     Muti_SurfaceView mcontext;
     KeyboardView kbview;
     RhythmTool rhyview;
@@ -35,7 +36,7 @@ public class InstruView extends BaseView {
         areaRHY = new Area(10,10,540,200);
         kbview = new KeyboardView(mcontext,areaKB,instruType);
         rhyview = new RhythmTool(mcontext,areaRHY,50);
-        TextureManager.loadingTexture(mcontext,27,13);
+        TextureManager.loadingTexture(mcontext,29,15);
     }
 
     @Override
@@ -45,7 +46,7 @@ public class InstruView extends BaseView {
 
     @Override
     public void drawView(GL10 gl) {
-        kbview.onDraw();
+        //kbview.onDraw();
         rhyview.onDraw();
     }
 }

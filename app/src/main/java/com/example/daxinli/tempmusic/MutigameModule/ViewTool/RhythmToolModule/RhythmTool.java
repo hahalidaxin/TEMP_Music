@@ -46,7 +46,7 @@ public class RhythmTool extends BaseViewTool {
         backGround.setHP(true);
         backGround.setX(x); backGround.setY(y);
         ptMg = new PointsManager(x,y,w,h,thistime);
-        centralPtDrawer.setHP(true);
+        //centralPtDrawer.setHP(true);
         this.borderX = x; this.borderY = y;
         this.borderWidth = w; this.borderHeight = h;
 
@@ -72,9 +72,9 @@ public class RhythmTool extends BaseViewTool {
         lineDrawer.setLinePoints(this.lineLaterNum/2,this.linelater);
         lineDrawer.drawSelf();
 
-        centralPtDrawer.setX(ptMg.centralX-ptMg.CW/2);
-        centralPtDrawer.setY(ptMg.centralY-ptMg.CH/2);
-        centralPtDrawer.drawSelf();
+        //centralPtDrawer.setX(ptMg.centralX-ptMg.CW/2);
+        //centralPtDrawer.setY(ptMg.centralY-ptMg.CH/2);
+        //centralPtDrawer.drawSelf();
     }
 
     public void getLinePtsArray(Queue<points> tmpQueue) {        //添加边界节点，返回节点的位置数组

@@ -2,10 +2,11 @@ package com.example.daxinli.tempmusic.MutigameModule.View;
 
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 
 import com.example.daxinli.tempmusic.MatrixState.MatrixState2D;
 import com.example.daxinli.tempmusic.MutigameModule.Activity.MutiGamingActivity;
+import com.example.daxinli.tempmusic.MutigameModule.ViewTool.RhythmToolModule.RhythmTool;
+import com.example.daxinli.tempmusic.util.elseUtil.Area;
 import com.example.daxinli.tempmusic.util.manager.ShaderManager;
 import com.example.daxinli.tempmusic.view.BaseView;
 
@@ -23,7 +24,9 @@ public class Muti_SurfaceView extends GLSurfaceView {
     private SceneRenderer mRenderer;
     public MutiGamingActivity mcontext;
     public BaseView curView,playingView;
-    private InstruView pianoView;
+    private InstruView instruView;
+
+    private RhythmTool rhy;
     private boolean initFlag = false;
     private long lastDrawTime;
 
@@ -46,18 +49,17 @@ public class Muti_SurfaceView extends GLSurfaceView {
         }
         public void onDrawFrame(GL10 gl)
         {
-            Log.e(TAG, "onDrawFrame: 已经执行了" );
             GLES30.glClear( GLES30.GL_DEPTH_BUFFER_BIT | GLES30.GL_COLOR_BUFFER_BIT);
             if(!initFlag) {
-                pianoView = new InstruView(Muti_SurfaceView.this,0);
-                //switch(initFlag/2) {
-
-                //}
-                curView = pianoView;
+                instruView = new InstruView(Muti_SurfaceView.this,0);
+                curView = instruView;
+                rhy = new RhythmTool(Muti_SurfaceView.this,new Area(10,10,500,200),50);
                 lastDrawTime = System.currentTimeMillis();
+                initFlag = true;
             }
 
             if(curView!=null) {
+                rhy.onDraw();
                 //curView.drawView(gl);
             }
 

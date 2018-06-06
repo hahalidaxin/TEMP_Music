@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
-        <activity android:name=".musicTouch.MutiGameActivity">
+        <activity android:name=".MutigameModule.Activity.MutiGamingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,7 +28,7 @@
         <activity android:name=".musicTouch.SettingsActivity" />
         <activity android:name=".musicTouch.LoginActivity" />
         <activity android:name=".musicTouch.RegisterActivity" />
-        <activity android:name=".MutigameModule.Activity.MutiGamingActivity" />
+        <activity android:name=".musicTouch.MutiGameActivity" />
         <activity android:name=".MutigameModule.Activity.WaitActivity" />
         <activity android:name=".MutigameModule.Activity.CreateAHomeActivity" />
         <activity android:name=".MutigameModule.Activity.EnterAHomeActivity" />

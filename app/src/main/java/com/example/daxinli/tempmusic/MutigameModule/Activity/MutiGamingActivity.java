@@ -36,7 +36,8 @@ public class MutiGamingActivity extends BaseActivity {
 
         }
     };
-
+    private int clockID;
+    private int sessionID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +45,8 @@ public class MutiGamingActivity extends BaseActivity {
         Log.e(TAG, "onCreate: 已经执行了");
         Intent intent = getIntent();
         int type = intent.getIntExtra("type",0);      //获取多人游戏加载的类型
+        this.clockID = intent.getIntExtra("clockID",-1);
+        this.sessionID = intent.getIntExtra("sessionID",-1);
         msurfaceView = new Muti_SurfaceView(this,type);
         setContentView(msurfaceView);
     }
