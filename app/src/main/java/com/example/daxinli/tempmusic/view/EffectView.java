@@ -62,4 +62,9 @@ public class EffectView extends BaseView {
         slide.drawSelf();
         //background.drawSelf();
     }
+
+    @Override
+    public boolean getIsInit() {
+        return true;
+    }
 }

@@ -6,9 +6,10 @@ import com.example.daxinli.tempmusic.MutigameModule.Activity.Manager.MusicScoreM
 import com.example.daxinli.tempmusic.MutigameModule.View.Muti_SurfaceView;
 import com.example.daxinli.tempmusic.MutigameModule.ViewTool.BaseViewTool;
 import com.example.daxinli.tempmusic.object.Obj2DRectangle;
-import com.example.daxinli.tempmusic.util.DrawUtil;
 import com.example.daxinli.tempmusic.util.SFUtil;
 import com.example.daxinli.tempmusic.util.elseUtil.Area;
+import com.example.daxinli.tempmusic.util.manager.ShaderManager;
+import com.example.daxinli.tempmusic.util.manager.TextureManager;
 
 /**
  * Created by Daxin Li on 2018/5/31.
@@ -19,10 +20,12 @@ public class KeyboardView extends BaseViewTool {
     static final float BLACKKEYWIDTHRATIO = 0.0609f;
     static final float BLACKKEYHEIGHTRATIO = 0.61461f;
     static final float WHITEKEYWIDThRATIO = 0.125f;
+    Obj2DRectangle[] instruKeys = new Obj2DRectangle[14];
     Muti_SurfaceView mcontext;
     Obj2DRectangle imgKeyboard;
     MusicScoreManager scoreManager;
 
+    private int nowKeyPressed;
     private int instruType;
     private float bckW ;
     private float bckHdown ;
@@ -42,11 +45,17 @@ public class KeyboardView extends BaseViewTool {
     @Override
     public void onInit(int x, int y, int w, int h) {
         super.onInit(x, y, w, h);
-        scoreManager = new MusicScoreManager(mcontext);
+        nowKeyPressed = 0;
         Ar = new Area(x,y,w,h);
         bckW = w*BLACKKEYWIDTHRATIO;
         bckHdown = h*BLACKKEYHEIGHTRATIO;
         whiW = w*WHITEKEYWIDThRATIO;
+        for (int i=0;i<14;i++) {
+            String filename = String.format("pic_kb_r%d.png",i);
+            instruKeys[i] = new Obj2DRectangle(Ar.x,Ar.y,Ar.width,Ar.height, TextureManager.getTextures(filename),
+                    ShaderManager.getShader(2));
+            instruKeys[i].setHP(true);
+        }
     }
 
     @Override
@@ -89,7 +98,7 @@ public class KeyboardView extends BaseViewTool {
 
     @Override
     public void onDraw() {
-        DrawUtil.drawBitmap(Ar.x,Ar.y,Ar.width,Ar.height,"btn_startGame_pre.png");
+        instruKeys[nowKeyPressed].drawSelf();
     }
 
     public void onKeyPress(int key) {

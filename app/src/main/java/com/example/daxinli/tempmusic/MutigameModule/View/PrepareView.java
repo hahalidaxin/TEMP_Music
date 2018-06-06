@@ -49,4 +49,9 @@ public class PrepareView extends BaseView {
         DrawUtil.drawRect(0,0,1920,1080, 0.2f,1,1,1);
         DrawUtil.drawBitmap(arBtnStartGame.x, arBtnStartGame.y,arBtnStartGame.width,arBtnStartGame.height,btnStartGamePname);
     }
+
+    @Override
+    public boolean getIsInit() {
+        return false;
+    }
 }

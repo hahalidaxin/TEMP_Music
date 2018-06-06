@@ -17,6 +17,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class InstruView extends BaseView {
     private static final String TAG = "InstruView";
+    private boolean isInit = false;
     Muti_SurfaceView mcontext;
     KeyboardView kbview;
     RhythmTool rhyview;
@@ -32,11 +33,17 @@ public class InstruView extends BaseView {
 
     @Override
     public void initView() {
-        areaKB = new Area(10,500,540,300);
-        areaRHY = new Area(10,10,540,200);
+        areaKB = new Area(0,0,1920,1080);
+        areaRHY = new Area(710,-50,500,100);
         kbview = new KeyboardView(mcontext,areaKB,instruType);
-        rhyview = new RhythmTool(mcontext.mcontext,areaRHY,50);
+        rhyview= new RhythmTool(mcontext.mcontext,areaRHY,1000);
         TextureManager.loadingTexture(mcontext,29,15);
+        this.isInit = true;     //直到资源加载完成才返回标志，此时才可以进行view的Draw绘制
+    }
+
+    @Override
+    public boolean getIsInit() {
+        return this.isInit;
     }
 
     @Override
@@ -46,7 +53,7 @@ public class InstruView extends BaseView {
 
     @Override
     public void drawView(GL10 gl) {
-        //kbview.onDraw();
+        kbview.onDraw();
         rhyview.onDraw();
     }
 }

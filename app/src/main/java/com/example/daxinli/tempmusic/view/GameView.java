@@ -257,4 +257,8 @@ public class GameView extends BaseView {
             }
         }
 
+    @Override
+    public boolean getIsInit() {
+        return true;
+    }
 }

@@ -8,6 +8,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by Daxin Li on 2018/5/9.
+ * 进行所有节奏型工具的绘制点的管理，进行绘制点信息的更新
  */
 public class PointsManager {
     private static final String TAG = "PointsManager";
@@ -15,7 +16,7 @@ public class PointsManager {
     private static final int numberLimit = 9;
     public static final float EPS = 5.0f;        //最小Y误差
     public static final float Ca = 1,Cr = 1,Cg = 0,Cb = 0;   //中心点的颜色
-    public static final float CW = 100,CH = 100;               //中心点的长宽
+    public static final float CW = 30,CH = 30;               //中心点的长宽
 
     public Queue<points> linePtsQueue = new LinkedBlockingQueue<points>();         //存储节奏型的点数据
     public points[] linePts = new points[15];
@@ -50,7 +51,9 @@ public class PointsManager {
             if(i!=(numberLimit+1)/2-1)
                 linePtsQueue.add(new points(downx,downlineY));
         }
-        this.speed = (downlineY-uplineY)/time*(Muti_SurfaceView.DRAWSPANTIME)*(downx-upx)/(downlineY-uplineY);
+        float dX = Math.abs(upx-downx);
+        float dY = Math.abs(uplineY-downlineY);
+        this.speed = 2*dX/time * Muti_SurfaceView.DRAWSPANTIME;
     }
     public void go() {
         int qsize = linePtsQueue.size();

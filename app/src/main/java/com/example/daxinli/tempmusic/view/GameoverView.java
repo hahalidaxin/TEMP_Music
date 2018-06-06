@@ -91,4 +91,9 @@ public class GameoverView extends BaseView {
     }
     public void setBtnRestart_isPressed(boolean flag) { this.btnRestart_isPressed = flag; }
     public void setBtnExit_isPressed(boolean flag) { this.btnExit_isPressed = flag; }
+
+    @Override
+    public boolean getIsInit() {
+        return true;
+    }
 }

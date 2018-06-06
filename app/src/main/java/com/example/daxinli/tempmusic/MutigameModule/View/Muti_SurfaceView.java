@@ -2,12 +2,13 @@ package com.example.daxinli.tempmusic.MutigameModule.View;
 
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 
 import com.example.daxinli.tempmusic.MatrixState.MatrixState2D;
 import com.example.daxinli.tempmusic.MutigameModule.Activity.MutiGamingActivity;
 import com.example.daxinli.tempmusic.MutigameModule.ViewTool.RhythmToolModule.RhythmTool;
-import com.example.daxinli.tempmusic.util.elseUtil.Area;
 import com.example.daxinli.tempmusic.util.manager.ShaderManager;
+import com.example.daxinli.tempmusic.util.manager.TextureManager;
 import com.example.daxinli.tempmusic.view.BaseView;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -52,15 +53,14 @@ public class Muti_SurfaceView extends GLSurfaceView {
             GLES30.glClear( GLES30.GL_DEPTH_BUFFER_BIT | GLES30.GL_COLOR_BUFFER_BIT);
             if(!initFlag) {
                 instruView = new InstruView(Muti_SurfaceView.this,0);
+                TextureManager.loadingTexture(Muti_SurfaceView.this,29,15);
                 curView = instruView;
-                rhy = new RhythmTool(Muti_SurfaceView.this.mcontext,new Area(100,100,1000,1000),500);
                 lastDrawTime = System.currentTimeMillis();
                 initFlag = true;
             }
 
-            if(rhy!=null) {
-                rhy.onDraw();
-                //curView.drawView(gl);
+            if(curView!=null && curView.getIsInit()) {
+                curView.drawView(gl);
             }
 
             if(System.currentTimeMillis()-lastDrawTime<DRAWSPANTIME) {
@@ -74,7 +74,9 @@ public class Muti_SurfaceView extends GLSurfaceView {
         }
         public void onSurfaceChanged(GL10 gl, int width, int height)
         {
-
+            width = 1920;
+            height = 1080;
+            Log.e(TAG, String.format("onSurfaceCreated: %d %d",width,height));
             float ratio= (float) width/height;
             MatrixState2D.setInitStack();
             MatrixState2D.setCamera(0,0,5,0f,0f,0f,0f,1f,0f);
@@ -84,6 +86,7 @@ public class Muti_SurfaceView extends GLSurfaceView {
         }
         public void onSurfaceCreated(GL10 gl, EGLConfig config)
         {
+
             GLES30.glClearColor(255f,255f,255f, 1.0f);
             GLES30.glEnable(GL10.GL_CULL_FACE);
             ShaderManager.loadCodeFromFile(mcontext.getResources());

@@ -12,4 +12,5 @@ public abstract class BaseView
     public abstract void initView();
     public abstract boolean onTouchEvent(MotionEvent e);
     public abstract void drawView(GL10 gl);
+    public abstract boolean getIsInit() ;
 }

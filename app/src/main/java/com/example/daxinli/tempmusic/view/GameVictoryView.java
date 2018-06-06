@@ -136,4 +136,9 @@ public class GameVictoryView extends BaseView {
             DrawUtil.drawBitmap(ar.x,ar.y,ar.width,ar.height,"btn_restart1_gov.png");
         //backGround.drawSelf();
     }
+
+    @Override
+    public boolean getIsInit() {
+        return true;
+    }
 }

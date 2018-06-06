@@ -98,9 +98,13 @@ public class Obj2DRectangle
 	public void initVertexData(float width,float height)
 	{
 		//屏幕->视口
-		width = Constant.fromPixSizeToNearSize(width);		//将屏幕高度转化为视口高度
-		height = Constant.fromPixSizeToNearSize(height);
-
+		if(!this.isHP) {
+			width = Constant.fromPixSizeToNearSize(width);        //将屏幕高度转化为视口高度
+			height = Constant.fromPixSizeToNearSize(height);
+		} else {
+			width = Constant.fromPixSizeToNearSize_HP(width);        //将屏幕高度转化为视口高度
+			height = Constant.fromPixSizeToNearSize_HP(height);
+		}
 		vCount=4;
 		float vertices[]=new float[]
 		{
@@ -114,11 +118,12 @@ public class Obj2DRectangle
 		mVertexBuffer=vbb.asFloatBuffer();
 		mVertexBuffer.put(vertices);
 		mVertexBuffer.position(0);
-		float[] texCoor=new float[12];
+		float[] texCoor;
 		
 		if(!isLoad)
 		{
-			texCoor=new float[]{
+			//两个三角形拼成一个矩形的文理坐标
+			texCoor=new float[] {
 					0,0,0,1,1,0,
 					1,1,1,0,0,1};
 		}else
@@ -145,8 +150,13 @@ public class Obj2DRectangle
 	}
 	public void initVertexDataRect(float width,float height) {			//初始化长方形的顶点数据	//需要顶点坐标以及顶点的颜色数据
 		initVertexData(width,height);
-		width = Constant.fromPixSizeToNearSize(width);		//将屏幕高度转化为视口高度
-		height = Constant.fromPixSizeToNearSize(height);
+		if(isHP) {
+			width = Constant.fromPixSizeToNearSize_HP(width);
+			height = Constant.fromPixSizeToNearSize_HP(height);
+		} else {
+			width = Constant.fromPixSizeToNearSize(width);
+			height = Constant.fromPixSizeToNearSize(height);
+		}
 
 		float colors[] = new float[] {
 				r,g,b,a,
@@ -162,7 +172,6 @@ public class Obj2DRectangle
 	}
 	public void initShader()
 	{
-		
 		maPositionHandle = GLES30.glGetAttribLocation(programId, "aPosition");
 		
 		if(!isPure) maTexCoorHandle= GLES30.glGetAttribLocation(programId, "aTexCoor");
@@ -198,6 +207,8 @@ public class Obj2DRectangle
 		this.isHP = isHP;
 		this.NearX = Constant.fromScreenXToNearX_HP(this.x);
 		this.NearY = Constant.fromScreenYToNearY_HP(this.y);
+		if(isPure) initVertexDataRect(this.Width,this.Height);
+		else initVertexData(this.Width,this.Height);
 	}
 	public void setRadiusSpan(float x) {
 		this.radiusSpan = x;

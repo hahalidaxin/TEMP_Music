@@ -58,7 +58,7 @@ public class MutiGamingActivity extends BaseActivity {
     public void initData() {
         DisplayMetrics dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        Constant.ssr= ScreenScaleUtil.calScale(dm.widthPixels, dm.heightPixels);
+        Constant.ssr= ScreenScaleUtil.calScale(1920, 1080);
         sound = new SoundManager(this);
     }
 
