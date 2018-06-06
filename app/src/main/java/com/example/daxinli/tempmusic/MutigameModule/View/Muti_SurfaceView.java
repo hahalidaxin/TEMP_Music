@@ -53,12 +53,12 @@ public class Muti_SurfaceView extends GLSurfaceView {
             if(!initFlag) {
                 instruView = new InstruView(Muti_SurfaceView.this,0);
                 curView = instruView;
-                rhy = new RhythmTool(Muti_SurfaceView.this,new Area(10,10,500,200),50);
+                rhy = new RhythmTool(Muti_SurfaceView.this.mcontext,new Area(100,100,1000,1000),500);
                 lastDrawTime = System.currentTimeMillis();
                 initFlag = true;
             }
 
-            if(curView!=null) {
+            if(rhy!=null) {
                 rhy.onDraw();
                 //curView.drawView(gl);
             }

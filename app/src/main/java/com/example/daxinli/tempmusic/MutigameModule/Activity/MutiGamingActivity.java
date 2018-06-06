@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.DisplayMetrics;
@@ -48,6 +49,8 @@ public class MutiGamingActivity extends BaseActivity {
         this.clockID = intent.getIntExtra("clockID",-1);
         this.sessionID = intent.getIntExtra("sessionID",-1);
         msurfaceView = new Muti_SurfaceView(this,type);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(msurfaceView);
     }
 

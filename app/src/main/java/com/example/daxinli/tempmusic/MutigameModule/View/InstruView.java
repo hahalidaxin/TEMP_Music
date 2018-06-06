@@ -35,7 +35,7 @@ public class InstruView extends BaseView {
         areaKB = new Area(10,500,540,300);
         areaRHY = new Area(10,10,540,200);
         kbview = new KeyboardView(mcontext,areaKB,instruType);
-        rhyview = new RhythmTool(mcontext,areaRHY,50);
+        rhyview = new RhythmTool(mcontext.mcontext,areaRHY,50);
         TextureManager.loadingTexture(mcontext,29,15);
     }
 

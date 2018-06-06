@@ -1,6 +1,6 @@
 package com.example.daxinli.tempmusic.MutigameModule.ViewTool.RhythmToolModule;
 
-import android.opengl.GLSurfaceView;
+import android.content.Context;
 import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.MutigameModule.ViewTool.BaseViewTool;
@@ -18,13 +18,15 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 
 public class RhythmTool extends BaseViewTool {
-    private GLSurfaceView mcontext;
     private static final String TAG = "RhythmTool";
+    public Context mcontext;
     public static final long refreshTimeSpan = 20;
     private Obj2DLine lineDrawer;
+    //private Obj2DPoint surPtsDrawer;  //环绕点地绘画对象
     private Obj2DRectangle centralPtDrawer; //中心点的回话对象1
     private Obj2DRectangle backGround;
     public PointsManager ptMg;
+    public RhythmToolThread mrhThread;
 
     private float borderX,borderY,borderWidth,borderHeight;
     private float[] lineformer = new float[30];
@@ -32,10 +34,12 @@ public class RhythmTool extends BaseViewTool {
     private int lineFormerNum=0,lineLaterNum=0;
     private int thistime;
 
-    public RhythmTool(GLSurfaceView context, Area area, int time) {
-        mcontext = context;
+    public int drawLinePtsNum;
+
+    public RhythmTool(Context context, Area area, int time) {
         thistime = time;
-        onInit((int)(area.x),(int)(area.y),(int)(area.width),(int)(area.height));
+        this.mcontext = context;
+        onInit((int)area.x,(int)area.y,(int)area.width,(int)area.height);
     }
 
     @Override
@@ -46,10 +50,16 @@ public class RhythmTool extends BaseViewTool {
         backGround.setHP(true);
         backGround.setX(x); backGround.setY(y);
         ptMg = new PointsManager(x,y,w,h,thistime);
-        //centralPtDrawer.setHP(true);
+        centralPtDrawer = new Obj2DRectangle(ptMg.centralX,ptMg.centralY,
+                ptMg.CW,ptMg.CH,
+                ptMg.Ca,ptMg.Cr,ptMg.Cg,ptMg.Cb,
+                ShaderManager.getShader(6));
+        centralPtDrawer.setHP(true);
         this.borderX = x; this.borderY = y;
         this.borderWidth = w; this.borderHeight = h;
 
+        //mrhThread = new RhythmToolThread(this);
+        //mrhThread.start();
     }
     @Override
     public boolean onTouch(MotionEvent event) {
@@ -72,9 +82,9 @@ public class RhythmTool extends BaseViewTool {
         lineDrawer.setLinePoints(this.lineLaterNum/2,this.linelater);
         lineDrawer.drawSelf();
 
-        //centralPtDrawer.setX(ptMg.centralX-ptMg.CW/2);
-        //centralPtDrawer.setY(ptMg.centralY-ptMg.CH/2);
-        //centralPtDrawer.drawSelf();
+        centralPtDrawer.setX(ptMg.centralX-ptMg.CW/2);
+        centralPtDrawer.setY(ptMg.centralY-ptMg.CH/2);
+        centralPtDrawer.drawSelf();
     }
 
     public void getLinePtsArray(Queue<points> tmpQueue) {        //添加边界节点，返回节点的位置数组
