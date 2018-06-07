@@ -103,21 +103,21 @@ public class SoundManager
 		if(!GameData.GameEffect) return ;
 		if(mp!=null) {
 			mp.pause();
-			mp=null;
+			if(id != lastMP)
+				mp=null;
 		}
 		if(mp==null)
 		{
-			if(lastMP != id) {
-				mp = MediaPlayer.create(ac, id);
-				mp.setVolume(1.0f, 1.0f);
-				lastMP = id;
-			}
-			mp.setLooping(loop);
-			mp.start();
+			mp = MediaPlayer.create(ac, id);
+			mp.setVolume(1.0f, 1.0f);
+			lastMP = id;
+
 		}
+		mp.setLooping(loop);
+		mp.start();
 	}
 	public void stopMediaMusic() {
-		if(mp.isPlaying()) {
+		if(mp!=null && mp.isPlaying()) {
 			try {
 				mp.stop();
 			} catch(Exception e) {

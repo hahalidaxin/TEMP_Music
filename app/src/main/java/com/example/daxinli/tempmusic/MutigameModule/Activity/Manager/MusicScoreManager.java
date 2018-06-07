@@ -18,6 +18,7 @@ public class MusicScoreManager {
     FileOutputStream out;
     BufferedWriter writer;
     StringBuilder musicScore;
+    ArrayList<int[3]>
 
     public MusicScoreManager(Muti_SurfaceView context) {
         onInit();

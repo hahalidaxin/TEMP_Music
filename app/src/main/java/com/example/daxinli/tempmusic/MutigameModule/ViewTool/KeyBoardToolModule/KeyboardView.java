@@ -74,7 +74,7 @@ public class KeyboardView extends BaseViewTool {
             instruKeys[i].setHP(true);
         }
         //piano
-        RESkeyMusic[0] = new int[] {R.raw.piano_1, R.raw.piano_2, R.raw.piano_3, R.raw.piano_4, R.raw.piano_5, R.raw.piano_6,
+        RESkeyMusic[0] = new int[] {0,R.raw.piano_1, R.raw.piano_2, R.raw.piano_3, R.raw.piano_4, R.raw.piano_5, R.raw.piano_6,
                 R.raw.piano_7, R.raw.piano_8, R.raw.piano_9, R.raw.piano_10, R.raw.piano_11, R.raw.piano_12, R.raw.piano_13};
         for(int i=0;i<5;i++) {                           //按照当前安排位置，计算当前黑键处于屏幕中的位置
             for (int j=0;j<4;j++) {
@@ -140,11 +140,12 @@ public class KeyboardView extends BaseViewTool {
     public void onKeyPress(int key) {
         nowKeyPressed = key;
         //播放音效 调用不同的特效
+        int thisP = funcKey[key];
         switch(this.instruType) {
-            int thisP = funcKey[key];
             case 0:
                 //piano
-                mcontext.mcontext.sound.playMediaMusic(mcontext.mcontext);
+                mcontext.mcontext.sound.stopMediaMusic();
+                mcontext.mcontext.sound.playMediaMusic(mcontext.mcontext,RESkeyMusic[0][thisP],false);
                 break;
             case 1:
                 //instru1
