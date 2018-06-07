@@ -1,5 +1,6 @@
 package com.example.daxinli.tempmusic.MutigameModule.ViewTool.KeyBoardToolModule;
 
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.MutigameModule.Activity.Manager.MusicScoreManager;
@@ -18,6 +19,7 @@ import com.example.daxinli.tempmusic.util.manager.TextureManager;
  */
 
 public class KeyboardView extends BaseViewTool {
+    private static final String TAG = "KeyboardView";
     static final float BLACKKEYWIDTHRATIO = 0.0609f;
     static final float BLACKKEYHEIGHTRATIO = 0.61461f;
     static final float WHITEKEYWIDThRATIO = 0.125f;
@@ -33,7 +35,17 @@ public class KeyboardView extends BaseViewTool {
     private float bckHdown ;
     private float whiW ;
     private float[] blackkeylocX = {2.79f,8.04f,15.42f,20.21f,24.94f};
+    private float[][] X = {
+            {3.10f,5.75f,2.72f,5.47f},
+            {8.08f,10.72f,8.08f,10.72f},
+            {15.42f,18.04f,15.77f,18.52f},
+            {20.07f,22.72f,20.74f,23.57f},
+            {24.84f,27.41f,25.82f,28.54f}};
+    private int[] funcKey = {
+        0,1,3,5,6,8,10,12,13,2,4,7,9,11
+    };
     private float imgVirW = 36.16f;
+    private float imgVirH = 25.96f;
     Area Ar;
 
 
@@ -50,10 +62,13 @@ public class KeyboardView extends BaseViewTool {
         nowKeyPressed = 0;
         Ar = new Area(x,y,w,h);
         bckW = w*BLACKKEYWIDTHRATIO;
-        bckHdown = h*BLACKKEYHEIGHTRATIO;
+        bckHdown = Ar.y+h*BLACKKEYHEIGHTRATIO;
         whiW = w*WHITEKEYWIDThRATIO;
         for (int i=0;i<14;i++) {
             String filename = String.format("pic_kb_r%d.png",i);
+            if(TextureManager.getTextures(filename)==-1) {
+                TextureManager.loadingTexture(mcontext,29,15);
+            }
             instruKeys[i] = new Obj2DRectangle(Ar.x,Ar.y,Ar.width,Ar.height, TextureManager.getTextures(filename),
                     ShaderManager.getShader(2));
             instruKeys[i].setHP(true);
@@ -61,6 +76,12 @@ public class KeyboardView extends BaseViewTool {
         //piano
         RESkeyMusic[0] = new int[] {R.raw.piano_1, R.raw.piano_2, R.raw.piano_3, R.raw.piano_4, R.raw.piano_5, R.raw.piano_6,
                 R.raw.piano_7, R.raw.piano_8, R.raw.piano_9, R.raw.piano_10, R.raw.piano_11, R.raw.piano_12, R.raw.piano_13};
+        for(int i=0;i<5;i++) {                           //按照当前安排位置，计算当前黑键处于屏幕中的位置
+            for (int j=0;j<4;j++) {
+                X[i][j] = Ar.x+Ar.width* (X[i][j])/imgVirW;
+            }
+        }
+        Log.e(TAG, "onInit: ");
     }
 
     @Override
@@ -70,17 +91,25 @@ public class KeyboardView extends BaseViewTool {
 
     @Override
     public boolean onTouch(MotionEvent event) {
+
         float x = event.getX();
         float y = event.getY();
+        Log.e(TAG, String.format("onKeyPress: %f %f",x,y));
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 int ans = -1;
                 //检查是否是黑键
                 int i;
-                for (i = 0; i < 5; i++)
-                    if (SFUtil.isin(x, y, new Area(Ar.x + blackkeylocX[i] / imgVirW * Ar.width, Ar.y, bckW, bckHdown))) {
+                float dy = y-Ar.y;
+                float H = bckHdown-Ar.y;
+                for (i = 0; i < 5; i++) {
+                    float x1 = (X[i][2]-X[i][0])/(H)*(y-Ar.y)+X[i][0];
+                    float x2 =  (X[i][3]-X[i][1])/(H)*(y-Ar.y)+X[i][1];
+                    if (y >= Ar.y && y <= bckHdown && x >=x1 && x <=x2) {
+                        ans = i;
                         break;
                     }
+                }
                 if (i< 5) ans = i + 9;
                 else {
                     //检查白键
@@ -96,7 +125,7 @@ public class KeyboardView extends BaseViewTool {
                 // TODO: 2018/6/1  终止音效播放
                 //向viewTool中传入一个音节已经完成的信息 停止显示
                 //将此音节信息传入产生的乐谱文件
-                scoreManager.onWrite();
+                //scoreManager.onWrite();
                 break;
         }
         return true;
@@ -104,16 +133,18 @@ public class KeyboardView extends BaseViewTool {
 
     @Override
     public void onDraw() {
-        instruKeys[nowKeyPressed].drawSelf();
+        if(instruKeys[nowKeyPressed]!=null)
+            instruKeys[nowKeyPressed].drawSelf();
     }
 
     public void onKeyPress(int key) {
+        nowKeyPressed = key;
         //播放音效 调用不同的特效
         switch(this.instruType) {
+            int thisP = funcKey[key];
             case 0:
                 //piano
-                nowKeyPressed = key;
-
+                mcontext.mcontext.sound.playMediaMusic(mcontext.mcontext);
                 break;
             case 1:
                 //instru1

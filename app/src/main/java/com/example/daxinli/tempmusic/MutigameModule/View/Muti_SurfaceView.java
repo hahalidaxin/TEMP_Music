@@ -3,12 +3,12 @@ package com.example.daxinli.tempmusic.MutigameModule.View;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
+import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.MatrixState.MatrixState2D;
 import com.example.daxinli.tempmusic.MutigameModule.Activity.MutiGamingActivity;
 import com.example.daxinli.tempmusic.MutigameModule.ViewTool.RhythmToolModule.RhythmTool;
 import com.example.daxinli.tempmusic.util.manager.ShaderManager;
-import com.example.daxinli.tempmusic.util.manager.TextureManager;
 import com.example.daxinli.tempmusic.view.BaseView;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -53,7 +53,6 @@ public class Muti_SurfaceView extends GLSurfaceView {
             GLES30.glClear( GLES30.GL_DEPTH_BUFFER_BIT | GLES30.GL_COLOR_BUFFER_BIT);
             if(!initFlag) {
                 instruView = new InstruView(Muti_SurfaceView.this,0);
-                TextureManager.loadingTexture(Muti_SurfaceView.this,29,15);
                 curView = instruView;
                 lastDrawTime = System.currentTimeMillis();
                 initFlag = true;
@@ -86,13 +85,21 @@ public class Muti_SurfaceView extends GLSurfaceView {
         }
         public void onSurfaceCreated(GL10 gl, EGLConfig config)
         {
-
             GLES30.glClearColor(255f,255f,255f, 1.0f);
             GLES30.glEnable(GL10.GL_CULL_FACE);
             ShaderManager.loadCodeFromFile(mcontext.getResources());
             ShaderManager.compileShader();
         }
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if(curView!=null) {
+            curView.onTouchEvent(event);
+        }
+        return true;
+    }
+
     public void startGame() {
         //将curView切换
         synchronized (this.curView) {
