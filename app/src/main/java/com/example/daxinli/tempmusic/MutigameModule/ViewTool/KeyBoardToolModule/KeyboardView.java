@@ -3,7 +3,6 @@ package com.example.daxinli.tempmusic.MutigameModule.ViewTool.KeyBoardToolModule
 import android.util.Log;
 import android.view.MotionEvent;
 
-import com.example.daxinli.tempmusic.MutigameModule.Activity.Manager.MusicScoreManager;
 import com.example.daxinli.tempmusic.MutigameModule.View.Muti_SurfaceView;
 import com.example.daxinli.tempmusic.MutigameModule.ViewTool.BaseViewTool;
 import com.example.daxinli.tempmusic.R;
@@ -24,10 +23,13 @@ public class KeyboardView extends BaseViewTool {
     static final float BLACKKEYHEIGHTRATIO = 0.61461f;
     static final float WHITEKEYWIDThRATIO = 0.125f;
     static final int[][] RESkeyMusic = new int[4][];
+    public MusicScoreManager scmanager;
+
+
     Obj2DRectangle[] instruKeys = new Obj2DRectangle[14];
     Muti_SurfaceView mcontext;
     Obj2DRectangle imgKeyboard;
-    MusicScoreManager scoreManager;
+
 
     private int nowKeyPressed;
     private int instruType;
@@ -46,14 +48,15 @@ public class KeyboardView extends BaseViewTool {
     };
     private float imgVirW = 36.16f;
     private float imgVirH = 25.96f;
+    private boolean initFlag = false;
     Area Ar;
+    node keynode = new node(0,0,-1);
 
 
     public KeyboardView(Muti_SurfaceView context, Area imgArea,int intruType) {
         this.mcontext = context;
         this.Ar = imgArea;
         this.instruType = intruType;
-        onInit((int)(imgArea.x),(int)(imgArea.y),(int)(imgArea.width),(int)(imgArea.height));
     }
 
     @Override
@@ -67,10 +70,11 @@ public class KeyboardView extends BaseViewTool {
         for (int i=0;i<14;i++) {
             String filename = String.format("pic_kb_r%d.png",i);
             if(TextureManager.getTextures(filename)==-1) {
-                TextureManager.loadingTexture(mcontext,29,15);
+                TextureManager.loadingTexture(mcontext,29,16);
             }
             instruKeys[i] = new Obj2DRectangle(Ar.x,Ar.y,Ar.width,Ar.height, TextureManager.getTextures(filename),
                     ShaderManager.getShader(2));
+            instruKeys[i].setHP(true);
             instruKeys[i].setHP(true);
         }
         //piano
@@ -81,7 +85,8 @@ public class KeyboardView extends BaseViewTool {
                 X[i][j] = Ar.x+Ar.width* (X[i][j])/imgVirW;
             }
         }
-        Log.e(TAG, "onInit: ");
+        this.scmanager = new MusicScoreManager(mcontext,0);
+        this.scmanager.onStart();
     }
 
     @Override
@@ -126,6 +131,7 @@ public class KeyboardView extends BaseViewTool {
                 //向viewTool中传入一个音节已经完成的信息 停止显示
                 //将此音节信息传入产生的乐谱文件
                 //scoreManager.onWrite();
+                onKeyUp();
                 break;
         }
         return true;
@@ -133,11 +139,17 @@ public class KeyboardView extends BaseViewTool {
 
     @Override
     public void onDraw() {
+        if(!initFlag) {
+            initFlag = true;
+            onInit((int)Ar.x,(int)Ar.y,(int)Ar.width,(int) Ar.height);
+        }
         if(instruKeys[nowKeyPressed]!=null)
             instruKeys[nowKeyPressed].drawSelf();
     }
 
     public void onKeyPress(int key) {
+        this.keynode.st = System.currentTimeMillis();
+        this.keynode.key= key;
         nowKeyPressed = key;
         //播放音效 调用不同的特效
         int thisP = funcKey[key];
@@ -159,6 +171,19 @@ public class KeyboardView extends BaseViewTool {
         }
         //切换显示图片
         //同时需要结合抬起动作
+    }
+    public void onKeyUp() {
+        this.nowKeyPressed = 0;
+        long time = System.currentTimeMillis();
+        this.keynode.ed = time;
+        this.scmanager.onKey(this.keynode.st,this.keynode.ed,this.keynode.key);
+    }
+    private class node {
+        long st,ed;
+        int key;
+        public node(long st,long ed,int key) {
+            this.st = st; this.ed = ed; this.key = key;
+        }
     }
 }
 

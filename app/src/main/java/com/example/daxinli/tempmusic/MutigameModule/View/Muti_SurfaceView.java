@@ -25,7 +25,7 @@ public class Muti_SurfaceView extends GLSurfaceView {
     private SceneRenderer mRenderer;
     public MutiGamingActivity mcontext;
     public BaseView curView,playingView;
-    private InstruView instruView;
+    public InstruView instruView;
 
     private RhythmTool rhy;
     private boolean initFlag = false;

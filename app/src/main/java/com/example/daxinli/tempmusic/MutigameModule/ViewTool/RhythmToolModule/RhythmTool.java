@@ -27,6 +27,7 @@ public class RhythmTool extends BaseViewTool {
     private Obj2DRectangle backGround;
     public PointsManager ptMg;
     public RhythmToolThread mrhThread;
+    private Area Ar;
 
     private float borderX,borderY,borderWidth,borderHeight;
     private float[] lineformer = new float[30];
@@ -35,11 +36,12 @@ public class RhythmTool extends BaseViewTool {
     private int thistime;
 
     public int drawLinePtsNum;
+    public boolean initFlag = false;
 
     public RhythmTool(Context context, Area area, int time) {
         thistime = time;
         this.mcontext = context;
-        onInit((int)area.x,(int)area.y,(int)area.width,(int)area.height);
+        this.Ar = area;
     }
 
     @Override
@@ -68,6 +70,10 @@ public class RhythmTool extends BaseViewTool {
 
     @Override
     public void onDraw() {
+        if(!initFlag) {
+            initFlag = true;
+            onInit((int)Ar.x,(int)Ar.y,(int)Ar.width,(int)Ar.height);
+        }
         backGround.setHP(true);
         backGround.drawSelf();
         ptMg.go();
