@@ -5,6 +5,7 @@ import android.view.MotionEvent;
 import com.example.daxinli.tempmusic.MutigameModule.Activity.Manager.MusicScoreManager;
 import com.example.daxinli.tempmusic.MutigameModule.View.Muti_SurfaceView;
 import com.example.daxinli.tempmusic.MutigameModule.ViewTool.BaseViewTool;
+import com.example.daxinli.tempmusic.R;
 import com.example.daxinli.tempmusic.object.Obj2DRectangle;
 import com.example.daxinli.tempmusic.util.SFUtil;
 import com.example.daxinli.tempmusic.util.elseUtil.Area;
@@ -20,6 +21,7 @@ public class KeyboardView extends BaseViewTool {
     static final float BLACKKEYWIDTHRATIO = 0.0609f;
     static final float BLACKKEYHEIGHTRATIO = 0.61461f;
     static final float WHITEKEYWIDThRATIO = 0.125f;
+    static final int[][] RESkeyMusic = new int[4][];
     Obj2DRectangle[] instruKeys = new Obj2DRectangle[14];
     Muti_SurfaceView mcontext;
     Obj2DRectangle imgKeyboard;
@@ -56,6 +58,9 @@ public class KeyboardView extends BaseViewTool {
                     ShaderManager.getShader(2));
             instruKeys[i].setHP(true);
         }
+        //piano
+        RESkeyMusic[0] = new int[] {R.raw.piano_1, R.raw.piano_2, R.raw.piano_3, R.raw.piano_4, R.raw.piano_5, R.raw.piano_6,
+                R.raw.piano_7, R.raw.piano_8, R.raw.piano_9, R.raw.piano_10, R.raw.piano_11, R.raw.piano_12, R.raw.piano_13};
     }
 
     @Override
@@ -69,7 +74,6 @@ public class KeyboardView extends BaseViewTool {
         float y = event.getY();
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                //触摸按下
                 int ans = -1;
                 //检查是否是黑键
                 int i;
@@ -77,13 +81,15 @@ public class KeyboardView extends BaseViewTool {
                     if (SFUtil.isin(x, y, new Area(Ar.x + blackkeylocX[i] / imgVirW * Ar.width, Ar.y, bckW, bckHdown))) {
                         break;
                     }
-                if (i != 5) ans = i + 9;
-
-                for (i = 0; i < 8; i++)
-                    if (SFUtil.isin(x, y, new Area(Ar.x + i * whiW, Ar.y, whiW, Ar.height))) break;
-                if (i != 8) ans = i + 1;
+                if (i< 5) ans = i + 9;
+                else {
+                    //检查白键
+                    for (i = 0; i < 8; i++)
+                        if (SFUtil.isin(x, y, new Area(Ar.x + i * whiW, Ar.y, whiW, Ar.height))) break;
+                    if (i < 8) ans = i + 1;
+                }
                 //点中了琴键 需要产生乐谱并且反馈一个音节
-                onKeyPress(ans);
+                if(ans!=-1) onKeyPress(ans);
                 break;
             case MotionEvent.ACTION_UP:
                 //触摸抬起
@@ -106,6 +112,8 @@ public class KeyboardView extends BaseViewTool {
         switch(this.instruType) {
             case 0:
                 //piano
+                nowKeyPressed = key;
+
                 break;
             case 1:
                 //instru1

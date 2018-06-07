@@ -49,7 +49,7 @@ public class WelcomeActivity extends BaseActivity implements View.OnClickListene
                     case 0:
                         //加载资源已经完成
                         setContentView(R.layout.activity_welcome);
-                        sound.playBackGroundMusic(WelcomeActivity.this,R.raw.background);   //播放游戏的背景音乐
+                        sound.playMediaMusic(WelcomeActivity.this,R.raw.background,true);   //播放游戏的背景音乐
                         initViews();                            //setContentView之后调用获得View的实例
                         break;
                 }

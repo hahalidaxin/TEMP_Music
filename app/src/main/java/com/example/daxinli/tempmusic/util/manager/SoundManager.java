@@ -9,7 +9,6 @@ import android.media.SoundPool;
 
 import com.example.daxinli.tempmusic.R;
 import com.example.daxinli.tempmusic.constant.GameData;
-import com.example.daxinli.tempmusic.musicTouch.WelcomeActivity;
 
 import java.util.HashMap;
 
@@ -21,20 +20,21 @@ public class SoundManager
             1,2,3,4,5,6,7,
             8,9,10,11,12,13,14,
 	};
+	public static int PITCH = 15;
 
 	SoundPool sp ;
 	HashMap<Integer	,Integer> hm ;
 	Activity activity;
 
 	public MediaPlayer mp  ;
+	public int lastMP;
 
 	public SoundManager(Activity activity)
 	{
-		this.activity = activity  ;
+		this.activity = activity ;
 		initSound();
 	}
 
-	
 	public void initSound()
 	{
 		sp = new SoundPool
@@ -57,26 +57,12 @@ public class SoundManager
         hm.put(PIANO_PITCH[12], sp.load(activity, R.raw.p_5_2, 1));
         hm.put(PIANO_PITCH[13], sp.load(activity, R.raw.p_6_2, 1));
         hm.put(PIANO_PITCH[14], sp.load(activity, R.raw.p_7_2, 1));
+        hm.put(PITCH, sp.load(activity, R.raw.background, 1));
 		hm.put(BACKGROUND_MUSIC, sp.load(activity, R.raw.background , 1));
-	}
-	public void playBackGroundMusic(Activity ac,int Id)
-	{
-		if(!GameData.GameEffect) return ;
-		if(WelcomeActivity.sound.mp!=null) {
-			WelcomeActivity.sound.mp.pause();
-			WelcomeActivity.sound.mp=null;
-		}
-		if(WelcomeActivity.sound.mp==null)
-		{
-			WelcomeActivity.sound.mp =  MediaPlayer.create(ac,Id);
-			WelcomeActivity.sound.mp.setVolume(0.2f, 0.2f);
-			WelcomeActivity.sound.mp.setLooping(true);
-			WelcomeActivity.sound.mp.start();
-		}
 	}
 	public void playMusic(int sound,int loop)
 	{
-		if(!GameData.GameEffect) return ;
+		//if(!GameData.GameEffect) return ;
 		@SuppressWarnings("static-access")
 		AudioManager am = (AudioManager)activity.getSystemService(activity.AUDIO_SERVICE);
 		float steamVolumCurrent = am.getStreamVolume(AudioManager.STREAM_MUSIC)  ;
@@ -112,4 +98,32 @@ public class SoundManager
 		sp.stop(sound);
 		sp.setVolume(sound, 0, 0);
 	}
+
+	public void playMediaMusic(Activity ac, int id,boolean loop) {
+		if(!GameData.GameEffect) return ;
+		if(mp!=null) {
+			mp.pause();
+			mp=null;
+		}
+		if(mp==null)
+		{
+			if(lastMP != id) {
+				mp = MediaPlayer.create(ac, id);
+				mp.setVolume(1.0f, 1.0f);
+				lastMP = id;
+			}
+			mp.setLooping(loop);
+			mp.start();
+		}
+	}
+	public void stopMediaMusic() {
+		if(mp.isPlaying()) {
+			try {
+				mp.stop();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 }

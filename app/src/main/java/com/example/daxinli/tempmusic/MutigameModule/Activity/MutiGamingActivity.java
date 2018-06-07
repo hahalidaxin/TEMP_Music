@@ -4,16 +4,17 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.DisplayMetrics;
-import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.example.daxinli.tempmusic.MutigameModule.Network.MutiGamingReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.View.Muti_SurfaceView;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
+import com.example.daxinli.tempmusic.R;
 import com.example.daxinli.tempmusic.musicTouch.BaseActivity;
 import com.example.daxinli.tempmusic.util.manager.SoundManager;
 import com.example.daxinli.tempmusic.util.screenscale.Constant;
@@ -42,6 +43,23 @@ public class MutiGamingActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sound = new SoundManager(this);
+        setContentView(R.layout.activity_muti_gaming);
+        Button btnstart = (Button)findViewById(R.id.btn1);
+        Button btnend = (Button)findViewById(R.id.btn2);
+        btnstart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sound.playMediaMusic(MutiGamingActivity.this,R.raw.piano_1,false);
+            }
+        });
+        btnend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sound.stopMediaMusic();
+            }
+        });
+        /*
         initData();
         Log.e(TAG, "onCreate: 已经执行了");
         Intent intent = getIntent();
@@ -52,6 +70,7 @@ public class MutiGamingActivity extends BaseActivity {
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(msurfaceView);
+        */
     }
 
 
