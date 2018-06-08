@@ -1,5 +1,6 @@
 package com.example.daxinli.tempmusic.MutigameModule.View;
 
+import android.content.Intent;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
@@ -26,33 +27,32 @@ public class Muti_SurfaceView extends GLSurfaceView {
     public MutiGamingActivity mcontext;
     public BaseView curView,playingView;
     public InstruView instruView;
+    public Intent mintent;
 
     private RhythmTool rhy;
     private boolean initFlag = false;
     private long lastDrawTime;
 
-    public Muti_SurfaceView(MutiGamingActivity context,int initType)
+    public Muti_SurfaceView(MutiGamingActivity context, Intent intent)
     {
         super(context);
         this.mcontext = context;
+        this.mintent = intent;
         this.setEGLContextClientVersion(3);
 
-        mRenderer = new SceneRenderer(initType);
+        mRenderer = new SceneRenderer();
         setRenderer(mRenderer);
         setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
 
     private class SceneRenderer implements GLSurfaceView.Renderer
     {
-        private int initType;
-        public SceneRenderer(int initType) {
-            this.initType = initType;
-        }
         public void onDrawFrame(GL10 gl)
         {
             GLES30.glClear( GLES30.GL_DEPTH_BUFFER_BIT | GLES30.GL_COLOR_BUFFER_BIT);
             if(!initFlag) {
-                instruView = new InstruView(Muti_SurfaceView.this,0);
+                int type = Muti_SurfaceView.this.mintent.getIntExtra("type",0);
+                instruView = new InstruView(Muti_SurfaceView.this,type);
                 curView = instruView;
                 lastDrawTime = System.currentTimeMillis();
                 initFlag = true;

@@ -85,7 +85,7 @@ public class KeyboardView extends BaseViewTool {
                 X[i][j] = Ar.x+Ar.width* (X[i][j])/imgVirW;
             }
         }
-        this.scmanager = new MusicScoreManager(mcontext,0);
+        this.scmanager = new MusicScoreManager(mcontext,musicname);
         this.scmanager.onStart();
     }
 

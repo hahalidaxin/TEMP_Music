@@ -19,6 +19,9 @@ public class NetMsgReceiver extends Thread {
     public static final String HOME_AC_ACTION="com.example.daxinli.tempmusic.homeacaction";
     public static final String NORMAL_AC_ACTION="com.example.daxinli.tempmusic.normalacaction";
     public static final String WAIT_AC_ACTION="com.example.daxinli.tempmusic.waitacaction";
+    public static final String MUSICOVER_AC_ACTION="com.example.daxinli.tempmusic.musicoveraction";
+    public static final String MUTIGAMING_AC_ACTION="com.example.daxinli.tempmusic.mutigamingaction";
+
     private static final String TAG = "NetMsgReceiver";
     public static final String SERVER_IP = "192.168.137.1";
     public static final long connectTimeLimit = 3000;

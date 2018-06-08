@@ -41,6 +41,8 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
     Button btn_sendDanmu;
     TextView text_teamateLinked;
     EditText editText_Danmu;
+    EditText editText_MusicName;
+    EditText editText_BPM;
 
     public final String[] instruNametoShow = { "钢琴","钢琴","钢琴","钢琴" };
     int[] RID_imgInstru = {R.id.img_Instru1_wait1,R.id.img_Instru2_wait1,
@@ -78,6 +80,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
         }
     };
 
+    public int mateType;
     public int clockID;
     public int sessionID;
     public int activityType;            //leader和teamate显示不同的view
@@ -87,6 +90,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
+        mateType = intent.getIntExtra("activityType",-1);
         clockID = intent.getIntExtra("clockID",-1);
         sessionID = intent.getIntExtra("sessionID",-1);
         this.activityType = intent.getIntExtra("activityType",-1);
@@ -100,6 +104,9 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
         btn_sendDanmu = (Button) findViewById(R.id.btn_danmusend_createhome);
         editText_Danmu = (EditText) findViewById(R.id.edittext_danmu_createhome);
         danmakuView = (DanmakuView) findViewById(R.id.danmakuview_leader);
+        editText_BPM = (EditText) findViewById(R.id.edittext_bpm);
+        editText_MusicName = (EditText) findViewById(R.id.edittext_musicname);
+
         if(activityType==1) {
             btn_startGame.setVisibility(View.INVISIBLE);    //将btn设置为不可见
         } else {
@@ -184,7 +191,11 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
             case 0:
                 //开始游戏
                 intent = new Intent(WaitActivity.this,MutiGamingActivity.class);
-                intent.putExtra("type",TYPE_LEADER);
+                intent.putExtra("type",mateType);
+                intent.putExtra("clockID",clockID);
+                intent.putExtra("sessionID",sessionID);
+                intent.putExtra("musicname",editText_MusicName.getText().toString());
+                intent.putExtra("BPM",editText_BPM.getText().toString());
                 startActivity(intent);
                 break;
         }

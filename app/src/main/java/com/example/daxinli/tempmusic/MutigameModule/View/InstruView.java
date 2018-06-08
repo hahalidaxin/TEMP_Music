@@ -1,5 +1,6 @@
 package com.example.daxinli.tempmusic.MutigameModule.View;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -76,6 +77,10 @@ public class InstruView extends BaseView {
     }
     public void onMusicOver() {
         Log.e(TAG, "结束对乐谱的技术 ");
+        //此时进行activity的转换
+        Intent intent = new Intent();
+        intent.putExtra("msg",this.kbview.scmanager.getMusic());
+        mcontext.mcontext.turnActivity(0,intent);
         //kbview.scmanager.onMusicOver();
     }
 }

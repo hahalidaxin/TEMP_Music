@@ -14,7 +14,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
-        <activity android:name=".MutigameModule.Activity.MutiGamingActivity"
+        <service
+            android:name=".MutigameModule.service.NetworkService"
+            android:enabled="true"
+            android:exported="true" />
+        <activity
+            android:name=".MutigameModule.Activity.MutiGamingActivity"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,11 +38,7 @@
         <activity android:name=".MutigameModule.Activity.WaitActivity" />
         <activity android:name=".MutigameModule.Activity.CreateAHomeActivity" />
         <activity android:name=".MutigameModule.Activity.EnterAHomeActivity" />
-
-        <service
-            android:name=".MutigameModule.service.NetworkService"
-            android:enabled="true"
-            android:exported="true"></service>
+        <activity android:name=".MutigameModule.Activity.MusicOverActivity" android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

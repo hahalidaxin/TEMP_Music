@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.example.daxinli.tempmusic.MutigameModule.Network.MutiGamingReceiver;
@@ -46,10 +47,9 @@ public class MutiGamingActivity extends BaseActivity {
         initData();
         Log.e(TAG, "onCreate: 已经执行了");
         Intent intent = getIntent();
-        int type = intent.getIntExtra("type",0);      //获取多人游戏加载的类型
         this.clockID = intent.getIntExtra("clockID",-1);
         this.sessionID = intent.getIntExtra("sessionID",-1);
-        msurfaceView = new Muti_SurfaceView(this,type);
+        msurfaceView = new Muti_SurfaceView(this,intent);
         setContentView(msurfaceView);
     }
 
@@ -80,7 +80,7 @@ public class MutiGamingActivity extends BaseActivity {
         breceiver = new MutiGamingReceiver(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(NetMsgReceiver.NORMAL_AC_ACTION);
-        intentFilter.addAction(NetMsgReceiver.WAIT_AC_ACTION);
+        intentFilter.addAction(NetMsgReceiver.MUTIGAMING_AC_ACTION);
         registerReceiver(breceiver,intentFilter);
         //初始化service
         Intent intent = new Intent (MutiGamingActivity.this,NetworkService.class);
@@ -99,8 +99,28 @@ public class MutiGamingActivity extends BaseActivity {
         super.onDestroy();
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch(keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                myBinder.sendMessage("<#EXIT#>");   //退出游戏标志
+                this.removeActivity();
+        }
+        return super.onKeyDown(keyCode,event);
+    }
+
     public void onStartGame() { //当游戏开始的时候
         //切换view到gameView
         msurfaceView.startGame();
+    }
+
+    public void turnActivity(int type,Intent tint) {
+        switch(type) {
+            case 0:
+                Intent intent = new Intent(MutiGamingActivity.this,MusicOverActivity.class);
+                intent.putExtra("msg",tint.getStringExtra("msg"));
+                startActivity(intent);
+                break;
+        }
     }
 }

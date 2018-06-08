@@ -1,13 +1,11 @@
 package com.example.daxinli.tempmusic.MutigameModule.ViewTool.KeyBoardToolModule;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.example.daxinli.tempmusic.MutigameModule.View.Muti_SurfaceView;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 /**
@@ -30,10 +28,10 @@ public class MusicScoreManager {
     }
     ArrayList<node> ndList = new ArrayList<>();
     int instruType;
-
-    public MusicScoreManager(Muti_SurfaceView context,int instruType) {
+    String musicname;
+    public MusicScoreManager(Muti_SurfaceView context,String musicname) {
         this.mcontext = context;
-        this.instruType = instruType;
+        this.musicname = musicname;
     }
     public void onStart() {
         long stT = System.currentTimeMillis();
@@ -43,21 +41,13 @@ public class MusicScoreManager {
         ndList.add(new node(st-ndList.get(0).st,ed-ndList.get(0).ed,key));
         Log.e(TAG, String.format("onKey: %d %d %d",st,ed,key));
     }
-    public void onMusicOver() {
-        //将ndList中转化为文件信息
-        out = null;
-        writer = null;
-        try {
-            out = mcontext.mcontext.openFileOutput("score.txt", Context.MODE_PRIVATE);
-            writer = new BufferedWriter(new OutputStreamWriter(out));
-            for(int i=0;i<ndList.size();i++) {
-                node nd = ndList.get(i);
-                writer.write(String.format("%d %d %d",nd.st,nd.ed,nd.key));
-            }
-            writer.flush();
-            writer.close();
-        } catch(Exception e) {
-            e.printStackTrace();
+    public String getMusic() {
+        StringBuffer builder = new StringBuffer();
+        builder.append(String.format("MusicSended#%s#%d#",musicname,ndList.get(ndList.size()-1).ed));
+        for(int i=1;i<ndList.size();i++) {
+            node nd = ndList.get(i);
+            builder.append(String.format("%d %d %d\n",nd.st,nd.ed,nd.key));
         }
+        return builder.toString();
     }
 }
