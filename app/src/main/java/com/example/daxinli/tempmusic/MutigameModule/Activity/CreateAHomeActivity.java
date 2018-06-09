@@ -54,7 +54,7 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
         btn_createYourHome.setOnClickListener(this);
     }
     //外部调用 针对创建房间返回的信息作出不同的调用处理
-    public void netWaitTolaunchActivity(final boolean flag,final int clockID,final int sessionID) {
+    public void netWaitTolaunchActivity(final int type ,final boolean flag,final int clockID,final int sessionID) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -65,7 +65,8 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
                     intent.putExtra("activityType",0);
                     startActivity(intent);
                 } else {
-                    CreateAHomeActivity.this.showAlerDialog("创建失败", "请更换您的密码", 2);
+                    if(type==0)
+                        CreateAHomeActivity.this.showAlerDialog("创建失败", "请更换您的密码", 2);
                 }
             }
         });

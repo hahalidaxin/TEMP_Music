@@ -119,6 +119,7 @@ public class MutiGamingActivity extends BaseActivity {
             case 0:
                 Intent intent = new Intent(MutiGamingActivity.this,MusicOverActivity.class);
                 intent.putExtra("msg",tint.getStringExtra("msg"));
+                intent.putExtra("activityType",tint.getIntExtra("activityType",-1));
                 startActivity(intent);
                 break;
 

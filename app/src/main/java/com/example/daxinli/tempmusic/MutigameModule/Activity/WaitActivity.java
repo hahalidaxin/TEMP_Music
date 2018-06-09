@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -42,6 +43,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
     EditText editText_Danmu;
     EditText editText_MusicName;
     EditText editText_BPM;
+    LinearLayout lilayout;
 
     public final String[] instruNametoShow = { "钢琴","钢琴","钢琴","钢琴" };
     int[] RID_imgInstru = {R.id.img_Instru1_wait1,R.id.img_Instru2_wait1,
@@ -82,7 +84,6 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
     public int mateType;
     public int clockID;
     public int sessionID;
-    public int activityType;            //leader和teamate显示不同的view
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,9 +105,10 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
         danmakuView = (DanmakuView) findViewById(R.id.danmakuview_leader);
         editText_BPM = (EditText) findViewById(R.id.edittext_bpm);
         editText_MusicName = (EditText) findViewById(R.id.edittext_musicname);
-
-        if(activityType==1) {
-            btn_startGame.setVisibility(View.INVISIBLE);    //将btn设置为不可见
+        lilayout = (LinearLayout) findViewById(R.id.Lilayout_tohide);
+        if(mateType==1) {
+            lilayout.setVisibility(View.INVISIBLE);
+            btn_startGame.setVisibility(View.INVISIBLE);
         } else {
             btn_startGame.setOnClickListener(this);
         }
@@ -162,11 +164,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
         for(int i=0;i<4;i++) {
             if(v.getId()==RID_imgInstru[i]) {
                 //当点击按钮之后 向服务进行申请点击事件 由服务器负责判断是否能够选择当前instru
-                if(text_instru[i].getText().toString()=="") {
-                    myBinder.sendMessage(String.format("<#WAITVIEW#>%d#INSTRU%d#SELECT",clockID,i));
-                } else {
-                    myBinder.sendMessage(String.format("<#WAITVIEW#>%d#INSTRU%d#UNSELECT",clockID,i));
-                }
+                myBinder.sendMessage(String.format("<#WAITVIEW#>%d#INSTRU%d#SELECT",clockID,i));
             }
         }
     }
@@ -188,8 +186,14 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
         switch(type) {
             case 0:
                 //开始游戏
+                int instruType=-1;
+                for(int i=0;i<4;i++) if(text_instru[i].getText().toString().contains("You")) {
+                    instruType = i; break;
+                }
+
                 intent = new Intent(WaitActivity.this,MutiGamingActivity.class);
-                intent.putExtra("instruType",mateType);
+                intent.putExtra("activityType",mateType);
+                intent.putExtra("instruType",instruType);
                 intent.putExtra("clockID",clockID);
                 intent.putExtra("sessionID",sessionID);
                 if(this.mateType==0) {
@@ -208,7 +212,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode==KeyEvent.KEYCODE_BACK) {
-            if(activityType==0) {
+            if(mateType==0) {
                 ShowAlertDialog("黄鹤大人","您真的要解散该房间吗？",0);
             } else {
                 ShowAlertDialog(">_<","您是否确定退出当前房间",0);
@@ -259,25 +263,35 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
     AlertDialog.Builder builder;            //用来处理多个builder重叠出现的情况
     public void ShowAlertDialog(final String tititle,final String msg,final int type) {     //用户想要退出显示警告信息框
         if(builder!=null) return ;
-        builder = new AlertDialog.Builder(WaitActivity.this);
-        builder.setTitle(tititle);
-        builder.setMessage(msg);
-        builder.setCancelable(false);
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        runOnUiThread(new Runnable() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(type==0) {
-                    myBinder.sendMessage("<#EXIT#>");
-                    WaitActivity.this.removeActivity();
-                } else if(type==3||type==1) {
-                    WaitActivity.this.removeActivity();
-                } else if(type==4) {
+            public void run() {
+                builder = new AlertDialog.Builder(WaitActivity.this);
+                builder.setTitle(tititle);
+                builder.setMessage(msg);
+                builder.setCancelable(false);
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(type==0) {
+                            myBinder.sendMessage("<#EXIT#>");
+                            WaitActivity.this.removeActivity();
+                        } else if(type==1) {
+                            WaitActivity.this.removeActivity();
+                        }else if(type==3) {
+                            //尝试进行重新连接service
+                            myBinder.restartNetThread();
+                            WaitActivity.this.removeActivity();
+                        }else if(type==4) {
 
-                }
-                builder = null;
+                        }
+                        builder = null;
+                    }
+                });
+                builder.show();
             }
         });
-        builder.show();
+
     }
     public void addDanmaku(final String content,final boolean withBorder) {    //添加一条弹幕
         runOnUiThread(new Runnable() {

@@ -21,7 +21,11 @@ public class MusicOverReceiver extends BroadcastReceiver {
         if(msg.startsWith("<#MUSICOVERVIEW#>")) {
             msg = msg .substring(17);
             if(msg.startsWith("RECEIVED")) {
-                mcontext.onMusicReceived();
+                if(mcontext.activityType==1)    //如果是组员
+                    mcontext.onMusicReceived();
+            } else if(msg.startsWith("NUMBER")) {
+                String[] msgSplits = msg.substring(7).split("#");
+                mcontext.setNumbertoShow(Integer.parseInt(msgSplits[0]));
             }
         }
     }

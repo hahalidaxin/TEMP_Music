@@ -73,9 +73,12 @@ public class InstruView extends BaseView {
     }
     public void onMusicOver() {
         Intent intent = new Intent();
+        int instruType = intent.getIntExtra("instruType",-1
+        );
         String msg = String.format("%s#%d#%s",mintent.getStringExtra("musicName"),
                mintent.getIntExtra("instruType",-1),this.kbview.scmanager.getMusic());
         intent.putExtra("msg",msg);
+        intent.putExtra("activityType",mintent.getIntExtra("activityType",-1));
         mcontext.mcontext.turnActivity(0,intent);
     }
 }

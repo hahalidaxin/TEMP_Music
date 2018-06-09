@@ -95,7 +95,7 @@ public class EnterAHomeActivity extends AbHomeActivity implements View.OnClickLi
         }
     }
 
-    public void netWaitTolaunchActivity(final boolean flag,final int clockID,final int sessionID) {
+    public void netWaitTolaunchActivity(final int type,final boolean flag,final int clockID,final int sessionID) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -106,7 +106,10 @@ public class EnterAHomeActivity extends AbHomeActivity implements View.OnClickLi
                     intent.putExtra("activityType",1);
                     startActivity(intent);
                 } else {
-                    EnterAHomeActivity.this.showAlerDialog("进入失败", "没有找到匹配房间", 0);
+                    if(type==0)
+                        EnterAHomeActivity.this.showAlerDialog("!!!∑(ﾟДﾟノ)ノ", "没有找到匹配房间", 3);
+                    else if(type==1)
+                        EnterAHomeActivity.this.showAlerDialog("!!!∑(ﾟДﾟノ)ノ","游戏已经开始了",3);
                 }
             }
         });
@@ -129,6 +132,8 @@ public class EnterAHomeActivity extends AbHomeActivity implements View.OnClickLi
                 } else if(type==2) {
                     //重新建立servece的net连接
                     myBinder.restartNetThread();
+                } else if(type==3) {
+
                 }
                 builder = null;
             }

@@ -22,4 +22,12 @@
             app:indicatorName="BallGridPulseIndicator" />
 
     </LinearLayout>
+    <TextView
+        android:layout_marginTop="25dp"
+        android:layout_gravity="center"
+        android:id="@+id/text_uploaderNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="uploading..."/>
 </LinearLayout>

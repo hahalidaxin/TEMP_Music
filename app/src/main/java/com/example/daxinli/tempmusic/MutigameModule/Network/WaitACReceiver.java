@@ -47,17 +47,18 @@ public class WaitACReceiver extends BroadcastReceiver {
             if (msg.startsWith("STARTGAME")) {
                 msg = msg.substring(10);
                 mcontext.onActivityTrans(0,msg);
-            } else if (Integer.parseInt(msgSplits[0]) == mcontext.getclockID()) {   //如果申请者是自己
-                if (msgSplits[1].startsWith("INSTRU")) {
-                    if (msgSplits[1].equals("INSTRUFALSE")) {
-                        Log.e(TAG, "在这里产生崩溃");
-                        mcontext.ShowAlertDialog("失败", "该乐器已经被选择", 4);
-                    }
+            } else if(msg.startsWith("STARTFALSE1")) {
+                mcontext.ShowAlertDialog("~~o(>_<)o ~~","组员乐器未选择",4);
+            }
+            else if(msgSplits[1].startsWith("INSTRU")) {
+                if (msgSplits[1].equals("INSTRUFALSE")) {   //乐器选择失败
+                    Log.e(TAG, "在这里产生崩溃");
+                    mcontext.ShowAlertDialog("_(:з」∠)_ ", "该乐器已经被选择", 4);
+                } else {    //乐器选择成功
                     int type = msgSplits[1].charAt(6) - '0';
                     int state = msgSplits[2].equals("SELECT") ? 1 : 0;
                     int flag = Integer.parseInt(msgSplits[0]) == mcontext.getclockID() ? 1 : 0;
-                    Log.e(TAG, "那么flag是 " + Integer.toString(flag));
-                    mcontext.setInstruSelect(type, state, flag);
+                    mcontext.setInstruSelect(type,state,flag);
                 }
             }
         }

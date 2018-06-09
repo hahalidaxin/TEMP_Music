@@ -26,12 +26,15 @@ public class HomeACReceiver extends BroadcastReceiver {
             msgSplits = msg.split("#");
             //创建或进入房间失败
             if (msg.equals("ERROR2")||msg.equals("ERROR1")) {
-                mcontext.netWaitTolaunchActivity(false, 0, 0);
-            } else {
+                mcontext.netWaitTolaunchActivity(0,false, 0, 0);
+            } else if(msg.equals("ERROR3")) {
+                mcontext.netWaitTolaunchActivity(1,false,0,0);
+            }
+            else {
                 //client创建成功 //返回clockId和sessionID信息
                 int clockID = Integer.parseInt(msgSplits[0]);
                 int sessionID = Integer.parseInt(msgSplits[1]);
-                mcontext.netWaitTolaunchActivity(true,clockID,sessionID);
+                mcontext.netWaitTolaunchActivity(0,true,clockID,sessionID);
             }
         } else if(msg.startsWith("<#ERROR#>")) {
             msg = msg.substring(9);
