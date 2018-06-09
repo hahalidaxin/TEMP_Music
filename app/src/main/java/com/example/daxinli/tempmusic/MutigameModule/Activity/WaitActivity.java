@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -93,7 +92,6 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
         mateType = intent.getIntExtra("activityType",-1);
         clockID = intent.getIntExtra("clockID",-1);
         sessionID = intent.getIntExtra("sessionID",-1);
-        this.activityType = intent.getIntExtra("activityType",-1);
         setContentView(R.layout.activity_wait1);
 
         initView();
@@ -151,7 +149,8 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.btn_leader_startgame:
-                myBinder.sendMessage("<#STARTGAME#>");
+                myBinder.sendMessage("<#WAITVIEW#>STARTGAME#"+editText_MusicName.getText().toString()+"#"
+                        +editText_BPM.getText().toString());
                 break;
             case R.id.btn_danmusend_createhome:
                 HideKeyboard(editText_Danmu);
@@ -163,7 +162,6 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
         for(int i=0;i<4;i++) {
             if(v.getId()==RID_imgInstru[i]) {
                 //当点击按钮之后 向服务进行申请点击事件 由服务器负责判断是否能够选择当前instru
-                Log.e(TAG, "已经点击了 ");
                 if(text_instru[i].getText().toString()=="") {
                     myBinder.sendMessage(String.format("<#WAITVIEW#>%d#INSTRU%d#SELECT",clockID,i));
                 } else {
@@ -184,18 +182,24 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
             imm.hideSoftInputFromWindow( v.getApplicationWindowToken() , 0 );
         }
     }
-    public void onActivityTrans(int type) {
+    public void onActivityTrans(int type,String extralInfo) {
         //进行activity之间的切换
         Intent intent = null;
         switch(type) {
             case 0:
                 //开始游戏
                 intent = new Intent(WaitActivity.this,MutiGamingActivity.class);
-                intent.putExtra("type",mateType);
+                intent.putExtra("instruType",mateType);
                 intent.putExtra("clockID",clockID);
                 intent.putExtra("sessionID",sessionID);
-                intent.putExtra("musicname",editText_MusicName.getText().toString());
-                intent.putExtra("BPM",editText_BPM.getText().toString());
+                if(this.mateType==0) {
+                    intent.putExtra("musicName", editText_MusicName.getText().toString());
+                    intent.putExtra("BPM", Integer.parseInt(editText_BPM.getText().toString()));
+                } else{
+                    String[] strs = extralInfo.split("#");
+                    intent.putExtra("musicName",strs[0]);
+                    intent.putExtra("BPM",Integer.parseInt(strs[1]));
+                }
                 startActivity(intent);
                 break;
         }

@@ -85,6 +85,11 @@ public class NetMsgReceiver extends Thread {
                         intent.setAction(WAIT_AC_ACTION);
                         intent.putExtra("msg", msg);
                         mcontext.sendBroadcast(intent);
+                    } else if(msg.startsWith("<#MUSICOVERVIEW#>")) {
+                        Intent intent = new Intent();
+                        intent.putExtra("msg",msg);
+                        intent.setAction(MUSICOVER_AC_ACTION);
+                        mcontext.sendBroadcast(intent);
                     }
                 }catch(Exception e) {
                     e.printStackTrace();

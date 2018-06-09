@@ -19,8 +19,7 @@
             android:enabled="true"
             android:exported="true" />
         <activity
-            android:name=".MutigameModule.Activity.MutiGamingActivity"
-            android:screenOrientation="landscape">
+            android:name=".musicTouch.MutiGameActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,7 +33,9 @@
         <activity android:name=".musicTouch.SettingsActivity" />
         <activity android:name=".musicTouch.LoginActivity" />
         <activity android:name=".musicTouch.RegisterActivity" />
-        <activity android:name=".musicTouch.MutiGameActivity" />
+        <activity android:name=".MutigameModule.Activity.MutiGamingActivity" android:screenOrientation="landscape">
+
+        </activity>
         <activity android:name=".MutigameModule.Activity.WaitActivity" />
         <activity android:name=".MutigameModule.Activity.CreateAHomeActivity" />
         <activity android:name=".MutigameModule.Activity.EnterAHomeActivity" />

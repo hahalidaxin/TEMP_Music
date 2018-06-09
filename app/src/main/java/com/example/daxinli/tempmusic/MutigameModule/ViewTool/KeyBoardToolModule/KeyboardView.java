@@ -1,5 +1,6 @@
 package com.example.daxinli.tempmusic.MutigameModule.ViewTool.KeyBoardToolModule;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -33,6 +34,7 @@ public class KeyboardView extends BaseViewTool {
 
     private int nowKeyPressed;
     private int instruType;
+    private String musicName;
     private float bckW ;
     private float bckHdown ;
     private float whiW ;
@@ -53,10 +55,11 @@ public class KeyboardView extends BaseViewTool {
     node keynode = new node(0,0,-1);
 
 
-    public KeyboardView(Muti_SurfaceView context, Area imgArea,int intruType) {
+    public KeyboardView(Muti_SurfaceView context, Area imgArea, Intent intent) {
         this.mcontext = context;
         this.Ar = imgArea;
-        this.instruType = intruType;
+        this.instruType = intent.getIntExtra("instruType",-1);
+        this.musicName = intent.getStringExtra("musicName");
     }
 
     @Override
@@ -85,7 +88,7 @@ public class KeyboardView extends BaseViewTool {
                 X[i][j] = Ar.x+Ar.width* (X[i][j])/imgVirW;
             }
         }
-        this.scmanager = new MusicScoreManager(mcontext,musicname);
+        this.scmanager = new MusicScoreManager(mcontext);
         this.scmanager.onStart();
     }
 

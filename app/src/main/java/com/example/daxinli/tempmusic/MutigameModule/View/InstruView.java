@@ -1,13 +1,11 @@
 package com.example.daxinli.tempmusic.MutigameModule.View;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.MutigameModule.ViewTool.KeyBoardToolModule.KeyboardView;
 import com.example.daxinli.tempmusic.MutigameModule.ViewTool.RhythmToolModule.RhythmTool;
 import com.example.daxinli.tempmusic.MutigameModule.ViewTool.others.OtherToolsView;
-import com.example.daxinli.tempmusic.object.Obj2DRectangle;
 import com.example.daxinli.tempmusic.util.elseUtil.Area;
 import com.example.daxinli.tempmusic.util.manager.TextureManager;
 import com.example.daxinli.tempmusic.view.BaseView;
@@ -29,13 +27,11 @@ public class InstruView extends BaseView {
     Area areaKB;
     Area areaRHY;
     Area areaOTH;
-    Area areaBtnDone;
-    Obj2DRectangle btnDone;
+    Intent mintent;
 
-    public int instruType;
-    public InstruView(Muti_SurfaceView context,int instruType) {
+    public InstruView(Muti_SurfaceView context,Intent intent) {
         this.mcontext = context;
-        this.instruType = instruType;
+        this.mintent = intent;
         initView();
     }
 
@@ -45,8 +41,8 @@ public class InstruView extends BaseView {
         areaRHY = new Area(560,10,800,200);
         areaOTH = new Area(0,0,1920,1080);
         TextureManager.loadingTexture(mcontext,29,16);
-        kbview = new KeyboardView(mcontext,areaKB,instruType);
-        rhyview= new RhythmTool(mcontext.mcontext,areaRHY,1000);
+        kbview = new KeyboardView(mcontext,areaKB,mintent);
+        rhyview= new RhythmTool(mcontext.mcontext,areaRHY,60000/mintent.getIntExtra("BPM",-1));
         othView = new OtherToolsView(mcontext,areaOTH);
 
         //areaBtnDone = new Area(10,10,800,800);
@@ -76,11 +72,10 @@ public class InstruView extends BaseView {
         othView.onDraw();
     }
     public void onMusicOver() {
-        Log.e(TAG, "结束对乐谱的技术 ");
-        //此时进行activity的转换
         Intent intent = new Intent();
-        intent.putExtra("msg",this.kbview.scmanager.getMusic());
+        String msg = String.format("%s#%d#%s",mintent.getStringExtra("musicName"),
+               mintent.getIntExtra("instruType",-1),this.kbview.scmanager.getMusic());
+        intent.putExtra("msg",msg);
         mcontext.mcontext.turnActivity(0,intent);
-        //kbview.scmanager.onMusicOver();
     }
 }

@@ -29,9 +29,8 @@ public class MusicScoreManager {
     ArrayList<node> ndList = new ArrayList<>();
     int instruType;
     String musicname;
-    public MusicScoreManager(Muti_SurfaceView context,String musicname) {
+    public MusicScoreManager(Muti_SurfaceView context) {
         this.mcontext = context;
-        this.musicname = musicname;
     }
     public void onStart() {
         long stT = System.currentTimeMillis();
@@ -43,7 +42,7 @@ public class MusicScoreManager {
     }
     public String getMusic() {
         StringBuffer builder = new StringBuffer();
-        builder.append(String.format("MusicSended#%s#%d#",musicname,ndList.get(ndList.size()-1).ed));
+        builder.append(String.format("%d#",ndList.get(ndList.size()-1).ed));
         for(int i=1;i<ndList.size();i++) {
             node nd = ndList.get(i);
             builder.append(String.format("%d %d %d\n",nd.st,nd.ed,nd.key));

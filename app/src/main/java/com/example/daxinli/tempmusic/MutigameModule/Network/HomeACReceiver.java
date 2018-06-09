@@ -3,7 +3,6 @@ package com.example.daxinli.tempmusic.MutigameModule.Network;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.example.daxinli.tempmusic.MutigameModule.Activity.AbHomeActivity;
 
@@ -26,7 +25,7 @@ public class HomeACReceiver extends BroadcastReceiver {
             msg = msg.substring(11);
             msgSplits = msg.split("#");
             //创建或进入房间失败
-            if (msg.equals("ERROR2")||msg.equals("ERRROR1")) {
+            if (msg.equals("ERROR2")||msg.equals("ERROR1")) {
                 mcontext.netWaitTolaunchActivity(false, 0, 0);
             } else {
                 //client创建成功 //返回clockId和sessionID信息

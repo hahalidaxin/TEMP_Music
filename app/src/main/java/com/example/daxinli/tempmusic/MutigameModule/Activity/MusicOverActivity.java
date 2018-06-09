@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.example.daxinli.tempmusic.MutigameModule.Network.MusicOverReceiver;
-import com.example.daxinli.tempmusic.MutigameModule.Network.MutiGamingReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
 import com.example.daxinli.tempmusic.R;
@@ -64,7 +63,7 @@ public class MusicOverActivity extends AppCompatActivity {
         intentFilter.addAction(NetMsgReceiver.MUSICOVER_AC_ACTION);
         registerReceiver(breceiver,intentFilter);
         //初始化service
-        Intent intent = new Intent (MusicOverActivity.this,NetworkService.class);
+        Intent intent = new Intent(MusicOverActivity.this,NetworkService.class);
         bindService(intent,connection,BIND_AUTO_CREATE);
     }
 
@@ -80,9 +79,20 @@ public class MusicOverActivity extends AppCompatActivity {
         avi.show();
     }
     public void sendMusic() {
-        //需要在msg外部对music的信息进行声明
-        Intent intent = getIntent();
-        myBinder.sendMessage("<#MUSICOVERVIEW#>"+intent.getStringExtra("msg"));
+        //在单独的线程中进行数据的发送
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //需要在msg外部对music的信息进行声明
+                try {
+                    Thread.sleep(3000);
+                }catch(Exception e) {
+                    e.printStackTrace();
+                }
+                Intent intent = getIntent();
+                myBinder.sendMessage("<#MUSICOVERVIEW#>MUSICSENDED#"+intent.getStringExtra("msg"));
+            }
+        }).start();
     }
     public void onMusicReceived() {
         runOnUiThread(new Runnable() {
@@ -90,7 +100,7 @@ public class MusicOverActivity extends AppCompatActivity {
             public void run() {
                 MusicOverActivity.this.avi.hide();
                 AlertDialog.Builder builder;
-                builder = new AlertDialog.Builder(WaitActivity.this);
+                builder = new AlertDialog.Builder(MusicOverActivity.this);
                 builder.setTitle("ヾ(◍°∇°◍)ﾉﾞ");
                 builder.setMessage("已上传文件到服务器");
                 builder.setCancelable(false);

@@ -51,8 +51,7 @@ public class Muti_SurfaceView extends GLSurfaceView {
         {
             GLES30.glClear( GLES30.GL_DEPTH_BUFFER_BIT | GLES30.GL_COLOR_BUFFER_BIT);
             if(!initFlag) {
-                int type = Muti_SurfaceView.this.mintent.getIntExtra("type",0);
-                instruView = new InstruView(Muti_SurfaceView.this,type);
+                instruView = new InstruView(Muti_SurfaceView.this,mintent);
                 curView = instruView;
                 lastDrawTime = System.currentTimeMillis();
                 initFlag = true;

@@ -43,20 +43,23 @@ public class WaitACReceiver extends BroadcastReceiver {
         } else if(msg.startsWith("<#WAITVIEW#>")) {    //按下按钮 切换activity
             msg = msg.substring(12);
             msgSplits = msg.split("#");
-            Log.e(TAG, "比较一下吧： "+Integer.toString(mcontext.getclockID())+" "+msgSplits[0]);
-            if(Integer.parseInt(msgSplits[0])==mcontext.getclockID()) {   //如果申请者是自己
-                if(msgSplits[1].startsWith("INSTRU")) {
-                    if(msgSplits[1].equals("INSTRUFALSE")) {
-                        Log.e(TAG, "在这里产生崩溃"  );
-                        mcontext.ShowAlertDialog("失败","该乐器已经被选择",4);
+            Log.e(TAG, "比较一下吧： " + Integer.toString(mcontext.getclockID()) + " " + msgSplits[0]);
+            if (msg.startsWith("STARTGAME")) {
+                msg = msg.substring(10);
+                mcontext.onActivityTrans(0,msg);
+            } else if (Integer.parseInt(msgSplits[0]) == mcontext.getclockID()) {   //如果申请者是自己
+                if (msgSplits[1].startsWith("INSTRU")) {
+                    if (msgSplits[1].equals("INSTRUFALSE")) {
+                        Log.e(TAG, "在这里产生崩溃");
+                        mcontext.ShowAlertDialog("失败", "该乐器已经被选择", 4);
                     }
+                    int type = msgSplits[1].charAt(6) - '0';
+                    int state = msgSplits[2].equals("SELECT") ? 1 : 0;
+                    int flag = Integer.parseInt(msgSplits[0]) == mcontext.getclockID() ? 1 : 0;
+                    Log.e(TAG, "那么flag是 " + Integer.toString(flag));
+                    mcontext.setInstruSelect(type, state, flag);
                 }
             }
-            int type = msgSplits[1].charAt(6)-'0';
-            int state = msgSplits[2].equals("SELECT")? 1:0;
-            int flag = Integer.parseInt(msgSplits[0])==mcontext.getclockID()?1:0;
-            Log.e(TAG, "那么flag是 "+Integer.toString(flag));
-            mcontext.setInstruSelect(type,state,flag);
         }
     }
 }

@@ -121,6 +121,7 @@ public class MutiGamingActivity extends BaseActivity {
                 intent.putExtra("msg",tint.getStringExtra("msg"));
                 startActivity(intent);
                 break;
+
         }
     }
 }
