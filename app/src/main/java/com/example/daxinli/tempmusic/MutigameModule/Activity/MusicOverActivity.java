@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -81,6 +82,16 @@ public class MusicOverActivity extends AppCompatActivity {
         unbindService(connection);
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch(keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                //不对返回键进行反应 只有等待全部完成之后才会反应
+                break;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     public void initView() {
         avi = (AVLoadingIndicatorView) findViewById(R.id.avi_sendMusic);
         avi.show();
@@ -113,12 +124,12 @@ public class MusicOverActivity extends AppCompatActivity {
                 AlertDialog.Builder builder;
                 builder = new AlertDialog.Builder(MusicOverActivity.this);
                 builder.setTitle("ヾ(◍°∇°◍)ﾉﾞ");
-                if(activityType==1)
+                if (activityType == 1)
                     builder.setMessage("已上传文件到服务器");
                 else
                     builder.setMessage("都完事儿了( • ̀ω•́ )✧");
                 builder.setCancelable(false);
-                if(activityType==0) {
+                if (activityType == 0) {
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -130,7 +141,7 @@ public class MusicOverActivity extends AppCompatActivity {
                         }
                     });
                     builder.show();
-                } else if(activityType==1) {
+                } else if (activityType == 1) {
                     builder.show();
                     //一种计时ui显示结束后执行指定动作的方法
                     new Thread(new Runnable() {
@@ -138,13 +149,13 @@ public class MusicOverActivity extends AppCompatActivity {
                         public void run() {
                             try {
                                 Thread.sleep(1000);
-                            } catch(Exception e) {
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Intent intent = new Intent(MusicOverActivity.this,MutiGameActivity.class);
+                                    Intent intent = new Intent(MusicOverActivity.this, MutiGameActivity.class);
                                     startActivity(intent);
                                 }
                             });

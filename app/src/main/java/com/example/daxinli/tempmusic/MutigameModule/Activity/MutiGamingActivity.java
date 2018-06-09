@@ -1,12 +1,14 @@
 package com.example.daxinli.tempmusic.MutigameModule.Activity;
 
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -17,6 +19,7 @@ import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.View.Muti_SurfaceView;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
 import com.example.daxinli.tempmusic.musicTouch.BaseActivity;
+import com.example.daxinli.tempmusic.musicTouch.MutiGameActivity;
 import com.example.daxinli.tempmusic.util.manager.SoundManager;
 import com.example.daxinli.tempmusic.util.screenscale.Constant;
 import com.example.daxinli.tempmusic.util.screenscale.ScreenScaleUtil;
@@ -104,7 +107,8 @@ public class MutiGamingActivity extends BaseActivity {
         switch(keyCode) {
             case KeyEvent.KEYCODE_BACK:
                 myBinder.sendMessage("<#EXIT#>");   //退出游戏标志
-                this.removeActivity();
+                Intent intent = new Intent(MutiGamingActivity.this,MutiGameActivity.class);
+                startActivity(intent);
         }
         return super.onKeyDown(keyCode,event);
     }
@@ -112,6 +116,50 @@ public class MutiGamingActivity extends BaseActivity {
     public void onStartGame() { //当游戏开始的时候
         //切换view到gameView
         msurfaceView.startGame();
+    }
+    public void onUItoShow(final int type) {
+        if(type==0) {
+            showAlertDialog("!!!∑(ﾟДﾟノ)ノ","王八蛋老板黄鹤...",0);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(1000);
+                    } catch(Exception e) {
+                        e.printStackTrace();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(MutiGamingActivity.this,MutiGameActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+                }
+            }).start();
+        }
+    }
+    public void showAlertDialog(final String title,final String msg,final int type) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //定时显示alert然后强制退出
+                AlertDialog.Builder builder;
+                builder = new AlertDialog.Builder(MutiGamingActivity.this);
+                builder.setTitle(title);
+                builder.setMessage(msg);
+                builder.setCancelable(false);
+                if(type!=0) {
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                }
+                builder.show();
+            }
+        });
     }
 
     public void turnActivity(int type,Intent tint) {
@@ -122,7 +170,6 @@ public class MutiGamingActivity extends BaseActivity {
                 intent.putExtra("activityType",tint.getIntExtra("activityType",-1));
                 startActivity(intent);
                 break;
-
         }
     }
 }

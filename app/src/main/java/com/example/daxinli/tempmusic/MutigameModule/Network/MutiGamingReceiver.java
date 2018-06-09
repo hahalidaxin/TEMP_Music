@@ -24,6 +24,8 @@ public class MutiGamingReceiver extends BroadcastReceiver {
                 //开始游戏
                 mcontext.onStartGame();
             }
+        } else if(msg.startsWith("<#DESTROY#>")) {
+            mcontext.onUItoShow(0);
         }
     }
 }
