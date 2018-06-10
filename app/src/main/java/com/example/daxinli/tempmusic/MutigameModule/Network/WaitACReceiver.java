@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.example.daxinli.tempmusic.MutigameModule.Activity.WaitActivity;
+import com.example.daxinli.tempmusic.MutigameModule.Activity.compose.WaitActivity;
 
 /**
  * Created by Daxin Li on 2018/5/19.

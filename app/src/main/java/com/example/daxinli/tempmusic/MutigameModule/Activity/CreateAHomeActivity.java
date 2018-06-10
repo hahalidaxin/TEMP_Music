@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.daxinli.tempmusic.MutigameModule.Activity.compose.WaitActivity;
+import com.example.daxinli.tempmusic.MutigameModule.Activity.gameplay.ChooseMusicActivity;
 import com.example.daxinli.tempmusic.MutigameModule.Network.HomeACReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
@@ -38,6 +40,8 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
 
         }
     };
+    private int connectType;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,7 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
         btn_createYourHome = (Button) findViewById(R.id.btn_createYourHome);
 
         btn_createYourHome.setOnClickListener(this);
+        connectType = 0;
     }
     //外部调用 针对创建房间返回的信息作出不同的调用处理
     public void netWaitTolaunchActivity(final int type ,final boolean flag,final int clockID,final int sessionID) {
@@ -59,11 +64,17 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
             @Override
             public void run() {
                 if(flag) {
-                    Intent intent = new Intent(CreateAHomeActivity.this,WaitActivity.class);
-                    intent.putExtra("clockID",clockID);
-                    intent.putExtra("sessionID",sessionID);
-                    intent.putExtra("activityType",0);
-                    startActivity(intent);
+                    if(connectType ==0) {
+                        Intent intent = new Intent(CreateAHomeActivity.this, WaitActivity.class);
+                        intent.putExtra("clockID", clockID);
+                        intent.putExtra("sessionID", sessionID);
+                        intent.putExtra("activityType", 0);
+                        startActivity(intent);
+                    } else if(connectType==1) {
+                        Intent intent = new Intent(CreateAHomeActivity.this, ChooseMusicActivity.class);
+                        intent.putExtra("activityType",0);
+                        startActivity(intent);
+                    }
                 } else {
                     if(type==0)
                         CreateAHomeActivity.this.showAlerDialog("创建失败", "请更换您的密码", 2);
@@ -77,6 +88,11 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
             case R.id.btn_createYourHome:
                 String requestCode = editText_homePassword.getText().toString();
                 myBinder.sendMessage("<#CONNECT#>LEADER#"+requestCode);
+                break;
+            case R.id.btn_playMusic:
+                connectType = 1;
+                String msg = editText_homePassword.getText().toString();
+                myBinder.sendMessage("<#CONNECT2#>LEADER#"+msg);
                 break;
         }
     }

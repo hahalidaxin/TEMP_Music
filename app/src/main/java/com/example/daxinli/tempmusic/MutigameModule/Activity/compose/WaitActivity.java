@@ -1,4 +1,4 @@
-package com.example.daxinli.tempmusic.MutigameModule.Activity;
+package com.example.daxinli.tempmusic.MutigameModule.Activity.compose;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.daxinli.tempmusic.MutigameModule.Activity.CreateAHomeActivity;
 import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.Network.WaitACReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
@@ -191,7 +192,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
                     instruType = i; break;
                 }
 
-                intent = new Intent(WaitActivity.this,MutiGamingActivity.class);
+                intent = new Intent(WaitActivity.this,CompositionActivity.class);
                 intent.putExtra("activityType",mateType);
                 intent.putExtra("instruType",instruType);
                 intent.putExtra("clockID",clockID);

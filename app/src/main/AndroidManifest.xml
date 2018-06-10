@@ -18,6 +18,7 @@
             android:name=".MutigameModule.service.NetworkService"
             android:enabled="true"
             android:exported="true" />
+
         <activity
             android:name=".musicTouch.MutiGameActivity"
             android:launchMode="singleTask">
@@ -34,13 +35,18 @@
         <activity android:name=".musicTouch.SettingsActivity" />
         <activity android:name=".musicTouch.LoginActivity" />
         <activity android:name=".musicTouch.RegisterActivity" />
-        <activity android:name=".MutigameModule.Activity.MutiGamingActivity" android:screenOrientation="landscape">
-
-        </activity>
-        <activity android:name=".MutigameModule.Activity.WaitActivity" />
+        <activity
+            android:name=".MutigameModule.Activity.compose.CompositionActivity"
+            android:screenOrientation="landscape" />
+        <activity android:name=".MutigameModule.Activity.compose.WaitActivity" />
         <activity android:name=".MutigameModule.Activity.CreateAHomeActivity" />
         <activity android:name=".MutigameModule.Activity.EnterAHomeActivity" />
-        <activity android:name=".MutigameModule.Activity.MusicOverActivity" android:screenOrientation="landscape"></activity>
+        <activity
+            android:name=".MutigameModule.Activity.compose.MusicOverActivity"
+            android:screenOrientation="landscape" />
+        <activity android:name=".MutigameModule.Activity.compose.MutiGamePlayActivity" />
+        <activity android:name=".MutigameModule.Activity.gameplay.ChooseMusicActivity" />
+        <activity android:name=".MutigameModule.Activity.gameplay.GWaitActivity"></activity>
     </application>
 
 </manifest>

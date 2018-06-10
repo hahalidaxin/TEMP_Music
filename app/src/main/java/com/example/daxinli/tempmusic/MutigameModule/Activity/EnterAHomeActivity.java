@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.daxinli.tempmusic.MutigameModule.Activity.compose.WaitActivity;
 import com.example.daxinli.tempmusic.MutigameModule.Network.HomeACReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;

@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.MatrixState.MatrixState2D;
-import com.example.daxinli.tempmusic.MutigameModule.Activity.MutiGamingActivity;
+import com.example.daxinli.tempmusic.MutigameModule.Activity.compose.CompositionActivity;
 import com.example.daxinli.tempmusic.MutigameModule.ViewTool.RhythmToolModule.RhythmTool;
 import com.example.daxinli.tempmusic.util.manager.ShaderManager;
 import com.example.daxinli.tempmusic.view.BaseView;
@@ -24,7 +24,7 @@ public class Muti_SurfaceView extends GLSurfaceView {
     public static final String TAG = "Muti_SurfaceView";
     public static final long DRAWSPANTIME = 20;
     private SceneRenderer mRenderer;
-    public MutiGamingActivity mcontext;
+    public CompositionActivity mcontext;
     public BaseView curView,playingView;
     public InstruView instruView;
     public Intent mintent;
@@ -33,7 +33,7 @@ public class Muti_SurfaceView extends GLSurfaceView {
     private boolean initFlag = false;
     private long lastDrawTime;
 
-    public Muti_SurfaceView(MutiGamingActivity context, Intent intent)
+    public Muti_SurfaceView(CompositionActivity context, Intent intent)
     {
         super(context);
         this.mcontext = context;

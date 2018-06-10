@@ -27,13 +27,13 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/img_Instru1_wait1"
+                    android:id="@+id/Gimg_Instru1_wait1"
                     android:layout_width="85dp"
                     android:layout_height="85dp"
                     android:layout_gravity="center">
                 </de.hdodenhof.circleimageview.CircleImageView>
                 <TextView
-                    android:id="@+id/text_instruSelect1_wait1"
+                    android:id="@+id/Gtext_instruSelect1_wait1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -45,13 +45,13 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/img_Instru2_wait1"
+                    android:id="@+id/Gimg_Instru2_wait1"
                     android:layout_width="85dp"
                     android:layout_height="85dp"
                     android:layout_gravity="center">
                 </de.hdodenhof.circleimageview.CircleImageView>
                 <TextView
-                    android:id="@+id/text_instruSelect2_wait1"
+                    android:id="@+id/Gtext_instruSelect2_wait1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -59,47 +59,47 @@
                     android:text=""/>
             </LinearLayout>
             <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/img_Instru3_wait1"
+                    android:id="@+id/Gimg_Instru3_wait1"
                     android:layout_width="85dp"
                     android:layout_height="85dp"
                     android:gravity="center"
                     android:layout_gravity="center">
                 </de.hdodenhof.circleimageview.CircleImageView>
-            <TextView
-                android:id="@+id/text_instruSelect3_wait1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text=""/>
+                <TextView
+                    android:id="@+id/Gtext_instruSelect3_wait1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:text=""/>
             </LinearLayout>
             <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/img_Instru4_wait1"
+                    android:id="@+id/Gimg_Instru4_wait1"
                     android:layout_width="85dp"
                     android:layout_height="85dp"
                     android:layout_gravity="center">
                 </de.hdodenhof.circleimageview.CircleImageView>
-            <TextView
-                android:id="@+id/text_instruSelect4_wait1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text=""/>
+                <TextView
+                    android:id="@+id/Gtext_instruSelect4_wait1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:text=""/>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/Lilayout_tohide"
+            android:id="@+id/GLilayout_tohide"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -110,7 +110,7 @@
                 android:text="音乐名："/>
             <EditText
                 android:layout_marginLeft="5dp"
-                android:id="@+id/edittext_musicname"
+                android:id="@+id/Gedittext_musicname"
                 android:layout_width="100dp"
                 android:layout_height="40dp"
                 android:text="new_Music"/>
@@ -120,7 +120,7 @@
                 android:layout_height="wrap_content"
                 android:text="BPM："/>
             <EditText
-                android:id="@+id/edittext_bpm"
+                android:id="@+id/Gedittext_bpm"
                 android:layout_marginLeft="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -129,14 +129,14 @@
         <TextView
             android:layout_marginTop="30dp"
             android:layout_gravity="center"
-            android:id="@+id/text_amout_peoplein"
+            android:id="@+id/Gtext_amout_peoplein"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="15dp"
             android:text="文本框"/>
         <Button
             android:layout_gravity="center"
-            android:id="@+id/btn_leader_startgame"
+            android:id="@+id/Gbtn_leader_startgame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="开始游戏"/>
@@ -146,7 +146,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <EditText
-                android:id="@+id/edittext_danmu_createhome"
+                android:id="@+id/Gedittext_danmu_createhome"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
@@ -155,7 +155,7 @@
                 android:textColor="@color/colorBlue"
                 android:textSize="15dp" />
             <Button
-                android:id="@+id/btn_danmusend_createhome"
+                android:id="@+id/Gbtn_danmusend_createhome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="发射"/>

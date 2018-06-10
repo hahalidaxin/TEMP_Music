@@ -38,7 +38,14 @@
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="创建房间"/>
+            android:text="开始编曲"/>
+        <Button
+            android:id="@+id/btn_playMusic"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="演奏乐曲"/>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

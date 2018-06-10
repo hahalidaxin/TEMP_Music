@@ -1,4 +1,4 @@
-package com.example.daxinli.tempmusic.MutigameModule.Activity;
+package com.example.daxinli.tempmusic.MutigameModule.Activity.compose;
 
 import android.content.ComponentName;
 import android.content.DialogInterface;
@@ -24,8 +24,8 @@ import com.example.daxinli.tempmusic.util.manager.SoundManager;
 import com.example.daxinli.tempmusic.util.screenscale.Constant;
 import com.example.daxinli.tempmusic.util.screenscale.ScreenScaleUtil;
 
-public class MutiGamingActivity extends BaseActivity {
-    private static final String TAG = "MutiGamingActivity";
+public class CompositionActivity extends BaseActivity {
+    private static final String TAG = "CompositionActivity";
     private Muti_SurfaceView msurfaceView;
     public SoundManager sound;
 
@@ -34,7 +34,7 @@ public class MutiGamingActivity extends BaseActivity {
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            MutiGamingActivity.this.myBinder = (NetworkService.MyBinder)service;
+            CompositionActivity.this.myBinder = (NetworkService.MyBinder)service;
         }
 
         @Override
@@ -86,7 +86,7 @@ public class MutiGamingActivity extends BaseActivity {
         intentFilter.addAction(NetMsgReceiver.MUTIGAMING_AC_ACTION);
         registerReceiver(breceiver,intentFilter);
         //初始化service
-        Intent intent = new Intent (MutiGamingActivity.this,NetworkService.class);
+        Intent intent = new Intent (CompositionActivity.this,NetworkService.class);
         bindService(intent,connection,BIND_AUTO_CREATE);
     }
 
@@ -107,7 +107,7 @@ public class MutiGamingActivity extends BaseActivity {
         switch(keyCode) {
             case KeyEvent.KEYCODE_BACK:
                 myBinder.sendMessage("<#EXIT#>");   //退出游戏标志
-                Intent intent = new Intent(MutiGamingActivity.this,MutiGameActivity.class);
+                Intent intent = new Intent(CompositionActivity.this,MutiGameActivity.class);
                 startActivity(intent);
         }
         return super.onKeyDown(keyCode,event);
@@ -131,7 +131,7 @@ public class MutiGamingActivity extends BaseActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Intent intent = new Intent(MutiGamingActivity.this,MutiGameActivity.class);
+                            Intent intent = new Intent(CompositionActivity.this,MutiGameActivity.class);
                             startActivity(intent);
                         }
                     });
@@ -145,7 +145,7 @@ public class MutiGamingActivity extends BaseActivity {
             public void run() {
                 //定时显示alert然后强制退出
                 AlertDialog.Builder builder;
-                builder = new AlertDialog.Builder(MutiGamingActivity.this);
+                builder = new AlertDialog.Builder(CompositionActivity.this);
                 builder.setTitle(title);
                 builder.setMessage(msg);
                 builder.setCancelable(false);
@@ -165,7 +165,7 @@ public class MutiGamingActivity extends BaseActivity {
     public void turnActivity(int type,Intent tint) {
         switch(type) {
             case 0:
-                Intent intent = new Intent(MutiGamingActivity.this,MusicOverActivity.class);
+                Intent intent = new Intent(CompositionActivity.this,MusicOverActivity.class);
                 intent.putExtra("msg",tint.getStringExtra("msg"));
                 intent.putExtra("activityType",tint.getIntExtra("activityType",-1));
                 startActivity(intent);

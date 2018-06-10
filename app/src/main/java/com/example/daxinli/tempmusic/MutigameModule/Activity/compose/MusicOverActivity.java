@@ -1,4 +1,4 @@
-package com.example.daxinli.tempmusic.MutigameModule.Activity;
+package com.example.daxinli.tempmusic.MutigameModule.Activity.compose;
 
 import android.content.ComponentName;
 import android.content.DialogInterface;
