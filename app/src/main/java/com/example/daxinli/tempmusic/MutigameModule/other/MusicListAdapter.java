@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.daxinli.tempmusic.MutigameModule.Activity.gameplay.ChooseMusicActivity;
 import com.example.daxinli.tempmusic.R;
 
+import java.util.ArrayList;
 import java.util.List;
 /*
  * Created by Daxin Li on 2018/3/8.
@@ -26,12 +27,13 @@ public class MusicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public MusicListAdapter(ChooseMusicActivity activity,List<MusicItem> list) {
         this.activity = activity;
         this.mList = list;
-        this.chooseMusicActivity = chooseMusicActivity;
+        this.chooseMusicActivity = activity;
     }
     static class FirstViewHolder extends RecyclerView.ViewHolder {
         TextView imageView;
         TextView musicName;
         TextView musicInfo;
+        TextView instruNum;
         View view;
         public FirstViewHolder(View view) {
             super(view);
@@ -39,6 +41,7 @@ public class MusicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             this.imageView = (TextView) view.findViewById(R.id.image_musicinfo);
             this.musicName = (TextView) view.findViewById(R.id.text_musicname);
             this.musicInfo = (TextView) view.findViewById(R.id.text_musicinfo);
+            this.instruNum = (TextView) view.findViewById(R.id.text_musicInstruNum);
         }
     }
 
@@ -49,9 +52,8 @@ public class MusicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         firstViewHolder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 2018/6/10 activity切换
-                chooseMusicActivity.sendMessage(firstViewHolder.musicName.getText().toString()+
-                                firstViewHolder.musicInfo.getText().toString());
+                String filename = firstViewHolder.musicName.getText().toString()+"-"+firstViewHolder.musicInfo.getText().toString();
+                chooseMusicActivity.sendMessage(filename);
             }
         });
         return firstViewHolder;
@@ -65,6 +67,8 @@ public class MusicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         fholder.imageView.setText(musicItem.getImageRes());
         fholder.musicName.setText(musicItem.getMusicName());
         fholder.musicInfo.setText(musicItem.getMusicInfo());
+        ArrayList<Integer> ls = musicItem.getInstrus();
+        fholder.instruNum.setText("可用乐器数："+Integer.toString(ls.size()));
     }
 
     @Override

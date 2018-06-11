@@ -47,7 +47,6 @@
         <activity android:name=".MutigameModule.Activity.Composition.MutiGamePlayActivity" />
         <activity android:name=".MutigameModule.Activity.gameplay.ChooseMusicActivity">
         </activity>
-        <activity android:name=".MutigameModule.Activity.gameplay.GWaitActivity" />
         <activity android:name=".MutigameModule.Activity.gameplay.MutiPlayActivity"></activity>
     </application>
 

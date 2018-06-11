@@ -105,18 +105,31 @@ public class EnterAHomeActivity extends AbHomeActivity implements View.OnClickLi
                     intent.putExtra("clockID",clockID);
                     intent.putExtra("sessionID",sessionID);
                     intent.putExtra("activityType",1);
-                    intent.putExtra("connectType","ELSE");
+                    intent.putExtra("connectType",WaitActivity.CONNECT_COMPOSE);    //任意
                     startActivity(intent);
                 } else {
                     if(type==0)
-                        EnterAHomeActivity.this.showAlerDialog("!!!∑(ﾟДﾟノ)ノ", "没有找到匹配房间", 3);
+                        EnterAHomeActivity.this.showAlerDialog("!!!∑(ﾟДﾟノ)ノ", "没有该房间", 3);
                     else if(type==1)
-                        EnterAHomeActivity.this.showAlerDialog("!!!∑(ﾟДﾟノ)ノ","游戏已经开始了",3);
+                        EnterAHomeActivity.this.showAlerDialog("!!!∑(ﾟДﾟノ)ノ","房间人数已经满了...",3);
+                    else if(type==2)
+                        EnterAHomeActivity.this.showAlerDialog("!!!∑(ﾟДﾟノ)ノ","啥，已经开始游戏了...",3);
+                    else if(type==3)
+                        EnterAHomeActivity.this.showAlerDialog("!!!∑(ﾟДﾟノ)ノ","房主大人正在选择乐谱，请稍后再试...",3);
                 }
             }
         });
     }
-    //alertDialog 提示框 ：网络交互信息 提示回退
+    public void onActivityTrans(int clockID,int sessionID,String msg) {
+        Intent intent = new Intent(EnterAHomeActivity.this,WaitActivity.class);
+        intent.putExtra("clockID",clockID);
+        intent.putExtra("sessionID",sessionID);
+        intent.putExtra("activityType",1);
+        intent.putExtra("connectType",WaitActivity.CONNECT_COMPOSE);    //任意
+        intent.putExtra("InstruNum",msg);
+        startActivity(intent);
+    }
+    //alertDialog 提示框 ：网络交互 信息 提示回退
     AlertDialog.Builder builder;
     public void showAlerDialog(String title,String Msg,final int type) {
         if(builder!=null) return ;

@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -20,6 +21,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.daxinli.tempmusic.MutigameModule.Activity.CreateAHomeActivity;
+import com.example.daxinli.tempmusic.MutigameModule.Activity.EnterAHomeActivity;
+import com.example.daxinli.tempmusic.MutigameModule.Activity.gameplay.MutiPlayActivity;
 import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.Network.WaitACReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
@@ -36,6 +39,8 @@ import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
 import master.flame.danmaku.ui.widget.DanmakuView;
 
 public class WaitActivity extends BaseActivity implements View.OnClickListener {
+    public static final int CONNECT_GAMEPlAY = 2221;
+    public static final int CONNECT_COMPOSE  = 1113;
     public static final int TYPE_LEADER = 0;
     private static final String TAG = "WaitOtherPeopleActivity";
     Button btn_startGame;
@@ -49,6 +54,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
     public final String[] instruNametoShow = { "钢琴","钢琴","钢琴","钢琴" };
     int[] RID_imgInstru = {R.id.img_Instru1_wait1,R.id.img_Instru2_wait1,
             R.id.img_Instru3_wait1,R.id.img_Instru4_wait1};
+    int[] RID_liInstru = {R.id.li_instru0,R.id.li_instru1,R.id.li_instru2,R.id.li_instru3};
     int[] RID_textInstri =  {R.id.text_instruSelect1_wait1,R.id.text_instruSelect2_wait1,
             R.id.text_instruSelect3_wait1,R.id.text_instruSelect4_wait1};
     int[] RDRAW_img={R.drawable.pic_instru1_p0,R.drawable.pic_instru1_p1,
@@ -64,6 +70,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             WaitActivity.this.myBinder = (NetworkService.MyBinder)service;
+            myBinder.sendMessage(String.format("<#WAITVIEW#>INSTRUNUMLIMIT#%d",instruNumLimit));
         }
 
         @Override
@@ -82,20 +89,22 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
         }
     };
 
+    Intent mintent;
     public int mateType;
     public int clockID;
     public int sessionID;
     public int connectType;
+    public int instruNumLimit=4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = getIntent();
-        mateType = intent.getIntExtra("activityType",-1);
-        clockID = intent.getIntExtra("clockID",-1);
-        sessionID = intent.getIntExtra("sessionID",-1);
-        connectType = intent.getStringExtra("connectType")=="GAMEPLAY"?1:0;
+        mintent = getIntent();
+        mateType = mintent.getIntExtra("activityType",-1);
+        clockID = mintent.getIntExtra("clockID",-1);
+        sessionID = mintent.getIntExtra("sessionID",-1);
+        connectType = mintent.getIntExtra("connectType",-1);
         setContentView(R.layout.activity_wait1);
 
         initView();
@@ -109,11 +118,25 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
         editText_BPM = (EditText) findViewById(R.id.edittext_bpm);
         editText_MusicName = (EditText) findViewById(R.id.edittext_musicname);
         lilayout = (LinearLayout) findViewById(R.id.Lilayout_tohide);
-        if(mateType==1) {
+        btn_startGame.setOnClickListener(this);
+        btn_sendDanmu.setOnClickListener(this);
+        if(connectType==CONNECT_COMPOSE) {
+            if (mateType == 1) {
+                lilayout.setVisibility(View.INVISIBLE);
+                btn_startGame.setVisibility(View.INVISIBLE);
+            }
+        } else if(connectType==CONNECT_GAMEPlAY) {
             lilayout.setVisibility(View.INVISIBLE);
-            btn_startGame.setVisibility(View.INVISIBLE);
-        } else {
-            btn_startGame.setOnClickListener(this);
+            String[] strs = mintent.getStringExtra("InstruNum").split("\\$\\$");
+            Log.e(TAG, "initView: "+mintent.getStringExtra("instruNum"));
+            boolean[] flag = new boolean[4];
+            instruNumLimit = strs.length;
+            for(int i=0;i<strs.length;i++) {
+                flag[Integer.parseInt(strs[i].trim())] = true;
+            }
+            for(int i=0;i<4;i++) if(!flag[i]) {
+                ((LinearLayout)findViewById(RID_liInstru[i])).setVisibility(View.INVISIBLE);
+            }
         }
         btn_sendDanmu.setOnClickListener(this);
         //通过提前设计变量可以进行统一的设计
@@ -154,8 +177,16 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.btn_leader_startgame:
-                myBinder.sendMessage("<#WAITVIEW#>STARTGAME#"+editText_MusicName.getText().toString()+"#"
-                        +editText_BPM.getText().toString());
+                if(connectType==CONNECT_COMPOSE) {
+                    myBinder.sendMessage("<#WAITVIEW#>STARTGAME#" + editText_MusicName.getText().toString() + "#"
+                            + editText_BPM.getText().toString());
+                } else if(connectType==CONNECT_GAMEPlAY) {
+                    int x = -1;
+                    for(int i=0;i<4;i++) if(text_instru[i].getText().toString().contains("You")) {
+                        x=i; break;
+                    }
+                    myBinder.sendMessage(String.format("<#WAITVIEW#>STARTGAME&MUSIC#%d",x));
+                }
                 break;
             case R.id.btn_danmusend_createhome:
                 HideKeyboard(editText_Danmu);
@@ -188,26 +219,35 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
         Intent intent = null;
         switch(type) {
             case 0:
-                //开始游戏
-                int instruType=-1;
-                for(int i=0;i<4;i++) if(text_instru[i].getText().toString().contains("You")) {
-                    instruType = i; break;
-                }
+                if(connectType==CONNECT_COMPOSE) {
+                    //开始游戏
+                    int instruType = -1;
+                    for (int i = 0; i < 4; i++)
+                        if (text_instru[i].getText().toString().contains("You")) {
+                            instruType = i;
+                            break;
+                        }
 
-                intent = new Intent(WaitActivity.this,CompositionActivity.class);
-                intent.putExtra("activityType",mateType);
-                intent.putExtra("instruType",instruType);
-                intent.putExtra("clockID",clockID);
-                intent.putExtra("sessionID",sessionID);
-                if(this.mateType==0) {
-                    intent.putExtra("musicName", editText_MusicName.getText().toString());
-                    intent.putExtra("BPM", Integer.parseInt(editText_BPM.getText().toString()));
-                } else{
-                    String[] strs = extralInfo.split("#");
-                    intent.putExtra("musicName",strs[0]);
-                    intent.putExtra("BPM",Integer.parseInt(strs[1]));
+                    intent = new Intent(WaitActivity.this, CompositionActivity.class);
+                    intent.putExtra("activityType", mateType);
+                    intent.putExtra("instruType", instruType);
+                    intent.putExtra("clockID", clockID);
+                    intent.putExtra("sessionID", sessionID);
+                    if (this.mateType == 0) {
+                        intent.putExtra("musicName", editText_MusicName.getText().toString());
+                        intent.putExtra("BPM", Integer.parseInt(editText_BPM.getText().toString().trim()));
+                    } else {
+                        String[] strs = extralInfo.split("#");
+                        intent.putExtra("musicName", strs[0]);
+                        intent.putExtra("BPM", Integer.parseInt(strs[1].trim()));
+                    }
+                    startActivity(intent);
+                } else if(connectType==CONNECT_GAMEPlAY) {
+                    //启动多人游戏
+                    intent = new Intent(WaitActivity.this,MutiPlayActivity.class);
+                    intent.putExtra("musicScore",extralInfo);
+                    startActivity(intent);
                 }
-                startActivity(intent);
                 break;
         }
     }
@@ -276,15 +316,22 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = null;
+                        if(mateType ==0) {
+                            intent = new Intent(WaitActivity.this, CreateAHomeActivity.class);
+                        } else if(mateType==1) {
+                            intent = new Intent(WaitActivity.this, EnterAHomeActivity.class);
+                        }
                         if(type==0) {
-                            myBinder.sendMessage("<#EXIT#>");
-                            WaitActivity.this.removeActivity();
+                            startActivity(intent);
+                            //myBinder.sendMessage("<#EXIT#>");
+                            //WaitActivity.this.removeActivity();
                         } else if(type==1) {
-                            WaitActivity.this.removeActivity();
+                            startActivity(intent);
                         }else if(type==3) {
                             //尝试进行重新连接service
                             myBinder.restartNetThread();
-                            WaitActivity.this.removeActivity();
+                            startActivity(intent);
                         }else if(type==4) {
 
                         }
@@ -318,7 +365,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void run() {
                 WaitActivity.this.text_teamateLinked.setText(
-                        String.format("找呀找呀找胖友...(%d/%d)",number, CreateAHomeActivity.HOMEMATELIMIT));
+                        String.format("找呀找呀找胖友...(%d)",number));
             }
         });
     }

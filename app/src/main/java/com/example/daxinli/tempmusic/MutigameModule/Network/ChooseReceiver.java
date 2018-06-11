@@ -20,7 +20,9 @@ public class ChooseReceiver extends BroadcastReceiver {
         String msg = intent.getStringExtra("msg");
         if(msg.startsWith("<#CHOOSEVIEW#>")) {
             msg = msg.substring(14);
-            mcontext.onActivityTrans(msg);
+            if(msg.startsWith("INSTRUNUM")) {
+                mcontext.onActivityTrans(msg.substring(10));
+            }
         }
     }
 }

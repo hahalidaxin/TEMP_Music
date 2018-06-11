@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
@@ -69,7 +70,7 @@ public class ChooseMusicActivity extends BaseActivity implements View.OnClickLis
         breceiver = new ChooseReceiver(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(NetMsgReceiver.NORMAL_AC_ACTION);
-        intentFilter.addAction(NetMsgReceiver.WAIT_AC_ACTION);
+        intentFilter.addAction(NetMsgReceiver.CHOOSE_AC_ACTION);
         registerReceiver(breceiver,intentFilter);
         //初始化service
         Intent intent = new Intent (ChooseMusicActivity.this,NetworkService.class);
@@ -82,14 +83,20 @@ public class ChooseMusicActivity extends BaseActivity implements View.OnClickLis
     public void initRecyclerView() {
         ArrayList<MusicItem> settingList = new ArrayList<>();
         String msg = mintent.getStringExtra("musicList");
-        String[] msgSplits =  msg.split("\\$\\$");  //需要用双斜线对特殊字符进行转义
+        String[] frag =  msg.split("#");  //需要用双斜线对特殊字符进行转义
+        String[] msgSplits = frag[0].split("\\$\\$");
         textMusicNum.setText(String.format("(嘿ヾ(✿ﾟ▽ﾟ)ノ，我们找到了%d首歌曲：",msgSplits.length));
         for(int i=0;i< msgSplits.length;i++) {
             int x = msgSplits[i].indexOf('-');
             String musicName = msgSplits[i].substring(0,x);
-            musicName = musicName.substring(0,musicName.length()-1);
+            musicName = musicName.substring(0,musicName.length());
             String musicInfo = msgSplits[i].substring(x+1);
-            settingList.add(new MusicItem(i+1,musicName,musicInfo));
+            ArrayList<Integer> ls = new ArrayList<>();
+            String[] tmpSplits = frag[i+1].split("\\$\\$");
+            for(int j=0;j<tmpSplits.length;j++) {
+                ls.add(Integer.parseInt(tmpSplits[j].trim()));
+            }
+            settingList.add(new MusicItem(i+1,musicName,musicInfo,ls));
         }
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -107,12 +114,13 @@ public class ChooseMusicActivity extends BaseActivity implements View.OnClickLis
         recyclerView.scheduleLayoutAnimation();
     }
     public void sendMessage(String filename) {
+        Log.e("123", "sendMessage: 已经到达");
         myBinder.sendMessage("<#CHOOSEVIEW#>MUSICSELECT#"+filename);
     }
-    public void onActivityTrans(String msg) {
+    public void onActivityTrans(String msg) {   //下一个activity是waitactivity
         Intent intent = new Intent(ChooseMusicActivity.this, WaitActivity.class);
-        intent.putExtra("msg",msg);
-        intent.putExtra("connectType","GAMEPLAY");
+        intent.putExtra("InstruNum",msg);
+        intent.putExtra("connectType",WaitActivity.CONNECT_GAMEPlAY);
         intent.putExtra("activityType",mintent.getStringExtra("activityType"));
         //打开wait界面 此时修改teamstate
         myBinder.sendMessage("<#CREATEVIEW#>teamstate#0");

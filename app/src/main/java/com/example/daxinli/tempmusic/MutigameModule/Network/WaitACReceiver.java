@@ -44,6 +44,10 @@ public class WaitACReceiver extends BroadcastReceiver {
             msg = msg.substring(12);
             msgSplits = msg.split("#");
             Log.e(TAG, "比较一下吧： " + Integer.toString(mcontext.getclockID()) + " " + msgSplits[0]);
+            if(msg.startsWith("STARTGAME&MUSIC")) {
+                msg = msg.substring(16);
+                mcontext.onActivityTrans(0,msg);
+            } else
             if (msg.startsWith("STARTGAME")) {
                 msg = msg.substring(10);
                 mcontext.onActivityTrans(0,msg);

@@ -73,7 +73,7 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
                         intent.putExtra("clockID", clockID);
                         intent.putExtra("sessionID", sessionID);
                         intent.putExtra("activityType", 0);
-                        intent.putExtra("connectType","COMPOSE");
+                        intent.putExtra("connectType",WaitActivity.CONNECT_COMPOSE);
                         myBinder.sendMessage("<#CREATEVIEW#>teamstate#0");
                         startActivity(intent);
                     } else if(connectType==1) {

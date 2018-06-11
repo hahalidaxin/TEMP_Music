@@ -30,11 +30,21 @@
             android:layout_height="50dp"
             android:textSize="30dp"
             android:textStyle="bold" />
-        <TextView
-            android:id="@+id/text_musicinfo"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:textSize="10dp" />
+            android:layout_height="30dp">
+            <TextView
+                android:id="@+id/text_musicinfo"
+                android:layout_weight="5"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:textSize="10dp" />
+            <TextView
+                android:id="@+id/text_musicInstruNum"
+                android:layout_weight="3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+        </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>

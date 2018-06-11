@@ -22,6 +22,7 @@
             android:layout_height="100dp"
             android:orientation="horizontal" >
             <LinearLayout
+                android:id="@+id/li_instru0"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
@@ -40,6 +41,7 @@
                     android:gravity="center"/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/li_instru1"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
@@ -59,6 +61,7 @@
                     android:text=""/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/li_instru2"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
@@ -79,6 +82,7 @@
                 android:text=""/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/li_instru3"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
@@ -124,6 +128,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:inputType="number"
                 android:text="120"/>
         </LinearLayout>
         <TextView
