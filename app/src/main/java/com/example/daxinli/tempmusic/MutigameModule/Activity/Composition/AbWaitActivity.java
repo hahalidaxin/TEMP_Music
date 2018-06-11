@@ -1,4 +1,4 @@
-package com.example.daxinli.tempmusic.MutigameModule.Activity.compose;
+package com.example.daxinli.tempmusic.MutigameModule.Activity.Composition;
 
 import com.example.daxinli.tempmusic.musicTouch.BaseActivity;
 

@@ -1,4 +1,4 @@
-package com.example.daxinli.tempmusic.MutigameModule.Activity.compose;
+package com.example.daxinli.tempmusic.MutigameModule.Activity.Composition;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -85,6 +85,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
     public int mateType;
     public int clockID;
     public int sessionID;
+    public int connectType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +95,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
         mateType = intent.getIntExtra("activityType",-1);
         clockID = intent.getIntExtra("clockID",-1);
         sessionID = intent.getIntExtra("sessionID",-1);
+        connectType = intent.getStringExtra("connectType")=="GAMEPLAY"?1:0;
         setContentView(R.layout.activity_wait1);
 
         initView();

@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.example.daxinli.tempmusic.MutigameModule.Activity.compose.MusicOverActivity;
+import com.example.daxinli.tempmusic.MutigameModule.Activity.Composition.MusicOverActivity;
 
 /**
  * Created by Daxin Li on 2018/6/8.

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context="com.example.daxinli.tempmusic.MutigameModule.Activity.compose.MusicOverActivity">
+    tools:context="com.example.daxinli.tempmusic.MutigameModule.Activity.Composition.MusicOverActivity">
 
     <LinearLayout
         android:layout_marginTop="100dp"

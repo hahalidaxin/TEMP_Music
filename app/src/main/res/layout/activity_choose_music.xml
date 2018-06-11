@@ -4,11 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.example.daxinli.tempmusic.MutigameModule.Activity.gameplay.ChooseMusicActivity">
+    <TextView
+        android:id="@+id/text_musicDetectedNum"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/colorGray"
+        android:textSize="15dp"
+        android:text=""/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/c_AboutBackground" />
     <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="15dp"
         android:id="@+id/GrecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layoutAnimation="@anim/layout_animation_slide_right"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     </android.support.v7.widget.RecyclerView>

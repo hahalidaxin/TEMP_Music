@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.MatrixState.MatrixState2D;
-import com.example.daxinli.tempmusic.MutigameModule.Activity.compose.CompositionActivity;
+import com.example.daxinli.tempmusic.MutigameModule.Activity.Composition.CompositionActivity;
 import com.example.daxinli.tempmusic.MutigameModule.ViewTool.RhythmToolModule.RhythmTool;
 import com.example.daxinli.tempmusic.util.manager.ShaderManager;
 import com.example.daxinli.tempmusic.view.BaseView;

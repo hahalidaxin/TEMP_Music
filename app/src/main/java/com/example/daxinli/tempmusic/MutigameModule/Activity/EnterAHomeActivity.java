@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.daxinli.tempmusic.MutigameModule.Activity.compose.WaitActivity;
+import com.example.daxinli.tempmusic.MutigameModule.Activity.Composition.WaitActivity;
 import com.example.daxinli.tempmusic.MutigameModule.Network.HomeACReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
@@ -105,6 +105,7 @@ public class EnterAHomeActivity extends AbHomeActivity implements View.OnClickLi
                     intent.putExtra("clockID",clockID);
                     intent.putExtra("sessionID",sessionID);
                     intent.putExtra("activityType",1);
+                    intent.putExtra("connectType","ELSE");
                     startActivity(intent);
                 } else {
                     if(type==0)

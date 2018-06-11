@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:layout_margin="10dp"
+    android:background="@color/colorLightGray"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
@@ -9,16 +11,18 @@
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent">
-        <ImageView
+        <TextView
             android:id="@+id/image_musicinfo"
-            android:gravity="center_vertical"
-            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:textSize="45dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent" />
         </LinearLayout>
     <LinearLayout
         android:layout_weight="4"
         android:layout_width="0dp"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/text_musicname"
@@ -30,7 +34,6 @@
             android:id="@+id/text_musicinfo"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:layout_weight="1"
             android:textSize="10dp" />
 
     </LinearLayout>

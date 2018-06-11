@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.example.daxinli.tempmusic.MutigameModule.Activity.AbHomeActivity;
+import com.example.daxinli.tempmusic.MutigameModule.Activity.CreateAHomeActivity;
 
 /**
  * Created by Daxin Li on 2018/5/19.
@@ -43,6 +44,11 @@ public class HomeACReceiver extends BroadcastReceiver {
             }
         } else if(msg.startsWith("<#NETWORKDOWN#>")) {
             mcontext.showAlerDialog("(;´༎ຶД༎ຶ`)","我们的服务器挂了，请重新连接",2);
+        } else if (msg.startsWith("<#CREATEVIEW#>")) {
+            msg = msg.substring(14);
+            if(mcontext instanceof CreateAHomeActivity) {
+                ((CreateAHomeActivity) mcontext).onPlayerActivityTrans(msg);
+            }
         }
     }
 }

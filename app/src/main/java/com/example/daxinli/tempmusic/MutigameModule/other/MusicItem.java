@@ -7,7 +7,9 @@ package com.example.daxinli.tempmusic.MutigameModule.other;
 public class MusicItem {
     public String musicName;
     public String musicInfo;
-    public MusicItem(String musicName,String musicInfo) {
+    public String imageRes;
+    public MusicItem(int imageRes,String musicName,String musicInfo) {
+        this.imageRes = Integer.toString(imageRes);
         this.musicInfo = musicInfo;
         this.musicName = musicName;
     }
@@ -16,5 +18,8 @@ public class MusicItem {
     }
     public String getMusicInfo() {
         return musicInfo;
+    }
+    public String getImageRes() {
+        return imageRes;
     }
 }

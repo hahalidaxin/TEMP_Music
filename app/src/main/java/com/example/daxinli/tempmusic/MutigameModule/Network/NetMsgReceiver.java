@@ -19,6 +19,7 @@ public class NetMsgReceiver extends Thread {
     public static final String HOME_AC_ACTION="com.example.daxinli.tempmusic.homeacaction";
     public static final String NORMAL_AC_ACTION="com.example.daxinli.tempmusic.normalacaction";
     public static final String WAIT_AC_ACTION="com.example.daxinli.tempmusic.waitacaction";
+    public static final String GWAIT_AC_ACTION="com.example.daxinli.tempmusic.gwaitacaction";
     public static final String MUSICOVER_AC_ACTION="com.example.daxinli.tempmusic.musicoveraction";
     public static final String MUTIGAMING_AC_ACTION="com.example.daxinli.tempmusic.mutigamingaction";
 
@@ -66,7 +67,7 @@ public class NetMsgReceiver extends Thread {
                 Log.e(TAG, "MSG FROM SERVER : "+msg);
                 //处理读来的返回信息
                 try {
-                    if(msg.startsWith("<#CONNECT#>")) {
+                    if(msg.startsWith("<#CONNECT#>")||msg.startsWith("<#CREATEVIEW#>")) {
                         Intent intent = new Intent();
                         intent.setAction(HOME_AC_ACTION);
                         intent.putExtra("msg",msg);

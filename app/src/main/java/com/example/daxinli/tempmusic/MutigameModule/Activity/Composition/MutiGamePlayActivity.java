@@ -1,4 +1,4 @@
-package com.example.daxinli.tempmusic.MutigameModule.Activity.compose;
+package com.example.daxinli.tempmusic.MutigameModule.Activity.Composition;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

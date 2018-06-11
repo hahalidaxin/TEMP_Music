@@ -36,17 +36,19 @@
         <activity android:name=".musicTouch.LoginActivity" />
         <activity android:name=".musicTouch.RegisterActivity" />
         <activity
-            android:name=".MutigameModule.Activity.compose.CompositionActivity"
+            android:name=".MutigameModule.Activity.Composition.CompositionActivity"
             android:screenOrientation="landscape" />
-        <activity android:name=".MutigameModule.Activity.compose.WaitActivity" />
+        <activity android:name=".MutigameModule.Activity.Composition.WaitActivity" />
         <activity android:name=".MutigameModule.Activity.CreateAHomeActivity" />
         <activity android:name=".MutigameModule.Activity.EnterAHomeActivity" />
         <activity
-            android:name=".MutigameModule.Activity.compose.MusicOverActivity"
+            android:name=".MutigameModule.Activity.Composition.MusicOverActivity"
             android:screenOrientation="landscape" />
-        <activity android:name=".MutigameModule.Activity.compose.MutiGamePlayActivity" />
-        <activity android:name=".MutigameModule.Activity.gameplay.ChooseMusicActivity" />
-        <activity android:name=".MutigameModule.Activity.gameplay.GWaitActivity"></activity>
+        <activity android:name=".MutigameModule.Activity.Composition.MutiGamePlayActivity" />
+        <activity android:name=".MutigameModule.Activity.gameplay.ChooseMusicActivity">
+        </activity>
+        <activity android:name=".MutigameModule.Activity.gameplay.GWaitActivity" />
+        <activity android:name=".MutigameModule.Activity.gameplay.MutiPlayActivity"></activity>
     </application>
 
 </manifest>

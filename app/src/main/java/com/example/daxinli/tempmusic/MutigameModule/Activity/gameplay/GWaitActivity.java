@@ -1,4 +1,4 @@
-package com.example.daxinli.tempmusic.MutigameModule.Activity.compose;
+package com.example.daxinli.tempmusic.MutigameModule.Activity.Composition;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -20,8 +20,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.daxinli.tempmusic.MutigameModule.Activity.CreateAHomeActivity;
+import com.example.daxinli.tempmusic.MutigameModule.Activity.gameplay.MutiPlayActivity;
+import com.example.daxinli.tempmusic.MutigameModule.Network.GWaitReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
-import com.example.daxinli.tempmusic.MutigameModule.Network.WaitACReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
 import com.example.daxinli.tempmusic.R;
 import com.example.daxinli.tempmusic.musicTouch.BaseActivity;
@@ -47,10 +48,10 @@ public class GWaitActivity extends BaseActivity implements View.OnClickListener 
     LinearLayout lilayout;
 
     public final String[] instruNametoShow = { "钢琴","钢琴","钢琴","钢琴" };
-    int[] RID_imgInstru = {R.id.img_Instru1_wait1,R.id.img_Instru2_wait1,
-            R.id.img_Instru3_wait1,R.id.img_Instru4_wait1};
-    int[] RID_textInstri =  {R.id.text_instruSelect1_wait1,R.id.text_instruSelect2_wait1,
-            R.id.text_instruSelect3_wait1,R.id.text_instruSelect4_wait1};
+    int[] RID_imgInstru = {R.id.Gimg_Instru1_wait1,R.id.Gimg_Instru2_wait1,
+            R.id.Gimg_Instru3_wait1,R.id.Gimg_Instru4_wait1};
+    int[] RID_textInstri =  {R.id.Gtext_instruSelect1_wait1,R.id.Gtext_instruSelect2_wait1,
+            R.id.Gtext_instruSelect3_wait1,R.id.Gtext_instruSelect4_wait1};
     int[] RDRAW_img={R.drawable.pic_instru1_p0,R.drawable.pic_instru1_p1,
             R.drawable.pic_instru2_p0,R.drawable.pic_instru2_p1,
             R.drawable.pic_instru3_p0,R.drawable.pic_instru3_p1,
@@ -59,11 +60,11 @@ public class GWaitActivity extends BaseActivity implements View.OnClickListener 
     TextView[] text_instru = new TextView[4];
 
     private NetworkService.MyBinder myBinder;
-    private WaitACReceiver breceiver;
+    private GWaitReceiver breceiver;
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            WaitActivity.this.myBinder = (NetworkService.MyBinder)service;
+            GWaitActivity.this.myBinder = (NetworkService.MyBinder)service;
         }
 
         @Override
@@ -91,14 +92,12 @@ public class GWaitActivity extends BaseActivity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
-        mateType = intent.getIntExtra("activityType",-1);
-        clockID = intent.getIntExtra("clockID",-1);
-        sessionID = intent.getIntExtra("sessionID",-1);
+        String msg = intent.getStringExtra("msg");
         setContentView(R.layout.activity_wait1);
 
-        initView();
+        initView(msg);
     }
-    void initView() {
+    void initView(String msg) {
         btn_startGame = (Button) findViewById(R.id.btn_leader_startgame);
         text_teamateLinked = (TextView) findViewById(R.id.text_amout_peoplein);
         btn_sendDanmu = (Button) findViewById(R.id.btn_danmusend_createhome);
@@ -146,13 +145,23 @@ public class GWaitActivity extends BaseActivity implements View.OnClickListener 
         });
         danmakuContext = DanmakuContext.create();
         danmakuView.prepare(parser,danmakuContext);
+
+        boolean[] flag= new boolean[4];
+        String[] msgSplits = msg.split("#");
+        for(int i=0;i<msgSplits.length;i++) {
+            int x = Integer.parseInt(msgSplits[i]);
+            flag[x]=true;
+        }
+        for(int i=0;i<4;i++) if(!flag[i]) {
+            img_stru[i].setVisibility(View.GONE);           //没有出现的不显示
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.btn_leader_startgame:
-                myBinder.sendMessage("<#WAITVIEW#>STARTGAME#"+editText_MusicName.getText().toString()+"#"
+                myBinder.sendMessage("<#GWAITVIEW#>STARTGAME#"+editText_MusicName.getText().toString()+"#"
                         +editText_BPM.getText().toString());
                 break;
             case R.id.btn_danmusend_createhome:
@@ -165,7 +174,7 @@ public class GWaitActivity extends BaseActivity implements View.OnClickListener 
         for(int i=0;i<4;i++) {
             if(v.getId()==RID_imgInstru[i]) {
                 //当点击按钮之后 向服务进行申请点击事件 由服务器负责判断是否能够选择当前instru
-                myBinder.sendMessage(String.format("<#WAITVIEW#>%d#INSTRU%d#SELECT",clockID,i));
+                myBinder.sendMessage(String.format("<#GWAITVIEW#>%d#INSTRU%d#SELECT",clockID,i));
             }
         }
     }
@@ -186,25 +195,8 @@ public class GWaitActivity extends BaseActivity implements View.OnClickListener 
         Intent intent = null;
         switch(type) {
             case 0:
-                //开始游戏
-                int instruType=-1;
-                for(int i=0;i<4;i++) if(text_instru[i].getText().toString().contains("You")) {
-                    instruType = i; break;
-                }
-
-                intent = new Intent(WaitActivity.this,CompositionActivity.class);
-                intent.putExtra("activityType",mateType);
-                intent.putExtra("instruType",instruType);
-                intent.putExtra("clockID",clockID);
-                intent.putExtra("sessionID",sessionID);
-                if(this.mateType==0) {
-                    intent.putExtra("musicName", editText_MusicName.getText().toString());
-                    intent.putExtra("BPM", Integer.parseInt(editText_BPM.getText().toString()));
-                } else{
-                    String[] strs = extralInfo.split("#");
-                    intent.putExtra("musicName",strs[0]);
-                    intent.putExtra("BPM",Integer.parseInt(strs[1]));
-                }
+                intent = new Intent(GWaitActivity.this,MutiPlayActivity.class);
+                //需要获取到乐曲的谱子信息才能够进行activity的跳转
                 startActivity(intent);
                 break;
         }
@@ -241,13 +233,13 @@ public class GWaitActivity extends BaseActivity implements View.OnClickListener 
             danmakuView.resume();
         }
         //注册广播//初始化广播接收器
-        breceiver = new WaitACReceiver(this);
+        breceiver = new GWaitReceiver(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(NetMsgReceiver.NORMAL_AC_ACTION);
-        intentFilter.addAction(NetMsgReceiver.WAIT_AC_ACTION);
+        intentFilter.addAction(NetMsgReceiver.GWAIT_AC_ACTION);
         registerReceiver(breceiver,intentFilter);
         //初始化service
-        Intent intent = new Intent (WaitActivity.this,NetworkService.class);
+        Intent intent = new Intent (GWaitActivity.this,NetworkService.class);
         bindService(intent,connection,BIND_AUTO_CREATE);
     }
 
@@ -267,7 +259,7 @@ public class GWaitActivity extends BaseActivity implements View.OnClickListener 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                builder = new AlertDialog.Builder(WaitActivity.this);
+                builder = new AlertDialog.Builder(GWaitActivity.this);
                 builder.setTitle(tititle);
                 builder.setMessage(msg);
                 builder.setCancelable(false);
@@ -276,13 +268,13 @@ public class GWaitActivity extends BaseActivity implements View.OnClickListener 
                     public void onClick(DialogInterface dialog, int which) {
                         if(type==0) {
                             myBinder.sendMessage("<#EXIT#>");
-                            WaitActivity.this.removeActivity();
+                            GWaitActivity.this.removeActivity();
                         } else if(type==1) {
-                            WaitActivity.this.removeActivity();
+                            GWaitActivity.this.removeActivity();
                         }else if(type==3) {
                             //尝试进行重新连接service
                             myBinder.restartNetThread();
-                            WaitActivity.this.removeActivity();
+                            GWaitActivity.this.removeActivity();
                         }else if(type==4) {
 
                         }
@@ -315,7 +307,7 @@ public class GWaitActivity extends BaseActivity implements View.OnClickListener 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                WaitActivity.this.text_teamateLinked.setText(
+                GWaitActivity.this.text_teamateLinked.setText(
                         String.format("找呀找呀找胖友...(%d/%d)",number, CreateAHomeActivity.HOMEMATELIMIT));
             }
         });
@@ -332,7 +324,7 @@ public class GWaitActivity extends BaseActivity implements View.OnClickListener 
             @Override
             public void run() {
                 //设置当前的选择状态
-                Glide.with(WaitActivity.this).load(RDRAW_img[type*2+state]).into(img_stru[type]);
+                Glide.with(GWaitActivity.this).load(RDRAW_img[type*2+state]).into(img_stru[type]);
                 //img_stru[type].setImageResource(RDRAW_img[type*2+state]);
                 String text = state==0? "":instruNametoShow[type];
                 if(flag==1 && state==1) text=text+"(You)";

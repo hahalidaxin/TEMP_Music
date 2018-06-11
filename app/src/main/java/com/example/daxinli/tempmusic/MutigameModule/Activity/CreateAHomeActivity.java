@@ -8,11 +8,12 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.daxinli.tempmusic.MutigameModule.Activity.compose.WaitActivity;
+import com.example.daxinli.tempmusic.MutigameModule.Activity.Composition.WaitActivity;
 import com.example.daxinli.tempmusic.MutigameModule.Activity.gameplay.ChooseMusicActivity;
 import com.example.daxinli.tempmusic.MutigameModule.Network.HomeACReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
@@ -24,6 +25,7 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
     public static final int HOMEMATELIMIT = 4;
     private EditText editText_homePassword;
     private Button btn_createYourHome;
+    private Button btn_mutiplaymusic;
 
     private NetworkService.MyBinder myBinder;
     private HomeACReceiver breceiver;
@@ -54,8 +56,10 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
     public void initWork() {
         editText_homePassword = (EditText) findViewById(R.id.editText_homepassword);
         btn_createYourHome = (Button) findViewById(R.id.btn_createYourHome);
+        btn_mutiplaymusic= (Button) findViewById(R.id.btn_mutiplayMusic);
 
         btn_createYourHome.setOnClickListener(this);
+        btn_mutiplaymusic.setOnClickListener(this);
         connectType = 0;
     }
     //外部调用 针对创建房间返回的信息作出不同的调用处理
@@ -65,15 +69,16 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
             public void run() {
                 if(flag) {
                     if(connectType ==0) {
-                        Intent intent = new Intent(CreateAHomeActivity.this, WaitActivity.class);
+                        Intent intent = new Intent(CreateAHomeActivity.this, WaitActivity.class);   //进入等待界面 此时需要提醒服务器端记性teamstate的修改
                         intent.putExtra("clockID", clockID);
                         intent.putExtra("sessionID", sessionID);
                         intent.putExtra("activityType", 0);
+                        intent.putExtra("connectType","COMPOSE");
+                        myBinder.sendMessage("<#CREATEVIEW#>teamstate#0");
                         startActivity(intent);
                     } else if(connectType==1) {
-                        Intent intent = new Intent(CreateAHomeActivity.this, ChooseMusicActivity.class);
-                        intent.putExtra("activityType",0);
-                        startActivity(intent);
+                        //需要额外发送信息进行musiclist的获取
+                        myBinder.sendMessage("<#CREATEVIEW#>MusicList");
                     }
                 } else {
                     if(type==0)
@@ -82,6 +87,13 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
             }
         });
     }
+    public void onPlayerActivityTrans(String msg) {
+        Intent intent = new Intent(CreateAHomeActivity.this, ChooseMusicActivity.class);        //进入乐谱选择界面//这个时候其他组员依然不能够进入房间
+        intent.putExtra("activityType",0);
+        intent.putExtra("musicList",msg);
+        Log.e(TAG, "onPlayerActivityTrans: "+msg);
+        startActivity(intent);
+    }
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
@@ -89,10 +101,10 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
                 String requestCode = editText_homePassword.getText().toString();
                 myBinder.sendMessage("<#CONNECT#>LEADER#"+requestCode);
                 break;
-            case R.id.btn_playMusic:
+            case R.id.btn_mutiplayMusic:
                 connectType = 1;
                 String msg = editText_homePassword.getText().toString();
-                myBinder.sendMessage("<#CONNECT2#>LEADER#"+msg);
+                myBinder.sendMessage("<#CONNECT#>LEADER#"+msg);
                 break;
         }
     }
