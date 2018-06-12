@@ -1,5 +1,6 @@
 package com.example.daxinli.tempmusic.view;
 
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.MySurfaceView;
@@ -39,6 +40,7 @@ public class GameoverView extends BaseView {
         float y = e.getY();
         x = Constant.fromRealScreenXToStandardScreenX(x);
         y = Constant.fromRealScreenYToStandardScreenY(y);
+        Log.e(TAG, String.format("onTouchEvent: %f %f",x,y));
         switch(e.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 //按键的按压效果放在按下事件中进行
@@ -56,6 +58,7 @@ public class GameoverView extends BaseView {
                     MySurfaceView.curView = MySurfaceView.gameView;
                     btnRestart_isPressed = false;
                 } else if(SFUtil.isin(x,y,GameData.area_btn_exit)) {        //游戏退出//如何处理
+                    Log.e(TAG, "onTouchEvent: 其实已经点到了");
                     mv.exit();
                     btnExit_isPressed = false;
                 }
@@ -85,9 +88,9 @@ public class GameoverView extends BaseView {
             DrawUtil.drawBitmap(ar.x,ar.y,ar.width,ar.height,"btn_restart1_gov.png");
         ar = GameData.area_btn_exit;
         if(btnExit_isPressed)
-            DrawUtil.drawBitmap(ar.x,ar.y,ar.width,ar.height,"btn_restart2_gov.png");
+            DrawUtil.drawBitmap(ar.x,ar.y,ar.width,ar.height,"btn_exitgame2_gov.png");
         else
-            DrawUtil.drawBitmap(ar.x,ar.y,ar.width,ar.height,"btn_restart1_gov.png");
+            DrawUtil.drawBitmap(ar.x,ar.y,ar.width,ar.height,"btn_exitgame1_gov.png");
     }
     public void setBtnRestart_isPressed(boolean flag) { this.btnRestart_isPressed = flag; }
     public void setBtnExit_isPressed(boolean flag) { this.btnExit_isPressed = flag; }

@@ -1,12 +1,10 @@
 package com.example.daxinli.tempmusic.thread;
 
 
-import android.util.Log;
-
 import com.example.daxinli.tempmusic.constant.GameData;
 import com.example.daxinli.tempmusic.object.MainSlide;
 import com.example.daxinli.tempmusic.util.effect.RedHeart.RedHeart;
-import com.example.daxinli.tempmusic.util.elseUtil.item;
+import com.example.daxinli.tempmusic.util.elseUtil.Pitch;
 import com.example.daxinli.tempmusic.view.GameView;
 
 import java.util.Random;
@@ -25,11 +23,12 @@ public class CreateSlideThread extends Thread {
     private Random random=new Random();
 
     public float createSpan;
+    public long nowclockTime;               //记录乐曲演奏的总时间
     private float baseSlideHeight,baseSlideWidth,baseHight,speedRK;                    //需要获取的GameData中的数据
     private int lastRandomInt=0;
     private int curRandomInt;
     private int currentTime,currentPitch,endPitch,loopTimes;
-    private item thisPitch;
+    private Pitch thisPitch;
     private boolean pause = false;
     private boolean flag=true;
     private long attachSpan = 0;        //因暂停原因产生的需要补上的睡眠时间
@@ -45,8 +44,8 @@ public class CreateSlideThread extends Thread {
 
     @Override
     public void run() {
-        Log.e(TAG, "createSpan线程开始了");
         initData();
+        createSpan = 10;
         while(flag) {                                                   //createSpan应该根据上一个滑块的长度来计算
             if(!pause) {
                 //补足时间
@@ -59,15 +58,16 @@ public class CreateSlideThread extends Thread {
                     }
                 }
                 long start= System.currentTimeMillis();
-                createSpan= GameData.SlideHeight[1]/speedRK;         //创建滑块的时间单位 每时间单位的时长 - 根据游戏难度改变
                 //进行文件操作 检查产生滑块
-                if (++currentTime == thisPitch.occur) {
+                float rt = GameData.gameSpeed[0]/GameData.gameSpeed[GameData.GameRK];
+                if (nowclockTime >= thisPitch.st*rt) {
                     createNewSlide(thisPitch);
+                    GameData.gameProgressRatio = (float)currentPitch/endPitch*0.25f+0.25f*(float)loopTimes;
                     if((++currentPitch)==endPitch) {
                         //如果音乐循环结束
                         if((++loopTimes)<4) {
                             currentPitch = 0;               //重新返回第一个音
-                            currentTime = -1;
+                            nowclockTime = 0;
                             synchronized(GameData.lock) {   //游戏难度提升
                                 if(GameData.GameRK<GameData.gameSpeed.length-1)
                                     speedRK=GameData.gameSpeed[++GameData.GameRK];
@@ -95,7 +95,7 @@ public class CreateSlideThread extends Thread {
                         }
                     }
                     MsPitchInfo = MsArray[currentPitch].split(" ");                     //获得此音节的音节信息
-                    thisPitch = new item(Integer.parseInt(MsPitchInfo[0]), Integer.parseInt(MsPitchInfo[1])
+                    thisPitch = new Pitch(Integer.parseInt(MsPitchInfo[0]), Integer.parseInt(MsPitchInfo[1])
                             , Integer.parseInt(MsPitchInfo[2]));
                 }
 
@@ -111,7 +111,6 @@ public class CreateSlideThread extends Thread {
                 }
 
                 long end= System.currentTimeMillis();
-                //Log.e("createSPan和滑块时间", Float.toString(createSpan)+" "+Long.toString(end-start));
                 if(end-start<createSpan) {
                     try {
                         Thread.sleep((long)createSpan-(end-start));
@@ -119,26 +118,27 @@ public class CreateSlideThread extends Thread {
                         e.printStackTrace();
                     }
                 }
+                nowclockTime += createSpan;
                 if(pause) {
                     attachSpan = System.currentTimeMillis()-GameData.gamepauseTime;
                 } else attachSpan = 0;
             }
         }
-        Log.e("CreateThread已经停止了", "run: ");
     }
-    public void createNewSlide(item tp) {                              //产生一个新的滑块 放入Data的滑块队列
+    public void createNewSlide(Pitch tp) {                              //产生一个新的滑块 放入Data的滑块队列
         while ((curRandomInt = random.nextInt(4)) == lastRandomInt) {}
         lastRandomInt=curRandomInt;
         //tp.span代表了滑块所处的类型 因此要求音节以单位化直接反应音节的长短
-        MainSlide slide = new MainSlide(curRandomInt*baseSlideWidth,-GameData.SlideHeight[tp.span],
-                baseSlideWidth, GameData.SlideHeight[tp.span],tp.pitch,tp.span,"paino");
+        int sh =(int) ((tp.ed-tp.st)*GameData.gameSpeed[0]);
+        MainSlide slide = new MainSlide(curRandomInt*baseSlideWidth,-sh,
+                baseSlideWidth, sh,tp.key,1,0);
         synchronized (GameView.lock) {
             GameView.mainSlideArrayList.add(slide);
         }
     }
     public void initData() {
         synchronized (GameData.lock) {                                              //同步GameData中的游戏数据
-            tmpBuffer = new StringBuffer(GameData.mainMusicScore.toString());
+            tmpBuffer = new StringBuffer(GameData.mainMusicScore.toString());       //这里获取了乐谱的string
             baseSlideHeight = GameData.baseSlideHeight;
             baseSlideWidth = GameData.baseSlideWidth;
             if(GameData.GameRK!=0) GameData.GameRK = 0;
@@ -146,18 +146,19 @@ public class CreateSlideThread extends Thread {
             baseHight = GameData.STANDARD_HIEGHT;
 
         }
+        nowclockTime = 0;
         attachSpan = 0;
         pause = false;
         flag = true;
         state = 0;
         MusicScore=tmpBuffer.toString();
         MsArray=MusicScore.split("#");
-        currentTime=-1;currentPitch=0;loopTimes=0;
+        currentTime=-1; currentPitch=0; loopTimes=0;
         endPitch=MsArray.length;
          //根据字符串 解析每一个音节 音调 出现 时长
         MsPitchInfo=MsArray[currentPitch].split(" ");
-        thisPitch=new item(Integer.parseInt(MsPitchInfo[0]), Integer.parseInt(MsPitchInfo[1])
-                , Integer.parseInt(MsPitchInfo[2]));
+        thisPitch=new Pitch(Integer.parseInt(MsPitchInfo[0].trim()), Integer.parseInt(MsPitchInfo[1].trim())
+                , Integer.parseInt(MsPitchInfo[2].trim()));
 
         randomInitRedHeartTime = 5+random.nextInt(MsArray.length-5);
     }

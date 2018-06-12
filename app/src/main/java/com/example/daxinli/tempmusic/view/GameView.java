@@ -12,6 +12,7 @@ import com.example.daxinli.tempmusic.thread.CreateSlideThread;
 import com.example.daxinli.tempmusic.thread.MainSlideThread;
 import com.example.daxinli.tempmusic.util.SFUtil;
 import com.example.daxinli.tempmusic.util.effect.ElseEffect.DrawScore;
+import com.example.daxinli.tempmusic.util.effect.ProgressTool.ProgressToolView;
 import com.example.daxinli.tempmusic.util.effect.RedHeart.RedHeart;
 import com.example.daxinli.tempmusic.util.effect.TriangleFirework.tri_ParticleSystem;
 import com.example.daxinli.tempmusic.util.elseUtil.Area;
@@ -47,6 +48,7 @@ public class GameView extends BaseView {
         public static RedHeart redHeartShowHealth;
         public Background background ;
         public tri_ParticleSystem trisys;
+        ProgressToolView progress;
         Random random = new Random();
 
         public static int Message=0;          //
@@ -69,6 +71,8 @@ public class GameView extends BaseView {
             GameData.area_btn_pause = new Area(0,20,120,120);
             //初始化纹理
             TextureManager.loadingTexture(father,0,29);           //加载游戏界面相关图片
+            TextureManager.loadingTexture(father,45,2);           //加载游戏界面相关图片
+            progress = new ProgressToolView(father.activity);
             scoreDraw = new DrawScore();
             background = new Background();
             //加载恒参图片)
@@ -244,6 +248,7 @@ public class GameView extends BaseView {
             } else {
                 viewlist.get(0).drawSelf();
             }
+            if(progress!=null) progress.onDraw();
             synchronized (GameData.lock) {
                 GameData.refreshFrameTime = System.currentTimeMillis()-begin;
             }

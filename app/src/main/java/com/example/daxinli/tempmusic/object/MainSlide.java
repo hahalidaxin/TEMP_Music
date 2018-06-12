@@ -27,7 +27,7 @@ public class MainSlide{
     public float Height;
     public float speed;
     public int Pitch;
-    public String Instru;
+    public int Instru;
     public int state;          //滑块的状态 0-正常 1-蓝色按压 2-红色没触摸
 
     private float baseTouchLimit;
@@ -41,20 +41,23 @@ public class MainSlide{
 
     Obj2DRectangle objSlide;
 
-    public MainSlide(float X, float Y, float Width, float Height, int Pitch, int type, String Instru) {
+    public MainSlide(float X, float Y, float Width, float Height, int Pitch, int ttype, int instruType) {
         this.X = X;
         this.Y = Y;
         this.Width = Width;
         this.Height = Height;
         this.Pitch = Pitch;
-        this.Instru = Instru;
-        this.type = type;
+        this.Instru = instruType;
+        this.type = ttype;
         this.speed = GameData.gameSpeed[GameData.GameRK] * GameData.MainSlideTHSpan;
         this.state = 0;
 
         this.ls_minY = Y + Height;
         this.touchMode = 0;
         this.plusScoreTimes = 1;
+
+        if(Height>GameData.gameSpeed[0]*600) type=2;
+        else type=1;
         if (type == 1) {
             objSlide = new Obj2DRectangle(X, Y, Width, Height, 1, 0, 0, 0,            // TODO: 2018/3/19 新建一个shader  用于接收argb绘制相应颜色方块
                     ShaderManager.getShader(6));

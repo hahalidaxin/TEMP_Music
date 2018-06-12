@@ -62,9 +62,10 @@ public class GameData {
     public static int slideT2score = 2;             //点击长滑块获得的分数
     public static int sleepSpanPerDiff = 4000;      //各难度之间需要休眠的时间
     public static long refreshFrameTime ;                   //GameView刷新一帧需要的时间
+    public static float gameProgressRatio;
 
     //-------------游戏工具类数据存储
-    public static final int initgamerHealth=10;
+    public static final int initgamerHealth=5;
     public static int GameScore=0;                        //游戏分数
     public static int gamerHealth=initgamerHealth;                      //玩家生命值
 

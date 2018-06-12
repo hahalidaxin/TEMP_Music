@@ -20,7 +20,8 @@ import java.util.HashMap;
 			"r4.png","r5.png","r6.png","r7.png","r8.png","r9.png","btn_start_g.png",					//29
             "pic_kb_r0.png","pic_kb_r1.png","pic_kb_r2.png","pic_kb_r3.png","pic_kb_r4.png","pic_kb_r5.png","pic_kb_r6.png", //36
 			"pic_kb_r7.png","pic_kb_r8.png","pic_kb_r9.png","pic_kb_r10.png","pic_kb_r11.png","pic_kb_r12.png","pic_kb_r13.png",        //43
-			"btn_startGame_pre.png","down_right.png"    //45-
+			"btn_startGame_pre.png","down_right.png",    //45-
+			"btn_exitgame1_gov.png","btn_exitgame2_gov.png", //47
 		};
 	
 	static HashMap<String,Integer> texList=new HashMap<String,Integer>();

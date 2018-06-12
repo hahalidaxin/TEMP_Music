@@ -32,7 +32,7 @@ public class EffectView extends BaseView {
         redheart = new RedHeart(0,0,250,250,10f);
         background = new Background();
         TextureManager.loadingTexture(mv,0,18);
-        slide = new MainSlide(X,  Y,  Width,  Height, 1, 1, "paino");
+        slide = new MainSlide(X,  Y,  Width,  Height, 1, 1, 0);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class EffectView extends BaseView {
             if (slide.state == 0) {
                 slide.onTouchEvent(e);
             } else {
-                slide = new MainSlide(X,  Y,  Width,  Height, 1, 1, "paino");
+                slide = new MainSlide(X,  Y,  Width,  Height, 1, 1, 0);
             }
         }
         return true;
