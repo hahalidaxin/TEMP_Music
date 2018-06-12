@@ -2,11 +2,13 @@ package com.example.daxinli.tempmusic.MutigameModule.Activity.gameplay;
 
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -76,6 +78,13 @@ public class ChooseMusicActivity extends BaseActivity implements View.OnClickLis
         Intent intent = new Intent (ChooseMusicActivity.this,NetworkService.class);
         bindService(intent,connection,BIND_AUTO_CREATE);
     }
+    @Override
+    protected void onDestroy() {
+        myBinder.sendMessage("<#EXIT#>");
+        //activity退出处理
+        super.onDestroy();
+    }
+
     public void initView() {
         recyclerView = (RecyclerView) findViewById(R.id.GrecyclerView);
         textMusicNum = (TextView)findViewById(R.id.text_musicDetectedNum);
@@ -121,10 +130,31 @@ public class ChooseMusicActivity extends BaseActivity implements View.OnClickLis
         Intent intent = new Intent(ChooseMusicActivity.this, WaitActivity.class);
         intent.putExtra("InstruNum",msg);
         intent.putExtra("connectType",WaitActivity.CONNECT_GAMEPlAY);
-        intent.putExtra("activityType",mintent.getStringExtra("activityType"));
+        intent.putExtra("activityType",0);
         //打开wait界面 此时修改teamstate
         myBinder.sendMessage("<#CREATEVIEW#>teamstate#0");
         startActivity(intent);
+    }
+    AlertDialog.Builder builder;
+    public void ShowAlertDialog(final String title,final String message,final int type) {
+        if(builder!=null) return ;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                builder = new AlertDialog.Builder(ChooseMusicActivity.this);
+                builder.setTitle(title);
+                builder.setMessage(message);
+                builder.setCancelable(false);
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        removeActivity();
+                        builder = null;
+                    }
+                });
+                builder.show();
+            }
+        });
     }
     @Override
     public void onClick(View v) {

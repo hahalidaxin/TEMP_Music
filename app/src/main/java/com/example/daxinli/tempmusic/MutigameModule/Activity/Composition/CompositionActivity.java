@@ -14,7 +14,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 
-import com.example.daxinli.tempmusic.MutigameModule.Network.MutiGamingReceiver;
+import com.example.daxinli.tempmusic.MutigameModule.Network.CompositionReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.View.Muti_SurfaceView;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
@@ -30,7 +30,7 @@ public class CompositionActivity extends BaseActivity {
     public SoundManager sound;
 
     public NetworkService.MyBinder myBinder;
-    public MutiGamingReceiver breceiver;
+    public CompositionReceiver breceiver;
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -80,7 +80,7 @@ public class CompositionActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         //注册广播//初始化广播接收器
-        breceiver = new MutiGamingReceiver(this);
+        breceiver = new CompositionReceiver(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(NetMsgReceiver.NORMAL_AC_ACTION);
         intentFilter.addAction(NetMsgReceiver.MUTIGAMING_AC_ACTION);
@@ -107,8 +107,20 @@ public class CompositionActivity extends BaseActivity {
         switch(keyCode) {
             case KeyEvent.KEYCODE_BACK:
                 myBinder.sendMessage("<#EXIT#>");   //退出游戏标志
-                Intent intent = new Intent(CompositionActivity.this,MutiGameActivity.class);
-                startActivity(intent);
+                myBinder.sendMessage("<#DESTROYTHREAD#>");
+                showAlertDialog("_(:з」∠)_ ","正在退出房间...",0);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+                            Thread.sleep(1000);
+                        }catch(Exception e) {
+                            e.printStackTrace();
+                        }
+                        Intent intent = new Intent(CompositionActivity.this,MutiGameActivity.class);
+                        startActivity(intent);
+                    }
+                }).start();
         }
         return super.onKeyDown(keyCode,event);
     }
@@ -137,6 +149,8 @@ public class CompositionActivity extends BaseActivity {
                     });
                 }
             }).start();
+        } else if(type==1) {
+            showAlertDialog("555...", "我们的服务器牺牲了,请您回退TAT",1);
         }
     }
     public void showAlertDialog(final String title,final String msg,final int type) {
@@ -153,7 +167,10 @@ public class CompositionActivity extends BaseActivity {
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
+                            if(type==1) {
+                                Intent intent = new Intent(CompositionActivity.this,MutiGameActivity.class);
+                                startActivity(intent);
+                            }
                         }
                     });
                 }

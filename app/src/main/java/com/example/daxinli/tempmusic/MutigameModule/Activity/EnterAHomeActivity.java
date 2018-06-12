@@ -96,7 +96,7 @@ public class EnterAHomeActivity extends AbHomeActivity implements View.OnClickLi
         }
     }
 
-    public void netWaitTolaunchActivity(final int type,final boolean flag,final int clockID,final int sessionID) {
+    public void netWaitTolaunchActivity(final int type,final boolean flag,final int clockID,final String sessionID) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -120,7 +120,7 @@ public class EnterAHomeActivity extends AbHomeActivity implements View.OnClickLi
             }
         });
     }
-    public void onActivityTrans(int clockID,int sessionID,String msg) {
+    public void onActivityTrans(int clockID,String sessionID,String msg) {
         Intent intent = new Intent(EnterAHomeActivity.this,WaitActivity.class);
         intent.putExtra("clockID",clockID);
         intent.putExtra("sessionID",sessionID);

@@ -63,7 +63,7 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
         connectType = 0;
     }
     //外部调用 针对创建房间返回的信息作出不同的调用处理
-    public void netWaitTolaunchActivity(final int type ,final boolean flag,final int clockID,final int sessionID) {
+    public void netWaitTolaunchActivity(final int type ,final boolean flag,final int clockID,final String sessionID) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

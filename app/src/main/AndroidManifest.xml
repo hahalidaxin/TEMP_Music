@@ -39,12 +39,11 @@
             android:name=".MutigameModule.Activity.Composition.CompositionActivity"
             android:screenOrientation="landscape" />
         <activity android:name=".MutigameModule.Activity.Composition.WaitActivity" />
-        <activity android:name=".MutigameModule.Activity.CreateAHomeActivity" />
-        <activity android:name=".MutigameModule.Activity.EnterAHomeActivity" />
+        <activity android:name=".MutigameModule.Activity.CreateAHomeActivity" android:launchMode="singleTask" />
+        <activity android:name=".MutigameModule.Activity.EnterAHomeActivity" android:launchMode="singleTask"/>
         <activity
             android:name=".MutigameModule.Activity.Composition.MusicOverActivity"
             android:screenOrientation="landscape" />
-        <activity android:name=".MutigameModule.Activity.Composition.MutiGamePlayActivity" />
         <activity android:name=".MutigameModule.Activity.gameplay.ChooseMusicActivity">
         </activity>
         <activity android:name=".MutigameModule.Activity.gameplay.MutiPlayActivity"></activity>

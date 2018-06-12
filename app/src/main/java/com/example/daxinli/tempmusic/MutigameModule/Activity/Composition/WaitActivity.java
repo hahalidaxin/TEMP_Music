@@ -323,8 +323,8 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
                             intent = new Intent(WaitActivity.this, EnterAHomeActivity.class);
                         }
                         if(type==0) {
+                            myBinder.sendMessage("<#EXIT#>");
                             startActivity(intent);
-                            //myBinder.sendMessage("<#EXIT#>");
                             //WaitActivity.this.removeActivity();
                         } else if(type==1) {
                             startActivity(intent);

@@ -23,6 +23,8 @@ public class ChooseReceiver extends BroadcastReceiver {
             if(msg.startsWith("INSTRUNUM")) {
                 mcontext.onActivityTrans(msg.substring(10));
             }
+        }else if(msg.startsWith("<#NETWORKDOWN#>")) {
+            mcontext.ShowAlertDialog("555...", "我们的服务器牺牲了，请您回退TAT", 3);
         }
     }
 }

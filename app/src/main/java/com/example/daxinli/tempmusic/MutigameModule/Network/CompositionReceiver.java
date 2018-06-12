@@ -10,9 +10,9 @@ import com.example.daxinli.tempmusic.MutigameModule.Activity.Composition.Composi
  * Created by Daxin Li on 2018/6/1.
  */
 
-public class MutiGamingReceiver extends BroadcastReceiver {
+public class CompositionReceiver extends BroadcastReceiver {
     CompositionActivity mcontext;
-    public MutiGamingReceiver(CompositionActivity context) {
+    public CompositionReceiver(CompositionActivity context) {
         mcontext = context;
     }
     @Override
@@ -26,6 +26,8 @@ public class MutiGamingReceiver extends BroadcastReceiver {
             }
         } else if(msg.startsWith("<#DESTROY#>")) {
             mcontext.onUItoShow(0);
+        } else if(msg.startsWith("<#NETWORKDOWN#>")) {
+            mcontext.onUItoShow(1);
         }
     }
 }

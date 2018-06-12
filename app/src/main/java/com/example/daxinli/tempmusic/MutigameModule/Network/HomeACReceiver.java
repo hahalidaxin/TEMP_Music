@@ -29,11 +29,11 @@ public class HomeACReceiver extends BroadcastReceiver {
             //创建或进入房间失败
             if (msg.startsWith("ERROR")) { //没有这个房间
                 int type = msg.charAt(5)-'0'-1;
-                mcontext.netWaitTolaunchActivity(type,false, 0, 0);
+                mcontext.netWaitTolaunchActivity(type,false, 0, "");
             }
             else { //client创建成功 //返回clockId和sessionID信息
                 int clockID = Integer.parseInt(msgSplits[0]);
-                int sessionID = Integer.parseInt(msgSplits[1]);
+                String sessionID = msgSplits[1];
                 if(msgSplits.length==2)
                     mcontext.netWaitTolaunchActivity(0,true,clockID,sessionID);
                 else if(msgSplits.length==3)
