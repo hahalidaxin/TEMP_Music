@@ -9,7 +9,6 @@ import com.example.daxinli.tempmusic.util.SFUtil;
 import com.example.daxinli.tempmusic.util.effect.ElseEffect.DrawScore;
 import com.example.daxinli.tempmusic.util.elseUtil.Area;
 import com.example.daxinli.tempmusic.util.manager.ShaderManager;
-import com.example.daxinli.tempmusic.util.manager.SoundManager;
 import com.example.daxinli.tempmusic.util.screenscale.Constant;
 
 
@@ -36,6 +35,7 @@ public class MainSlide{
     private float pressCurX;        //长时间按压时需要用的DOWN时候的XY坐标
     private float pressCurY;
     private DrawScore scoredraw;
+    private int musicStreamID;
 
     int plusScoreTimes;
 
@@ -134,7 +134,7 @@ public class MainSlide{
                 state = 1;
                 objSlide.runAnim(1);
                 if(WelcomeActivity.sound!=null) {
-                    WelcomeActivity.sound.playGameMusic(SoundManager.PIANO_PITCH[Pitch], 0);
+                   this.musicStreamID  = WelcomeActivity.sound.playMusic(Pitch, 0);
                 }
                 //sound的初始化处于WelcomeActivity中 因此需要提前调用WelcomeActivity
                 if(plusScoreTimes>0) {
@@ -171,7 +171,7 @@ public class MainSlide{
         baseTouchLimit = Height*(4-GameData.GameRK)/6;
         if(state == 0 && pressCurY>=Y+baseTouchLimit) {
             if(WelcomeActivity.sound!=null) {
-                WelcomeActivity.sound.playGameMusic(SoundManager.PIANO_PITCH[Pitch + 7], 0);      //此处播放长音
+                this.musicStreamID = WelcomeActivity.sound.playMusic(Pitch, 0);
             }
             state = 1;
         }
@@ -184,11 +184,21 @@ public class MainSlide{
         float eX = Constant.fromRealScreenXToStandardScreenX(event.getX());
         float eY = Constant.fromRealScreenYToStandardScreenY(event.getY());
         if(!SFUtil.isin(eX,eY,new Area(X,Y,Width,Height)))
-            if(touchMode == 1) touchMode = 2;               // 只有touchMode为1的时候才会更新信息
+            if(touchMode == 1) {
+                touchMode = 2;               // 只有touchMode为1的时候才会更新信息
+                if(WelcomeActivity.sound!=null) {
+                   WelcomeActivity.sound.stopGameMusic(this.musicStreamID);
+                }
+            }
         //如果Move出去 则触摸结束
     }
     public void onTouchUp(MotionEvent event) {
-        if(touchMode==1 && state==1) touchMode = 2;
+        if(touchMode==1 && state==1) {
+            touchMode = 2;
+            if(WelcomeActivity.sound!=null) {
+               WelcomeActivity.sound.stopGameMusic(this.musicStreamID);
+            }
+        }
         //如果触摸抬起 则触摸结束
     }
     public boolean getIsGetScore() {        //获取滑块是否已经得到分数

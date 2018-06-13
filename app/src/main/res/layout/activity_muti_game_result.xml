@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.daxinli.tempmusic.MutigameModule.Activity.gameplay.MutiGameResultActivity">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include
+            android:id="@+id/include_res1"
+            layout="@layout/mutiresultitem" />
+        <include
+            android:id="@+id/include_res2"
+            layout="@layout/mutiresultitem" />
+        <include
+            android:id="@+id/include_res3"
+            layout="@layout/mutiresultitem" />
+        <include
+            android:id="@+id/include_res4"
+            layout="@layout/mutiresultitem" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layoutAnimation="@anim/layout_animation_fall_down"
+        android:id="@+id/li_finalRes_mutires"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_marginTop="15dp"
+            android:id="@+id/downAnchor_mutires"
+            android:layout_gravity="center"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/downanchor"/>
+        <TextView
+            android:gravity="center"
+            android:id="@+id/text_finalScore_mutires"
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:text=""/>
+        <Button
+            android:id="@+id/btn_exitMutiGame"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="退出游戏"/>
+    </LinearLayout>
+</LinearLayout>

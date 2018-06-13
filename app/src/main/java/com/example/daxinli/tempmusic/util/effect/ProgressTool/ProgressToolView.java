@@ -1,7 +1,6 @@
 package com.example.daxinli.tempmusic.util.effect.ProgressTool;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.MutigameModule.ViewTool.BaseViewTool;
@@ -37,7 +36,6 @@ public class ProgressToolView extends BaseViewTool {
 
     @Override
     public void onDraw() {
-        Log.e(TAG, String.format("onDraw: %f",GameData.gameProgressRatio));
         DrawUtil.drawRect(0,0, 1080*GameData.gameProgressRatio,10,0.8f,39/255f,1.0f,115/255f);
     }
 }

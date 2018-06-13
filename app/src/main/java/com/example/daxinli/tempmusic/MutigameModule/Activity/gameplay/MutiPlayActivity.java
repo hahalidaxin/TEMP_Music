@@ -1,25 +1,38 @@
 package com.example.daxinli.tempmusic.MutigameModule.Activity.gameplay;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.WindowManager;
 
 import com.example.daxinli.tempmusic.MutigameModule.Network.GameplayReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
-import com.example.daxinli.tempmusic.R;
+import com.example.daxinli.tempmusic.MySurfaceView;
+import com.example.daxinli.tempmusic.constant.GameData;
 import com.example.daxinli.tempmusic.musicTouch.BaseActivity;
 import com.example.daxinli.tempmusic.musicTouch.MutiGameActivity;
+import com.example.daxinli.tempmusic.util.screenscale.Constant;
+import com.example.daxinli.tempmusic.util.screenscale.ScreenScaleUtil;
 
 public class MutiPlayActivity extends BaseActivity {
+    private static final String TAG = "MutiPlayActivity";
     public NetworkService.MyBinder myBinder;
     public GameplayReceiver breceiver;
+    public MySurfaceView mySurfaceView;
+    public static SharedPreferences.Editor editor;  //保存上次退出的保留
+    public static SharedPreferences sp;
+
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -31,10 +44,34 @@ public class MutiPlayActivity extends BaseActivity {
 
         }
     };
+
+    Intent mintent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_muti_play);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        mySurfaceView = new MySurfaceView(this);
+        mySurfaceView.requestFocus();
+        mySurfaceView.setFocusableInTouchMode(true);
+
+        this.mintent = getIntent();
+        StringBuffer builder = new StringBuffer();
+        String[] strs = mintent.getStringExtra("musicScore").split("\\$\\$");
+        for(int i=0;i<strs.length;i++) {
+            builder.append(strs[i]+"#");
+        }
+        GameData.mainMusicScore = builder;
+
+        Log.e(TAG, "onCreate: "+GameData.mainMusicScore);
+        //加载资源文件
+        initScreenData();               //初始化屏幕数据 为后续计算对应点做准备
+        loadSettings();
+
+
+        setContentView(mySurfaceView);                          //以SurfaceView作为主界面
     }
     @Override
     protected void onResume() {
@@ -105,5 +142,44 @@ public class MutiPlayActivity extends BaseActivity {
                 builder.show();
             }
         });
+    }
+
+    public void exit() {            //暴露退出函数
+        this.removeActivity();
+    }
+    public void initScreenData() {
+        DisplayMetrics dm=new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        Constant.ssr= ScreenScaleUtil.calScale(dm.widthPixels, dm.heightPixels);
+        //System.out.println(Integer.toString(dm.widthPixels)+" "+Integer.toString(dm.heightPixels));
+    }
+    public void loadSettings() {
+        sp = this.getSharedPreferences("settings", Context.MODE_PRIVATE);
+        editor = sp.edit();
+        //获得音效设置
+        boolean isMusicOn = sp.getBoolean("MUSICEFFECT",true);      //default Value
+        GameData.GameEffect = isMusicOn;
+    }
+    public void exitActivity(int type) {
+        if(type==0) {
+            Intent intent = new Intent(MutiPlayActivity.this,MutiGameActivity.class);
+            startActivity(intent);
+        }
+    }
+    //将所有的通信操作都集成到MutiPlayActivity中，方便统一管理。
+    public void onSendMessage(int type,Intent intent) {
+        //1: gameover //2:gamevitory
+        Log.e(TAG, "onSendMessage: ");
+        switch(type) {
+            case 1:
+                String ratio = Integer.toString(intent.getIntExtra("ratio",-1));
+                String score = Integer.toString(intent.getIntExtra("score",-1));
+                myBinder.sendMessage("<#MUTIPLAYVIEW#>GAMEOVER#"+ratio+"#"+score);
+                Intent mintent = new Intent(MutiPlayActivity.this,MutiGameResultActivity.class);
+                startActivity(mintent);
+                break;
+            case 2:
+                break;
+        }
     }
 }

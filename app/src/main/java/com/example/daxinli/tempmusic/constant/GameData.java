@@ -65,7 +65,7 @@ public class GameData {
     public static float gameProgressRatio;
 
     //-------------游戏工具类数据存储
-    public static final int initgamerHealth=5;
+    public static final int initgamerHealth=1;
     public static int GameScore=0;                        //游戏分数
     public static int gamerHealth=initgamerHealth;                      //玩家生命值
 

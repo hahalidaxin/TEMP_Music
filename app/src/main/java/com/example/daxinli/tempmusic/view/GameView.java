@@ -1,5 +1,6 @@
 package com.example.daxinli.tempmusic.view;
 
+import android.content.Intent;
 import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.MySurfaceView;
@@ -118,17 +119,24 @@ public class GameView extends BaseView {
             actionThread.turnPause();
             mainSlideThread.turnPause();
         }
-        public void turnToView(int x) {
+        public void turnToView(int x) {             //在这里进行view之间的转换 //需要向服务器通知
             //关闭所有线程
             closeThread();
-            isThClose = true;           //设置线程关闭位
+            isThClose = true;           //设置线程关闭// 位
+            Intent intent = new Intent();
+            intent.putExtra("ratio",(int)(GameData.gameProgressRatio*100));
+            intent.putExtra("score",GameData.GameScore);
             switch(x) {
                 case 1:
                     //将主界面设置为gameoverView
-                    MySurfaceView.curView = MySurfaceView.gameoverView;
+                    if(father.activityType==MySurfaceView.ACTYPE_SINGLEGAMETYPE)
+                        MySurfaceView.curView = MySurfaceView.gameoverView;
+                    father.onTurnView(1,intent);
                     break;
                 case 2:
-                    MySurfaceView.curView = MySurfaceView.gameVictoryView;
+                    if(father.activityType==MySurfaceView.ACTYPE_SINGLEGAMETYPE)
+                        MySurfaceView.curView = MySurfaceView.gameVictoryView;
+                    father.onTurnView(1,intent);
                     break;
             }
         }

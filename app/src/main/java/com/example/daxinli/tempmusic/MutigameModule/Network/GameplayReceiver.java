@@ -22,6 +22,8 @@ public class GameplayReceiver extends BroadcastReceiver {
             mcontext.showAlertDialog("!!!∑(ﾟДﾟノ)ノ","王八蛋老板黄鹤...",1);
         } else if(msg.startsWith("<#NETWORKDOWN#>")) {
             mcontext.showAlertDialog("555...", "我们的服务器牺牲了,请您回退TAT",1);
+        } else if(msg.startsWith("<#MUTIPALYVIEW#>")) {
+
         }
     }
 }

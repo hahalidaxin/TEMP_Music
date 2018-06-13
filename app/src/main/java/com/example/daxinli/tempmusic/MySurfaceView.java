@@ -1,12 +1,15 @@
 package com.example.daxinli.tempmusic;
 
 import android.content.Context;
+import android.content.Intent;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.MatrixState.MatrixState2D;
+import com.example.daxinli.tempmusic.MutigameModule.Activity.gameplay.MutiPlayActivity;
 import com.example.daxinli.tempmusic.constant.GameData;
 import com.example.daxinli.tempmusic.musicTouch.GameActivity;
 import com.example.daxinli.tempmusic.util.manager.ShaderManager;
@@ -20,7 +23,10 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 public class MySurfaceView extends GLSurfaceView {
-    public GameActivity  activity;
+    public static final int ACTYPE_MUTIGAMETYPE=1111;
+    public static final int ACTYPE_SINGLEGAMETYPE=2222;
+    public int activityType;
+    public Context activity;
     public static BaseView curView;         //注意 这里声明的是static类型 所以一个程序只会创建一次 不会重复进行创建
     public static GameView gameView;
     public static GameoverView gameoverView;
@@ -37,7 +43,13 @@ public class MySurfaceView extends GLSurfaceView {
     public MySurfaceView(Context context)
     {
         super(context);
-        activity=(GameActivity) context;
+        if(context instanceof GameActivity) {
+            this.activityType = ACTYPE_SINGLEGAMETYPE;
+        } else if(context instanceof MutiPlayActivity) {
+            this.activityType = ACTYPE_MUTIGAMETYPE;
+        }
+        activity = context;
+
         this.setEGLContextClientVersion(3);
 
         mRenderer = new SceneRenderer();
@@ -82,7 +94,11 @@ public class MySurfaceView extends GLSurfaceView {
         //curView = null;                 //退出 直接将curView设置为null 这样可以避免curView的不及时绘制
         gameView.closeThread();
         //结束游戏actviity
-        activity.removeActivity();
+        if(this.activityType==ACTYPE_SINGLEGAMETYPE) {
+            ((GameActivity)activity).removeActivity();
+        } else if(this.activityType==ACTYPE_MUTIGAMETYPE) {
+            ((MutiPlayActivity)activity).exitActivity(0);
+        }
     }
     private class SceneRenderer implements GLSurfaceView.Renderer
     {
@@ -128,6 +144,14 @@ public class MySurfaceView extends GLSurfaceView {
             GLES30.glEnable(GL10.GL_CULL_FACE);
             ShaderManager.loadCodeFromFile(activity.getResources());
             ShaderManager.compileShader();
+        }
+    }
+    public void onTurnView(int type ,Intent intent) {
+        //1 : gameView->gameoverView
+        //2: gameView->gameVictoryView
+        Log.e(TAG, "onTurnView: ");
+        if(this.activityType==ACTYPE_MUTIGAMETYPE) {
+            ((MutiPlayActivity)activity).onSendMessage(type,intent);
         }
     }
 

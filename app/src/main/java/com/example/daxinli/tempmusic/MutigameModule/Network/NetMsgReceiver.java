@@ -23,6 +23,7 @@ public class NetMsgReceiver extends Thread {
     public static final String MUSICOVER_AC_ACTION="com.example.daxinli.tempmusic.musicoveraction";
     public static final String MUTIGAMING_AC_ACTION="com.example.daxinli.tempmusic.mutigamingaction";
     public static final String CHOOSE_AC_ACTION="com.example.daxinli.tempmusic.chooseacaction";
+    public static final String MUTIGAMERECEIVE_AC_ACTION="com.example.daxinli.tempmusic.mutiresultaction";
 
     private static final String TAG = "NetMsgReceiver";
     public static final String SERVER_IP = "192.168.137.1";
@@ -96,6 +97,11 @@ public class NetMsgReceiver extends Thread {
                         Intent intent = new Intent();
                         intent.putExtra("msg",msg);
                         intent.setAction(CHOOSE_AC_ACTION);
+                        mcontext.sendBroadcast(intent);
+                    } else if(msg.startsWith("<#MUTIRES#>")) {
+                        Intent intent = new Intent();
+                        intent.putExtra("msg",msg);
+                        intent.setAction(MUTIGAMERECEIVE_AC_ACTION);
                         mcontext.sendBroadcast(intent);
                     }
                 }catch(Exception e) {
