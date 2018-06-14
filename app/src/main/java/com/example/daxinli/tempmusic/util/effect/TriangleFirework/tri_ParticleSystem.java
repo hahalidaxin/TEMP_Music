@@ -1,7 +1,5 @@
 package com.example.daxinli.tempmusic.util.effect.TriangleFirework;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -19,6 +17,7 @@ import java.util.Random;
 //            int lifeTime,int vgType)          总生命周期，vg因子类型
 
 public class tri_ParticleSystem {
+    private static final int colorRandomDELTA=100;
     private static final String TAG = "tri_ParticleSystem";
     ArrayList<tri_ParticleSingle> tris;
     int state;
@@ -26,16 +25,27 @@ public class tri_ParticleSystem {
     long lastTime;
     int lifeTime ;
     int particleType = 1;
+    int mainColor;
     Random random = new Random();
     boolean isEnd = false;
+
+
     public tri_ParticleSystem(int particleType,float startX,float startY) {       //粒子系统的类型
         this.particleType = particleType;
         initData(startX,startY);
+    }
+    public tri_ParticleSystem(float posX,float posY) {    //当触摸到的时候直接开始第二阶段
+        initData(posX,posY);
+        tris.get(0).isDead = true;
+        this.particleType = random.nextInt(2)+1;
+        this.lifeTime-=1000;
+        runStateTwo(this.particleType);
     }
     public void initData(float X,float Y) {
         //第一个三角形粒子
         tris = new ArrayList<tri_ParticleSingle>();           //初始化粒子数组
         int c = random.nextInt(tri_ParticleData.triColor.length);
+        mainColor = c;
         float a = tri_ParticleData.triColor[c][0],r = tri_ParticleData.triColor[c][1],
                 g=tri_ParticleData.triColor[c][2],b=tri_ParticleData.triColor[c][3];
         float vx = 0 * tri_ParticleData.moveSpan[3];
@@ -65,8 +75,10 @@ public class tri_ParticleSystem {
                     int rAngSpan = random.nextInt(tri_ParticleData.AngleSpan.length);
                     int rScaleF = random.nextInt(tri_ParticleData.ScaleFactor.length);
                     int c = random.nextInt(tri_ParticleData.triColor.length);
-                    float a = tri_ParticleData.triColor[c][0],r = tri_ParticleData.triColor[c][1],
-                            g=tri_ParticleData.triColor[c][2],b=tri_ParticleData.triColor[c][3];
+                    float a = tri_ParticleData.triColor[mainColor][0];
+                    float r = tri_ParticleData.triColor[mainColor][1]+random.nextInt(colorRandomDELTA)/255.0f;
+                    float g = tri_ParticleData.triColor[mainColor][2]+random.nextInt(colorRandomDELTA)/255.0f;
+                    float b = tri_ParticleData.triColor[mainColor][3]+random.nextInt(colorRandomDELTA)/255.0f;
                     int rVG = random.nextInt(tri_ParticleData.vg.length);
                     //if(i<5) rVG = 0;
                     rVG = 2;
@@ -88,8 +100,10 @@ public class tri_ParticleSystem {
                     int rAngSpan = random.nextInt(tri_ParticleData.AngleSpan.length);
                     int rScaleF = random.nextInt(tri_ParticleData.ScaleFactor.length-3);
                     int c = random.nextInt(tri_ParticleData.triColor.length);
-                    float a = tri_ParticleData.triColor[c][0],r = tri_ParticleData.triColor[c][1],
-                            g=tri_ParticleData.triColor[c][2],b=tri_ParticleData.triColor[c][3];
+                    float a = tri_ParticleData.triColor[mainColor][0];
+                    float r = tri_ParticleData.triColor[mainColor][1]+random.nextInt(colorRandomDELTA)/255.0f;
+                    float g = tri_ParticleData.triColor[mainColor][2]+random.nextInt(colorRandomDELTA)/255.0f;
+                    float b = tri_ParticleData.triColor[mainColor][3]+random.nextInt(colorRandomDELTA)/255.0f;
                     float vx = -(float)Math.cos(i * Math.PI/6) * tri_ParticleData.moveSpan[i+2];
                     float vy = -(float)Math.sin(i * Math.PI/6) * tri_ParticleData.moveSpan[i+1];
                     int rVG = 2;//random.nextInt(tri_ParticleData.vg.length);
@@ -104,8 +118,10 @@ public class tri_ParticleSystem {
                     rAngSpan = random.nextInt(tri_ParticleData.AngleSpan.length);
                     rScaleF = random.nextInt(tri_ParticleData.ScaleFactor.length-3);
                     c = random.nextInt(tri_ParticleData.triColor.length);
-                    a = tri_ParticleData.triColor[c][0];r = tri_ParticleData.triColor[c][1];
-                            g=tri_ParticleData.triColor[c][2];b=tri_ParticleData.triColor[c][3];
+                    a = tri_ParticleData.triColor[mainColor][0];
+                    r = tri_ParticleData.triColor[mainColor][1]+random.nextInt(colorRandomDELTA)/255.0f;
+                    g = tri_ParticleData.triColor[mainColor][2]+random.nextInt(colorRandomDELTA)/255.0f;
+                    b = tri_ParticleData.triColor[mainColor][3]+random.nextInt(colorRandomDELTA)/255.0f;
                     vx = -(float)Math.cos(Math.PI-i * Math.PI/6) * tri_ParticleData.moveSpan[i+2];
                     vy = -(float)Math.sin(Math.PI-i * Math.PI/6) * tri_ParticleData.moveSpan[i+1];
                     rVG = 2;//random.nextInt(tri_ParticleData.vg.length);

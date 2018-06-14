@@ -51,7 +51,6 @@
         <activity android:name=".MutigameModule.Activity.gameplay.ChooseMusicActivity" />
         <activity android:name=".MutigameModule.Activity.gameplay.MutiPlayActivity" />
         <activity android:name=".musicTouch.TestActivity">
-
         </activity>
         <activity android:name=".MutigameModule.Activity.gameplay.MutiGameResultActivity">
         </activity>

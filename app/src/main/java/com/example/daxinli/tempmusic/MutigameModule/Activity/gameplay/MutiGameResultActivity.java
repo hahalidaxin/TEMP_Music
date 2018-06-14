@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.daxinli.tempmusic.MutigameModule.Network.MutiGameResultReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
@@ -41,6 +42,7 @@ public class MutiGameResultActivity extends AppCompatActivity {
         }
     };
     private int[] RID_Include = {R.id.include_res1,R.id.include_res2,R.id.include_res3,R.id.include_res4};
+    private int[] DID_iconInstru = {R.drawable.icon_instru1_p1,R.drawable.icon_instru2_p1,R.drawable.icon_instru3_p1,R.drawable.icon_instru4_p1};
     private LinearLayout[] linear_result = new LinearLayout[4];
     private LinearLayout linear_finalRes;
     private int nowResNum=0;
@@ -102,7 +104,7 @@ public class MutiGameResultActivity extends AppCompatActivity {
             decorView.setSystemUiVisibility(flag);
         }
     }
-    public void addResult(int instruType,final int ratio,final int score) {
+    public void addResult(final int instruType, final int ratio, final int score) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -110,6 +112,7 @@ public class MutiGameResultActivity extends AppCompatActivity {
                 //linear_result[nowResNum].findViewById(R.id.image_instru_mutires);
                 ((ProgressBar)li.findViewById(R.id.progress_GameRatio_mutires)).setProgress(ratio);
                 ((TextView)li.findViewById(R.id.text_resScore_mutires)).setText("得分："+Integer.toString(score));
+                Glide.with(MutiGameResultActivity.this).load(DID_iconInstru[instruType]).into((ImageView) li.findViewById(R.id.image_instru_mutires));
                 linear_result[nowResNum++].setVisibility(View.VISIBLE);
             }
         });

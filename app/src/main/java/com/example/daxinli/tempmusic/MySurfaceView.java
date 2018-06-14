@@ -120,6 +120,7 @@ public class MySurfaceView extends GLSurfaceView {
         }
         public void onSurfaceChanged(GL10 gl, int width, int height)
         {
+            Log.e(TAG, String.format("onSurfaceChanged: %d %d",width,height));
             //设置视口的大小 为当前view的宽高
             GameData.REAL_WIDTH = width;
             GameData.REAL_HEIGHT = height;

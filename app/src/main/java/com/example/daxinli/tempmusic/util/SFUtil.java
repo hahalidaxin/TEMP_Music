@@ -3,7 +3,9 @@ package com.example.daxinli.tempmusic.util;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
+
 import com.example.daxinli.tempmusic.util.elseUtil.Area;
 
 /**
@@ -63,5 +65,19 @@ public class SFUtil {
         paint.setColor(Color.argb(100,202,255,115));
         canvas.drawRect(startX,startY,startX+width,startY+height,paint);
         canvas.restore();
+    }
+    static public Bitmap resizeBitmap(Bitmap bitmap, int w, int h) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        float scaleWidth = ((float) w) / width;
+        float scaleHeight = ((float) h) / height;
+
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width,
+                height, matrix, true);
+        return resizedBitmap;
     }
 }

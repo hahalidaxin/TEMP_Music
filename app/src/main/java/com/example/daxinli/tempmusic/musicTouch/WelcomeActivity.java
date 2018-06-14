@@ -12,7 +12,11 @@ import com.example.daxinli.tempmusic.R;
 import com.example.daxinli.tempmusic.constant.GameData;
 import com.example.daxinli.tempmusic.thread.Login_NetworkThread;
 import com.example.daxinli.tempmusic.util.manager.SoundManager;
+import com.example.daxinli.tempmusic.view.floatbackground.FloatBackLayout;
+import com.example.daxinli.tempmusic.view.floatbackground.FloatBitmap;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import java.util.Random;
 
 
 public class WelcomeActivity extends BaseActivity implements View.OnClickListener {
@@ -21,12 +25,17 @@ public class WelcomeActivity extends BaseActivity implements View.OnClickListene
     private Button btn_GameSettings;
     private Button btn_GameExit;
     private Button btn_GameAbout;
+    private FloatBackLayout floatBackLayout;
     private AVLoadingIndicatorView ani_Loading;
     public static SoundManager sound;
     private WelcomeActivity mActivity;
     private static final String TAG = "WelcomeActivity";
     private Handler handler;
     public Login_NetworkThread networkThread;
+    private Random random = new Random();
+
+    private int RID_picNote[] = {R.drawable.pic_note1,R.drawable.pic_note2,R.drawable.pic_note3,R.drawable.pic_note4,
+            R.drawable.pic_note5,R.drawable.pic_note6};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +75,7 @@ public class WelcomeActivity extends BaseActivity implements View.OnClickListene
         } catch(Exception e) {
             e.printStackTrace();
         }
+        if(floatBackLayout!=null) floatBackLayout.startFloat();
     }
     @Override
     protected void onPause() {
@@ -77,6 +87,7 @@ public class WelcomeActivity extends BaseActivity implements View.OnClickListene
         } catch(Exception e) {
             e.printStackTrace();
         }
+        if(floatBackLayout!=null) floatBackLayout.endFloat();
     }
     public void initGame() {
         //开启新线程加载音乐
@@ -107,11 +118,36 @@ public class WelcomeActivity extends BaseActivity implements View.OnClickListene
         btn_MutipleGame = (Button) findViewById(R.id.btn_MutipleGame);
         btn_GameSettings = (Button) findViewById(R.id.btn_GameSettings);
         btn_GameExit= (Button) findViewById(R.id.btn_GameExit);
+        floatBackLayout = (FloatBackLayout)findViewById(R.id.welcome_floatbackground);
 
         btn_GameStart.setOnClickListener(this);
         btn_GameExit.setOnClickListener(this);
         btn_GameSettings.setOnClickListener(this);
         btn_MutipleGame.setOnClickListener(this);
+
+        floatBackLayout.setBackGround(this,R.drawable.pic_start_backg);
+        for(int i=0;i<6;i++) {
+            float posX = ((float)random.nextInt(100)/100.0f);
+            float posY = ((float)random.nextInt(100)/100.0f);
+            floatBackLayout.addFloatView(new FloatBitmap(this,posX,posY,RID_picNote[i]));
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        floatBackLayout.startFloat();
+                    }
+                });
+            }
+        }).start();
+
     }
 
     @Override
@@ -136,4 +172,5 @@ public class WelcomeActivity extends BaseActivity implements View.OnClickListene
                 break;
         }
     }
+
 }

@@ -22,6 +22,7 @@ import java.util.HashMap;
 			"pic_kb_r7.png","pic_kb_r8.png","pic_kb_r9.png","pic_kb_r10.png","pic_kb_r11.png","pic_kb_r12.png","pic_kb_r13.png",        //43
 			"btn_startGame_pre.png","down_right.png",    //45-
 			"btn_exitgame1_gov.png","btn_exitgame2_gov.png", //47
+			"pic_GameOver_downBar.png",//48
 		};
 	
 	static HashMap<String,Integer> texList=new HashMap<String,Integer>();

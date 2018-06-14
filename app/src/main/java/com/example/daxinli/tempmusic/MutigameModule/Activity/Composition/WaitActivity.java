@@ -29,6 +29,7 @@ import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
 import com.example.daxinli.tempmusic.R;
 import com.example.daxinli.tempmusic.musicTouch.BaseActivity;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import master.flame.danmaku.controller.DrawHandler;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
 import master.flame.danmaku.danmaku.model.DanmakuTimer;
@@ -51,7 +52,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
     EditText editText_BPM;
     LinearLayout lilayout;
 
-    public final String[] instruNametoShow = { "钢琴","钢琴","钢琴","钢琴" };
+    public final String[] instruNametoShow = { "钢琴","吉他","打击","响铃" };
     int[] RID_imgInstru = {R.id.img_Instru1_wait1,R.id.img_Instru2_wait1,
             R.id.img_Instru3_wait1,R.id.img_Instru4_wait1};
     int[] RID_liInstru = {R.id.li_instru0,R.id.li_instru1,R.id.li_instru2,R.id.li_instru3};
@@ -61,7 +62,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
             R.drawable.pic_instru2_p0,R.drawable.pic_instru2_p1,
             R.drawable.pic_instru3_p0,R.drawable.pic_instru3_p1,
             R.drawable.pic_instru4_p0,R.drawable.pic_instru4_p1};
-    de.hdodenhof.circleimageview.CircleImageView[] img_stru= new de.hdodenhof.circleimageview.CircleImageView[4];
+    CircleImageView[] img_stru= new CircleImageView[4];
     TextView[] text_instru = new TextView[4];
 
     private NetworkService.MyBinder myBinder;
@@ -141,7 +142,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
         btn_sendDanmu.setOnClickListener(this);
         //通过提前设计变量可以进行统一的设计
         for(int i=0;i<4;i++) {
-            img_stru[i] = (de.hdodenhof.circleimageview.CircleImageView) findViewById(RID_imgInstru[i]);
+            img_stru[i] = (CircleImageView) findViewById(RID_imgInstru[i]);
             img_stru[i].setOnClickListener(this);
             Glide.with(this).load(RDRAW_img[i*2]).into(img_stru[i]);
             text_instru[i] = (TextView) findViewById(RID_textInstri[i]);

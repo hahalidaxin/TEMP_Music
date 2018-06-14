@@ -7,7 +7,7 @@ package com.example.daxinli.tempmusic.util.effect.TriangleFirework;
 
 public class tri_ParticleData {
     //lifeTime和moveSpan可以组合出三角形的生命周期效果
-    public static final float[] AngleSpan = {0.2f,0.4f,0.6f,0.8f,1f};      //每次三角形的旋转角度 //5
+    public static final float[] AngleSpan = {1.2f,1.4f,1.6f,1.8f,1f};      //每次三角形的旋转角度 //5
     public static final float[] ScaleFactor = {0.97f,0.98f,0.985f,0.99f,0.95f};      //每次三角形的每次缩小程度   //5
     public static final int sysLifeTime = 3000;        //粒子系统的总声明周期
     public static final int[] singleLifeTime = { 800,1000,1200,1400,1600,1800,2000 };  //每个粒子的声明周期 可选择  //3

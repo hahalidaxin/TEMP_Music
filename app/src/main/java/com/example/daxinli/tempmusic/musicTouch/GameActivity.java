@@ -2,8 +2,9 @@ package com.example.daxinli.tempmusic.musicTouch;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.example.daxinli.tempmusic.MySurfaceView;
@@ -16,6 +17,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class GameActivity extends BaseActivity {
+    private static final String TAG = "GameActivity";
     public MySurfaceView mySurfaceView;
     public static SharedPreferences.Editor editor;  //保存上次退出的保留
     public static SharedPreferences sp;
@@ -41,10 +43,11 @@ public class GameActivity extends BaseActivity {
         this.removeActivity();
     }
     public void initScreenData() {
-        DisplayMetrics dm=new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        Constant.ssr= ScreenScaleUtil.calScale(dm.widthPixels, dm.heightPixels);
-        //System.out.println(Integer.toString(dm.widthPixels)+" "+Integer.toString(dm.heightPixels));
+        //避免状态栏和虚拟按键的干扰 获得真实显示的屏幕信息
+        Point point = new Point();
+        getWindowManager().getDefaultDisplay().getRealSize(point);
+        Log.d(TAG,"the screen size is "+point.toString());
+        Constant.ssr= ScreenScaleUtil.calScale(point.x, point.y);
     }
     public void loadSettings() {
         sp = this.getSharedPreferences("settings", Context.MODE_PRIVATE);
