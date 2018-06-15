@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.daxinli.tempmusic.view.floatbackground.FloatBackLayout
-    android:id="@+id/floatbackLayout_backg"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:layout_marginTop="100dp"
-        android:id="@+id/test_btn2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="end" />
+    <com.example.daxinli.tempmusic.util.effect.pathviewer.PathView
+        android:id="@+id/path_view1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-    <Button
-        android:id="@+id/test_btn1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="start" />
-</com.example.daxinli.tempmusic.view.floatbackground.FloatBackLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="哈哈哈"/>
+    </LinearLayout>
+</FrameLayout>
