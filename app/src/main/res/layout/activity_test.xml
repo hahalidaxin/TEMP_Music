@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.example.daxinli.tempmusic.util.effect.pathviewer.PathView
-        android:id="@+id/path_view1"
+    <com.example.daxinli.tempmusic.util.effect.pathviewer.PathSurfaceView
+        android:id="@+id/test_pathView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

@@ -33,7 +33,13 @@
         <activity
             android:name=".MutigameModule.Activity.Composition.CompositionActivity"
             android:screenOrientation="landscape" />
-        <activity android:name=".MutigameModule.Activity.Composition.WaitActivity" />
+        <activity android:name=".MutigameModule.Activity.Composition.WaitActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".MutigameModule.Activity.CreateAHomeActivity"
             android:launchMode="singleTask" />
@@ -46,11 +52,6 @@
         <activity android:name=".MutigameModule.Activity.gameplay.ChooseMusicActivity" />
         <activity android:name=".MutigameModule.Activity.gameplay.MutiPlayActivity" />
         <activity android:name=".musicTouch.TestActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".MutigameModule.Activity.gameplay.MutiGameResultActivity">
         </activity>

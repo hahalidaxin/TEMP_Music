@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.example.daxinli.tempmusic.util.effect.pathviewer.PathSurfaceView
+        android:id="@+id/wait_pathView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,11 +17,51 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <master.flame.danmaku.ui.widget.DanmakuView
-            android:id="@+id/danmakuview_leader"
-            android:layout_marginTop="20dp"
+        <ImageView
+            android:layout_margin="30dp"
+            android:id="@+id/wait_titleDanmu"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:layout_width="200dp"
+            android:layout_height="50dp" />
+        <FrameLayout
+            android:layout_marginTop="30dp"
             android:layout_width="match_parent"
-            android:layout_height="150dp" />
+            android:layout_height="130dp" >
+
+            <master.flame.danmaku.ui.widget.DanmakuView
+                android:id="@+id/danmakuview_leader"
+                android:layout_marginTop="10dp"
+                android:layout_width="340dp"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/wait_picliaotian"
+                android:layout_width="340dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center" />
+        </FrameLayout>
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/edittext_danmu_createhome"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_edittext"
+                android:layout_marginLeft="23dp"
+                android:gravity="left"
+                android:hint="听说会发弹幕的都有女朋友哦~"
+                android:textColor="@color/colorBlue"
+                android:textSize="15dp" />
+            <Button
+                android:id="@+id/btn_danmusend_createhome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="发射"/>
+        </LinearLayout>
         <LinearLayout
             android:layout_marginTop="30dp"
             android:layout_width="match_parent"
@@ -109,21 +155,27 @@
             android:orientation="horizontal">
             <TextView
                 android:layout_marginLeft="20dp"
+                android:textColor="@color/colorWhite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="音乐名："/>
             <EditText
+                android:textColor="@color/colorWhite"
                 android:layout_marginLeft="5dp"
                 android:id="@+id/edittext_musicname"
                 android:layout_width="100dp"
                 android:layout_height="40dp"
+                android:textSize="10dp"
                 android:text="new_Music"/>
             <TextView
+                android:textColor="@color/colorWhite"
                 android:layout_marginLeft="30dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="BPM："/>
             <EditText
+                android:textColor="@color/colorWhite"
+                android:textSize="10dp"
                 android:id="@+id/edittext_bpm"
                 android:layout_marginLeft="5dp"
                 android:layout_width="wrap_content"
@@ -132,6 +184,7 @@
                 android:text="120"/>
         </LinearLayout>
         <TextView
+            android:textColor="@color/colorWhite"
             android:layout_marginTop="30dp"
             android:layout_gravity="center"
             android:id="@+id/text_amout_peoplein"
@@ -145,27 +198,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="开始游戏"/>
-        <LinearLayout
-            android:layout_marginTop="80dp"
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/edittext_danmu_createhome"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:gravity="left"
-                android:hint="听说会发弹幕的都有女朋友哦~"
-                android:textColor="@color/colorBlue"
-                android:textSize="15dp" />
-            <Button
-                android:id="@+id/btn_danmusend_createhome"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="发射"/>
-        </LinearLayout>
+
 
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>
+</FrameLayout>

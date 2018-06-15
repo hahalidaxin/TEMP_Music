@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Color;
+import android.graphics.Path;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -28,6 +30,11 @@ import com.example.daxinli.tempmusic.MutigameModule.Network.WaitACReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
 import com.example.daxinli.tempmusic.R;
 import com.example.daxinli.tempmusic.musicTouch.BaseActivity;
+import com.example.daxinli.tempmusic.util.effect.pathviewer.PathSurfaceView;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import master.flame.danmaku.controller.DrawHandler;
@@ -108,6 +115,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
         connectType = mintent.getIntExtra("connectType",-1);
         setContentView(R.layout.activity_wait1);
 
+        initPathView();
         initView();
     }
     void initView() {
@@ -148,6 +156,8 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
             text_instru[i] = (TextView) findViewById(RID_textInstri[i]);
             text_instru[i].setText("");
         }
+        Glide.with(this).load(R.drawable.text_danmuliaotian).into((ImageView)findViewById(R.id.wait_titleDanmu));
+        Glide.with(this).load(R.drawable.pic_liaotianshi).into((ImageView)findViewById(R.id.wait_picliaotian));
         //danmaku的初始化基本操作
        // netMsgSender = new NetMsgSender(this);
         danmakuView.enableDanmakuDrawingCache(true);
@@ -391,4 +401,73 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
         });
     }
 
+    PathSurfaceView pathSurfaceView;
+    private void initPathView() {
+        int pathCnt=0;
+        pathSurfaceView = (PathSurfaceView)findViewById(R.id.wait_pathView);
+
+        BufferedReader reader = null;
+        InputStream in = null;
+        long start = System.currentTimeMillis();
+        try {
+            in = getResources().getAssets().open("text/bliLine.txt");
+            reader = new BufferedReader(new InputStreamReader(in));
+            String line;
+            String[] strs = reader.readLine().trim().split(" ");
+            float imgW = Float.parseFloat(strs[0]);
+            float imgH = Float.parseFloat(strs[1]);
+            while((line=reader.readLine())!=null) {
+                if(line.length()==0) continue;
+                strs = line.trim().split(" ");
+                int n = Integer.parseInt(strs[0].trim());
+                int type = Integer.parseInt(strs[1].trim());
+                Path npath = new Path();
+                Path n2path = new Path();
+
+                for(int i=0;i<n;i++) {
+                    strs = reader.readLine().trim().split(" ");
+                    float x = Float.parseFloat(strs[0]);
+                    float y = Float.parseFloat(strs[1]);
+                    x = (x/imgW*1080.0f);
+                    y = (y/imgH*1920.0f);
+                    if(i==0) {
+                        npath.moveTo(x,y);
+                        n2path.moveTo(1080.0f-x,y);
+                    }
+                    else {
+                        npath.lineTo(x,y);
+                        n2path.lineTo(1080.0f-x,y);
+                    }
+                }
+                int lineWidth  = pathCnt<10?5:10;
+                pathSurfaceView.addNewPath(lineWidth, type, npath);
+                pathSurfaceView.addNewPath(lineWidth, type, n2path);
+                pathCnt++;
+            }
+            pathCnt*=2;
+            in.close();
+            reader.close();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(true) {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    runOnUiThread(new Runnable() {
+                                      @Override
+                                      public void run() {
+                                          pathSurfaceView.startAnimation(WaitActivity.this);
+                                      }
+                                  }
+                    );
+                }
+            }
+        }).start();
+    }
 }

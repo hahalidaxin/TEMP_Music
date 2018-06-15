@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.example.daxinli.tempmusic.util.effect.pathviewer.PathSurfaceView
+        android:id="@+id/createhome_pathView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,6 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="50dp"
+            android:textColor="@color/colorWhite"
             android:text="创建您的房间"/>
         <TextView
             android:layout_marginTop="40dp"
@@ -23,6 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20dp"
+            android:textColor="@color/colorWhite"
             android:text="输入房间密钥："/>
         <EditText
             android:id="@+id/editText_homepassword"
@@ -30,8 +38,11 @@
             android:layout_gravity="center"
             android:layout_width="200dp"
             android:gravity="center"
+            android:textColor="@color/colorWhite"
             android:layout_height="wrap_content"
-            android:hint="YourPasswordHere"/>
+            android:textColorHint="@color/colorWhite"
+            android:textSize="10dp"
+            android:hint="请输入密码"/>
         <Button
             android:id="@+id/btn_createYourHome"
             android:layout_marginTop="20dp"
@@ -48,4 +59,5 @@
             android:text="演奏乐曲"/>
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>
+</FrameLayout>

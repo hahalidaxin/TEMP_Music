@@ -5,11 +5,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.daxinli.tempmusic.R;
-import com.example.daxinli.tempmusic.util.effect.pathviewer.PathView;
+import com.example.daxinli.tempmusic.util.effect.pathviewer.PathSurfaceView;
 import com.example.daxinli.tempmusic.view.floatbackground.FloatBackLayout;
 
 import java.io.BufferedReader;
@@ -36,20 +35,13 @@ public class TestActivity extends AppCompatActivity{
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
             decorView.setSystemUiVisibility(flag);
         }
-        init();
+        initPathView();
     }
 
-    private int[] RID_pathView = {R.id.path_view1};/*, R.id.path_view2,R.id.path_view3,R.id.path_view4,
-                    R.id.path_view5,R.id.path_view6,R.id.path_view7,R.id.path_view8,R.id.path_view9,R.id.path_view10,
-            R.id.path_view11,R.id.path_view12,R.id.path_view13,R.id.path_view14,R.id.path_view15,R.id.path_view16
-            ,R.id.path_view17,R.id.path_view18,R.id.path_view19,R.id.path_view20}; */
-    PathView [] pathViews = new PathView[20];
-    private int pathCnt;
-
-    private void init() {
-        for(int i=0;i<1;i++) {
-            pathViews[i] = (PathView) findViewById(RID_pathView[i]);
-        }
+    PathSurfaceView pathSurfaceView;
+    private void initPathView() {
+        int pathCnt;
+        pathSurfaceView = (PathSurfaceView)findViewById(R.id.test_pathView);
 
         ArrayList<Path> paths = new ArrayList<Path>();
         pathCnt=0;
@@ -89,12 +81,10 @@ public class TestActivity extends AppCompatActivity{
                         n2path.lineTo(1080.0f-x,y);
                     }
                 }
-                pathViews[pathCnt].setPath(npath);
-                pathViews[pathCnt].setLineWidth(5);
-                pathViews[pathCnt].setMode(type);
-                pathViews[pathCnt+10].setPath(n2path);
-                pathViews[pathCnt+10].setLineWidth(5);
-                pathViews[pathCnt].setMode(type);
+                int lineWidth  = pathCnt<10?5:10;
+                pathSurfaceView.addNewPath(lineWidth, type, npath);
+                pathSurfaceView.addNewPath(lineWidth, type, n2path);
+
                 paths.add(npath);
                 pathCnt++;
             }
@@ -103,52 +93,28 @@ public class TestActivity extends AppCompatActivity{
             in.close();
             reader.close();
             long end = System.currentTimeMillis();
-            Log.e(TAG, String.format("initTIme: %d",end-start));
         } catch(Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        switch(event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                long start = System.currentTimeMillis();
-                Log.e(TAG, "onTouchEvent: " );
-                for(int i=0;i<pathCnt/2;i++) {
-                    if(i==1 || i==4) {
-                        long sleepTime=0;
-                        if(i==1) sleepTime = 1000;
-                        else if(i==4) sleepTime = 2000;
-                        final long finalSleepTime=sleepTime;
-                        final int finali = i;
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    Thread.sleep(finalSleepTime);
-                                }catch(Exception e) {
-                                    e.printStackTrace();
-                                }
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        pathViews[finali].startAnimation();
-                                        //pathViews[finali+10].startAnimation();
-                                    }
-                                });
-                            }
-                        }).start();
-                    } else {
-                        pathViews[i].startAnimation();
-                        //pathViews[i+10].startAnimation();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(true) {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+                    runOnUiThread(new Runnable() {
+                                      @Override
+                                      public void run() {
+                                          pathSurfaceView.startAnimation(TestActivity.this);
+                                      }
+                                  }
+                    );
                 }
-                long end = System.currentTimeMillis();
-                Log.e(TAG, String.format("onTouchEvent: %d",end-start));
-                break;
-        }
-        return super.onTouchEvent(event);
+            }
+        }).start();
     }
 
     @Override

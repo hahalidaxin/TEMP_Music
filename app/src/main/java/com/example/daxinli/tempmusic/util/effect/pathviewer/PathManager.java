@@ -3,19 +3,14 @@ package com.example.daxinli.tempmusic.util.effect.pathviewer;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
-import android.graphics.PixelFormat;
-import android.graphics.PorterDuff;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntDef;
 import android.support.annotation.IntRange;
-import android.util.AttributeSet;
-import android.view.SurfaceHolder;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -27,13 +22,17 @@ import java.util.concurrent.Semaphore;
  * 用来管理一条路路径
  */
 
-public class PathViewManager {
+public class PathManager {
+    @IntDef({TRAIN_MODE, AIRPLANE_MODE})
+    @IntRange(from = AIRPLANE_MODE, to = TRAIN_MODE)
+    @Retention(RetentionPolicy.SOURCE)
+    private @interface Mode {
+    }
+
+
     public static final int AIRPLANE_MODE = 0; // 一开始不显示灰色线条，粉红色线条走过后才留下灰色线条
     public static final int TRAIN_MODE = 1;// 一开始就显示灰色线条，并且一直显示，直到动画结束
-
-    private volatile boolean isDrawing;
     private Semaphore mLightLineSemaphore, mDarkLineSemaphore;      //限制使用某种资源的线程数目
-    private SurfaceHolder mSurfaceHolder;
     private Keyframes mKeyframes;
     private int mMode;
     private float[] mLightPoints;
@@ -45,24 +44,11 @@ public class PathViewManager {
     private Paint mPaint;
     private int mAlpha;
 
-    public PathViewManager(Context context) {
-        this(context, null);
-    }
-
-    public PathViewManager(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    public PathViewManager(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public PathManager() {
         init();
     }
 
     private void init() {
-        setZOrderOnTop(true);
-        mSurfaceHolder = getHolder();
-        mSurfaceHolder.setFormat(PixelFormat.TRANSLUCENT);
-        mSurfaceHolder.addCallback(this);
 
         //初始化画笔
         mPaint = new Paint();
@@ -70,7 +56,7 @@ public class PathViewManager {
         mPaint.setAntiAlias(true);
 
         //默认动画时长
-        mAnimationDuration = 3000L;
+        mAnimationDuration = 800L;
 
         //默认颜色
         mLightLineColor = Color.parseColor("#F17F94");
@@ -81,7 +67,7 @@ public class PathViewManager {
 
     }
 
-    public void setMode(@PathView.Mode int mode) {
+    public void setMode(@PathManager.Mode int mode) {
         if ((mAlphaAnimator != null && mAlphaAnimator.isRunning()) || (mAlphaAnimator != null && mAlphaAnimator.isRunning()))
             throw new IllegalStateException("animation has been started!");
         mMode = mode;
@@ -92,7 +78,7 @@ public class PathViewManager {
     }
 
     public void setPath(Path path) {
-        mKeyframes = new PathView.Keyframes(path);
+        mKeyframes = new Keyframes(path);
         mAlpha = 0;
     }
 
@@ -229,33 +215,7 @@ public class PathViewManager {
         }
     }
 
-    @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-        restart();
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
-        stop();
-    }
-
-    @Override
-    public void run() {
-        while (isDrawing) {
-            Canvas canvas = mSurfaceHolder.lockCanvas();
-            if (canvas == null) return;
-            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-            startDraw(canvas);
-            mSurfaceHolder.unlockCanvasAndPost(canvas);
-        }
-    }
-
-    private void startDraw(Canvas canvas) {             //进行绘画的主函数
+    public void startDraw(Canvas canvas) {             //进行绘画的主函数
         try {
             mDarkLineSemaphore.acquire();
         } catch (InterruptedException e) {
@@ -280,13 +240,7 @@ public class PathViewManager {
         mLightLineSemaphore.release();
     }
 
-    private void restart() {
-        isDrawing = true;
-        new Thread(this).start();
-    }
-
-    private void stop() {
-        isDrawing = false;
+    public void stop() {
         try {
             mDarkLineSemaphore.acquire();
         } catch (InterruptedException e) {

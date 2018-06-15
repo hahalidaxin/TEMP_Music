@@ -1,0 +1,26 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+        <!-- 边框里面背景颜色 白色 -->
+    <item>
+        <shape>
+            <solid android:color="@color/colorWhite" />
+            <corners
+                android:radius="9dp"
+                android:topLeftRadius="2dp"
+                android:topRightRadius="2dp"
+                android:bottomLeftRadius="2dp"
+                android:bottomRightRadius="2dp"/>
+            <padding
+                android:left="8dp"
+                android:top="8dp"
+                android:right="8dp"
+                android:bottom="8dp"/>
+            <stroke
+                android:width="2dp"
+                android:color="@color/color_cursor"
+                android:dashWidth="1dp"
+                android:dashGap="0dp"/>
+        </shape>
+    </item>
+
+</layer-list>

@@ -14,4 +14,5 @@
     <color name="colorGray">#66e4e1e1</color>
     <color name="colorLightGray">#eae8e8</color>
     <color name="black_overlay">#eae8e8</color>
+    <color name="color_cursor">#009688</color>
 </resources>
