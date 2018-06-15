@@ -24,6 +24,7 @@ public class FloatBitmap extends FloatObject {
         setColor(Color.WHITE);
         bitmap = SFUtil.resizeBitmap(((BitmapDrawable) activity.getResources().getDrawable(img))
                 .getBitmap(),100,100);
+        objHeight = 100; objWidth = 100;
     }
 
     @Override

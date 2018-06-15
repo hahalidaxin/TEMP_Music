@@ -14,11 +14,13 @@ import java.util.Random;
 
 public abstract class FloatObject {
     private static final String TAG = "FloatObject";
-    private int status;
+    public int status;
     public static final int START = 0;
     public static final int MOVE = 1;
     public static final int END = 2;
     public static final int FINISH = 3;
+    public static final int DRAG = 4;           //被拖拽的状态
+    public static final int THROW  = 5;
     public static int[] MOVE_ALPHADX = {1,2};
     public int stateOfAlpha=0;
     Random random = new Random();
@@ -26,26 +28,33 @@ public abstract class FloatObject {
     // percent
     float posX;
     float posY;
+    float deltaX;
+    float deltaY;
+    float forceX = 20.0f;       //每次绘制衰减的速度
+    float forceY = 20.0f;
 
     private int width;
     private int height;
-    private float x;
-    private float y;
-    private int alpha;
+    public float objWidth;
+    public float objHeight;
+    public float x;
+    public float y;
+    public int alpha;
 
     private float distance = 500;
-    private float mCurDistance = 0;
+    public float mCurDistance = 0;
 
     private PointF start;
     private Point end;
     private Point c1;
     private Point c2;
     private Paint paint = new Paint();
+    public boolean isDragNow;               //标志现在是否被拖拽
 
     private int ALPHA_LIMIT = 220;
 
     private static final float MOVE_PER_FRAME = 0.4F;
-    private static final int ALPHA_PER_FRAME = 2;
+    private static final int ALPHA_PER_FRAME = 3;
 
     public FloatObject(float posX, float posY) {
         Log.e(TAG, "FloatObject: ");
@@ -65,7 +74,9 @@ public abstract class FloatObject {
         paint.setAntiAlias(true);
         setStatus(FINISH);
     }
-
+    public void setXY(float x,float y) {
+        this.x =x;  this.y =y;
+    }
     public void drawFloatItem(Canvas canvas) {
 
         switch (status) {
@@ -119,6 +130,16 @@ public abstract class FloatObject {
                     setStatus(FINISH);
                 }
                 break;
+            case THROW:
+                x+=deltaX;
+                y+=deltaY;
+                deltaX-=forceX;
+                deltaY-=forceY;
+                if(deltaX<0) {
+                    deltaX = 0; deltaY = 0;
+                    mCurDistance = 0;
+                    setStatus(MOVE);            //重新开始自由移动
+                }
         }
 
         if (status != FINISH) {

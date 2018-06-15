@@ -2,6 +2,8 @@ package com.example.daxinli.tempmusic.musicTouch;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -12,6 +14,7 @@ import com.example.daxinli.tempmusic.view.floatbackground.FloatBitmap;
 import java.util.Random;
 
 public class TestActivity extends AppCompatActivity{
+    private static final String TAG = "TestActivity";
     Random random = new Random();
     FloatBackLayout floatBackLayout;
     @Override
@@ -53,5 +56,13 @@ public class TestActivity extends AppCompatActivity{
                 floatBackLayout.endFloat();
             }
         });
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float x = event.getX();
+        float y = event.getY();
+        Log.e(TAG, String.format("onTouchEvent: %f %f",x,y));
+        return super.onTouchEvent(event);
     }
 }

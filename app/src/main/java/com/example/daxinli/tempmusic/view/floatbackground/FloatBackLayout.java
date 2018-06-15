@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
 import com.example.daxinli.tempmusic.util.SFUtil;
@@ -19,8 +20,10 @@ import java.util.List;
  */
 
 public class FloatBackLayout extends FrameLayout {
+    private static final String TAG = "FloatBackLayout";
+    private static final float DELTAX = 100;
 
-    private static final long DELAY = 26;
+    public static final long DELAY = 26;            //刷新一帧的间隔时长
 
     List<FloatObject> floats = new ArrayList<>();
     private int RID_background=-1;
@@ -44,6 +47,44 @@ public class FloatBackLayout extends FrameLayout {
         if (w != oldw || h != oldh) {
             initFloatObject(w, h);
         }
+    }
+
+    private float lastX,lastY,deltaX,deltaY;
+    private long lastDownTime,downTimeSpan;
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        //实现背景图片可以被拖拽的效果
+        float x = event.getX();
+        float y = event.getY();
+        switch(event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                lastX=x; lastY=y;
+                lastDownTime = System.currentTimeMillis();
+                for(FloatObject ftoj:floats)
+                    if(SFUtil.distance(x,y,ftoj.x+ftoj.objWidth/2,ftoj.y+ftoj.objHeight/2)<DELTAX) {
+                        ftoj.alpha = 255;
+                    }
+                break;
+            case MotionEvent.ACTION_UP:
+                for(FloatObject oj:floats) if(oj.status==FloatObject.DRAG) {
+                    oj.setStatus(FloatObject.THROW);
+                    oj.deltaX = deltaX/downTimeSpan*DELAY; oj.deltaY = deltaY/downTimeSpan*DELAY;   //计算每次刷新应该移动的位置差
+                }
+                break;
+            case MotionEvent.ACTION_MOVE:
+                deltaX = x-lastX; deltaY=y-lastY;
+                for(FloatObject ftoj:floats)
+                    if(SFUtil.distance(x,y,ftoj.x+ftoj.objWidth/2,ftoj.y+ftoj.objHeight/2)<DELTAX) {
+                        ftoj.alpha = 255;
+                        ftoj.setStatus(FloatObject.DRAG);
+                        ftoj.setXY(ftoj.x+deltaX,ftoj.y+deltaY);
+                    }
+                lastX = x; lastY = y;
+                downTimeSpan = System.currentTimeMillis()-lastDownTime;
+                lastDownTime = System.currentTimeMillis();
+                break;
+        }
+        return super.onTouchEvent(event);
     }
 
     @Override

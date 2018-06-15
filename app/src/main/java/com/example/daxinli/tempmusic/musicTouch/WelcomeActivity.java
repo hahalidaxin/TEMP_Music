@@ -126,10 +126,11 @@ public class WelcomeActivity extends BaseActivity implements View.OnClickListene
         btn_MutipleGame.setOnClickListener(this);
 
         floatBackLayout.setBackGround(this,R.drawable.pic_start_backg);
-        for(int i=0;i<6;i++) {
+        for(int i=0;i<12;i++) {
             float posX = ((float)random.nextInt(100)/100.0f);
             float posY = ((float)random.nextInt(100)/100.0f);
-            floatBackLayout.addFloatView(new FloatBitmap(this,posX,posY,RID_picNote[i]));
+            int x = i<6? i:i-6;
+            floatBackLayout.addFloatView(new FloatBitmap(this,posX,posY,RID_picNote[x]));
         }
         new Thread(new Runnable() {
             @Override
