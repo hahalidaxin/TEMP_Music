@@ -10,9 +10,10 @@
     <color name="c_Background">#000</color>
     <color name="colorBlue">#48d4e4</color>
     <color name="colorWhite">#FFFFFF</color>
-    <color name="colorBlack">#66000000</color>
+    <color name="colorBlack">#000000</color>
     <color name="colorGray">#66e4e1e1</color>
     <color name="colorLightGray">#eae8e8</color>
     <color name="black_overlay">#eae8e8</color>
     <color name="color_cursor">#009688</color>
+    <color name="color_pathView_pink">#F17F94</color>
 </resources>

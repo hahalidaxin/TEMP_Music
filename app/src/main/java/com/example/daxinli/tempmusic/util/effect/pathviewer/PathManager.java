@@ -81,7 +81,9 @@ public class PathManager {
         mKeyframes = new Keyframes(path);
         mAlpha = 0;
     }
-
+    public void setRGB(int a,int r,int g,int b) {
+        mLightLineColor  = Color.argb(a,r,g,b);
+    }
     public void setAnimationDuration(long duration) {
         mAnimationDuration = duration;
     }

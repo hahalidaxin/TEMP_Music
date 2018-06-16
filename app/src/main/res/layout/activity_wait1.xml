@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <com.example.daxinli.tempmusic.util.effect.pathviewer.PathSurfaceView
-        android:id="@+id/wait_pathView"
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/colorBlack"
         android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.example.daxinli.tempmusic.util.effect.pathviewer.PathSurfaceView
+            android:id="@+id/wait_pathView"
+            android:layout_width="match_parent"
         android:layout_height="match_parent" />
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -25,9 +26,9 @@
             android:layout_width="200dp"
             android:layout_height="50dp" />
         <FrameLayout
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="0dp"
             android:layout_width="match_parent"
-            android:layout_height="130dp" >
+            android:layout_height="180dp" >
 
             <master.flame.danmaku.ui.widget.DanmakuView
                 android:id="@+id/danmakuview_leader"
@@ -39,7 +40,8 @@
                 android:id="@+id/wait_picliaotian"
                 android:layout_width="340dp"
                 android:layout_height="match_parent"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:scaleType="fitXY"/>
         </FrameLayout>
         <LinearLayout
             android:layout_marginTop="20dp"
@@ -154,7 +156,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="40dp"
                 android:textColor="@color/colorWhite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

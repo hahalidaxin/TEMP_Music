@@ -19,6 +19,7 @@ import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
 import com.example.daxinli.tempmusic.R;
 import com.example.daxinli.tempmusic.musicTouch.MutiGameActivity;
+import com.example.daxinli.tempmusic.util.effect.pathviewer.PathSurfaceView;
 import com.wang.avi.AVLoadingIndicatorView;
 
 public class MusicOverActivity extends AppCompatActivity {
@@ -36,7 +37,6 @@ public class MusicOverActivity extends AppCompatActivity {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-
         }
     };
 
@@ -58,6 +58,7 @@ public class MusicOverActivity extends AppCompatActivity {
         }
         this.mintent = getIntent();
         this.activityType = mintent.getIntExtra("activityType",-1);
+        initPathView();
         initView();
         sendMusic();
     }
@@ -93,8 +94,6 @@ public class MusicOverActivity extends AppCompatActivity {
     }
 
     public void initView() {
-        avi = (AVLoadingIndicatorView) findViewById(R.id.avi_sendMusic);
-        avi.show();
         text_uploaderNum = (TextView) findViewById(R.id.text_uploaderNum);
         if(activityType==1) {
             text_uploaderNum.setVisibility(View.INVISIBLE);
@@ -176,5 +175,27 @@ public class MusicOverActivity extends AppCompatActivity {
         if(num==1) {
             onMusicReceived();
         }
+    }
+
+    PathSurfaceView pathSurfaceView;
+    private void initPathView() {
+        pathSurfaceView = (PathSurfaceView)findViewById(R.id.gameover_pathView);
+        pathSurfaceView.initData("text/bliLine.txt");
+        pathSurfaceView.startPathviewThread(this);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Thread.sleep(5000);
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                Intent intent = new Intent();
+                intent.putExtra("type",0); intent.putExtra("i",1);
+                intent.putExtra("a",255); intent.putExtra("r",255);
+                intent.putExtra("g",0); intent.putExtra("b",0);
+                pathSurfaceView.modifyData(intent);
+            }
+        }).start();
     }
 }
