@@ -29,19 +29,17 @@
             android:layout_marginTop="0dp"
             android:layout_width="match_parent"
             android:layout_height="180dp" >
-
-            <master.flame.danmaku.ui.widget.DanmakuView
-                android:id="@+id/danmakuview_leader"
-                android:layout_marginTop="10dp"
-                android:layout_width="340dp"
-                android:layout_height="match_parent" />
-
             <ImageView
                 android:id="@+id/wait_picliaotian"
                 android:layout_width="340dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:scaleType="fitXY"/>
+            <master.flame.danmaku.ui.widget.DanmakuView
+                android:id="@+id/danmakuview_leader"
+                android:layout_marginTop="10dp"
+                android:layout_width="340dp"
+                android:layout_height="match_parent" />
         </FrameLayout>
         <LinearLayout
             android:layout_marginTop="20dp"

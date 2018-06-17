@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -33,7 +34,7 @@ public class MutiGameResultActivity extends AppCompatActivity {
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            MutiGameResultActivity.this.myBinder = (NetworkService.MyBinder)service;
+            //MutiGameResultActivity.this.myBinder = (NetworkService.MyBinder)service;
         }
 
         @Override
@@ -53,6 +54,7 @@ public class MutiGameResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_muti_game_result);
 
         initView();
+        testInitView();
     }
     @Override
     protected void onResume() {
@@ -104,13 +106,41 @@ public class MutiGameResultActivity extends AppCompatActivity {
             decorView.setSystemUiVisibility(flag);
         }
     }
+    private void testInitView () {
+        for(int i=0;i<4;i++) {
+            addResult(i,76,100);
+        }
+    }
     public void addResult(final int instruType, final int ratio, final int score) {
+        final LinearLayout li = linear_result[nowResNum];
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int nowRatio = 0;
+                while(nowRatio<ratio) {
+                    final int tmpRatio = nowRatio;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((ProgressBar) li.findViewById(R.id.progress_GameRatio_mutires)).setProgress(tmpRatio);
+                        }
+                    });
+                    ++nowRatio;
+                    long delayTime = 10+(long)((float)(nowRatio/ratio)*(nowRatio/ratio)*5.0f);
+                    Log.e(TAG, String.format("run: %d",delayTime));
+                    try {
+                        Thread.sleep(delayTime);
+                    } catch(Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LinearLayout li = linear_result[nowResNum];
                 //linear_result[nowResNum].findViewById(R.id.image_instru_mutires);
-                ((ProgressBar)li.findViewById(R.id.progress_GameRatio_mutires)).setProgress(ratio);
                 ((TextView)li.findViewById(R.id.text_resScore_mutires)).setText("得分："+Integer.toString(score));
                 Glide.with(MutiGameResultActivity.this).load(DID_iconInstru[instruType]).into((ImageView) li.findViewById(R.id.image_instru_mutires));
                 linear_result[nowResNum++].setVisibility(View.VISIBLE);

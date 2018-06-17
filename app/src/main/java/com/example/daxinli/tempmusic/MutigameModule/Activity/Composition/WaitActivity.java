@@ -355,7 +355,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
                 danmaku.text = content;
                 danmaku.padding = 5;
                 danmaku.textSize = sp2px(50);      //有待修改
-                danmaku.textColor = Color.BLACK;
+                danmaku.textColor = Color.WHITE;
                 danmaku.setTime(danmakuView.getCurrentTime());
                 if (withBorder) {
                     danmaku.borderColor = Color.GREEN;

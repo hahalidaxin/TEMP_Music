@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -19,7 +20,6 @@ import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
 import com.example.daxinli.tempmusic.R;
 import com.example.daxinli.tempmusic.musicTouch.MutiGameActivity;
-import com.example.daxinli.tempmusic.util.effect.pathviewer.PathSurfaceView;
 import com.wang.avi.AVLoadingIndicatorView;
 
 public class MusicOverActivity extends AppCompatActivity {
@@ -58,7 +58,7 @@ public class MusicOverActivity extends AppCompatActivity {
         }
         this.mintent = getIntent();
         this.activityType = mintent.getIntExtra("activityType",-1);
-        initPathView();
+        initTextThread();
         initView();
         sendMusic();
     }
@@ -111,7 +111,8 @@ public class MusicOverActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 Intent intent = getIntent();
-                myBinder.sendMessage("<#MUSICOVERVIEW#>MUSICSENDED#"+intent.getStringExtra("msg"));
+                if(myBinder!=null)
+                    myBinder.sendMessage("<#MUSICOVERVIEW#>MUSICSENDED#"+intent.getStringExtra("msg"));
             }
         }).start();
     }
@@ -169,7 +170,7 @@ public class MusicOverActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                text_uploaderNum.setText(String.format("剩余%d组员正在上传...",num));
+                text_uploaderNum.setText(String.format("%d UPLOADING...",num));
             }
         });
         if(num==1) {
@@ -177,24 +178,30 @@ public class MusicOverActivity extends AppCompatActivity {
         }
     }
 
-    PathSurfaceView pathSurfaceView;
-    private void initPathView() {
-        pathSurfaceView = (PathSurfaceView)findViewById(R.id.gameover_pathView);
-        pathSurfaceView.initData("text/bliLine.txt");
-        pathSurfaceView.startPathviewThread(this);
+    //制作uploading字体的颜色轮换效果
+    int[] textRhythm = { 200,200,800 };
+    int[] textColor = {Color.parseColor("#FF638F"),Color.parseColor("#08FFE7") ,
+            Color.parseColor("#23FF24"),};
+    private void initTextThread() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try{
-                    Thread.sleep(5000);
-                } catch(Exception e) {
-                    e.printStackTrace();
+                while(true) {
+                    for(int i=0;i<textRhythm.length;i++) {
+                        final int finali=i;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                text_uploaderNum.setTextColor(textColor[finali]);
+                            }
+                        });
+                        try {
+                            Thread.sleep(textRhythm[finali]);
+                        } catch(Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
-                Intent intent = new Intent();
-                intent.putExtra("type",0); intent.putExtra("i",1);
-                intent.putExtra("a",255); intent.putExtra("r",255);
-                intent.putExtra("g",0); intent.putExtra("b",0);
-                pathSurfaceView.modifyData(intent);
             }
         }).start();
     }
