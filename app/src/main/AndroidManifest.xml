@@ -38,7 +38,9 @@
         <activity android:name=".musicTouch.RegisterActivity" />
         <activity
             android:name=".MutigameModule.Activity.Composition.CompositionActivity"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="landscape">
+        </activity>
+
         <activity android:name=".MutigameModule.Activity.Composition.WaitActivity">
         </activity>
         <activity

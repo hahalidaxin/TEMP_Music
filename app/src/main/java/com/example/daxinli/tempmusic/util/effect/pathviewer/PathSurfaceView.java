@@ -201,11 +201,6 @@ public class PathSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             @Override
             public void run() {
                 while(true) {
-                    try {
-                        Thread.sleep(refreshSpan);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
                     activity .runOnUiThread(new Runnable() {
                                       @Override
                                       public void run() {
@@ -231,6 +226,11 @@ public class PathSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                             int[] rtime = item.getIntArrayExtra("rtime");
                             modifyLineStartTime(rtime);
                         }
+                    }
+                    try {
+                        Thread.sleep(refreshSpan);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             }

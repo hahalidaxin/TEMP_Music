@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -34,7 +33,7 @@ public class MutiGameResultActivity extends AppCompatActivity {
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            //MutiGameResultActivity.this.myBinder = (NetworkService.MyBinder)service;
+            MutiGameResultActivity.this.myBinder = (NetworkService.MyBinder)service;
         }
 
         @Override
@@ -54,7 +53,7 @@ public class MutiGameResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_muti_game_result);
 
         initView();
-        testInitView();
+        //testInitView();
     }
     @Override
     protected void onResume() {
@@ -127,7 +126,6 @@ public class MutiGameResultActivity extends AppCompatActivity {
                     });
                     ++nowRatio;
                     long delayTime = 10+(long)((float)(nowRatio/ratio)*(nowRatio/ratio)*5.0f);
-                    Log.e(TAG, String.format("run: %d",delayTime));
                     try {
                         Thread.sleep(delayTime);
                     } catch(Exception e) {

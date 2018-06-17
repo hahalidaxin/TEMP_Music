@@ -138,6 +138,7 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
     protected void onDestroy() {
         super.onDestroy();
         //向service发送停止网络处理线程的信息
+       // if(myBinder!=null)
         myBinder.sendMessage("<#DESTROYTHREAD#>");
         stopService(serviceIntent);         //结束service
     }

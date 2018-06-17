@@ -40,14 +40,18 @@ public class MySurfaceView extends GLSurfaceView {
     public boolean isInitOver = false;
     private static boolean isExit = false;
 
+    public int instruType;
+
     public MySurfaceView(Context context)
     {
         super(context);
         if(context instanceof GameActivity) {
             this.activityType = ACTYPE_SINGLEGAMETYPE;
+            instruType  = ((GameActivity)context).instruType;
         } else if(context instanceof MutiPlayActivity) {
             this.activityType = ACTYPE_MUTIGAMETYPE;
         }
+
         activity = context;
 
         this.setEGLContextClientVersion(3);

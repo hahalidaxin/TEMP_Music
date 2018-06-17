@@ -39,6 +39,7 @@
                 android:id="@+id/danmakuview_leader"
                 android:layout_marginTop="10dp"
                 android:layout_width="340dp"
+                android:layout_gravity="center"
                 android:layout_height="match_parent" />
         </FrameLayout>
         <LinearLayout
@@ -55,7 +56,7 @@
                 android:gravity="left"
                 android:hint="听说会发弹幕的都有女朋友哦~"
                 android:textColor="@color/colorBlue"
-                android:textSize="15dp" />
+                android:textSize="10dp" />
             <Button
                 android:id="@+id/btn_danmusend_createhome"
                 android:layout_width="wrap_content"
@@ -84,6 +85,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:textColor="@color/colorWhite"
                     android:gravity="center"/>
             </LinearLayout>
             <LinearLayout
@@ -104,6 +106,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
+                    android:textColor="@color/colorWhite"
                     android:text=""/>
             </LinearLayout>
             <LinearLayout
@@ -124,6 +127,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:textColor="@color/colorWhite"
                 android:layout_gravity="center"
                 android:text=""/>
             </LinearLayout>
@@ -143,6 +147,7 @@
                 android:id="@+id/text_instruSelect4_wait1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/colorWhite"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:text=""/>

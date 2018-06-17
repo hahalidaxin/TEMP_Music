@@ -32,6 +32,7 @@ public class MutiPlayActivity extends BaseActivity {
     public MySurfaceView mySurfaceView;
     public static SharedPreferences.Editor editor;  //保存上次退出的保留
     public static SharedPreferences sp;
+    public int instruType;
 
     private ServiceConnection connection = new ServiceConnection() {
         @Override
@@ -60,6 +61,7 @@ public class MutiPlayActivity extends BaseActivity {
         this.mintent = getIntent();
         StringBuffer builder = new StringBuffer();
         String[] strs = mintent.getStringExtra("musicScore").split("\\$\\$");
+        instruType = mintent.getIntExtra("instuType",-1);
         for(int i=0;i<strs.length;i++) {
             builder.append(strs[i]+"#");
         }

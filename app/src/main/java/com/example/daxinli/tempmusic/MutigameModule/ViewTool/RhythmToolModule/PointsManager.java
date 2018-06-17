@@ -15,7 +15,7 @@ public class PointsManager {
     private float speed = 5;            //向右移动的总速度
     private static final int numberLimit = 9;
     public static final float EPS = 5.0f;        //最小Y误差
-    public static final float Ca = 1,Cr = 1,Cg = 0,Cb = 0;   //中心点的颜色
+    public static final float Ca = 1,Cr = 1,Cg = 64.0f/255.0f,Cb = 129.0f/255.0f;   //中心点的颜色
     public static final float CW = 30,CH = 30;               //中心点的长宽
 
     public Queue<points> linePtsQueue = new LinkedBlockingQueue<points>();         //存储节奏型的点数据

@@ -38,16 +38,12 @@ public class InstruView extends BaseView {
     @Override
     public void initView() {
         areaKB = new Area(0,200,1920,880);
-        areaRHY = new Area(560,10,800,200);
+        areaRHY = new Area(460,10,1000,190);
         areaOTH = new Area(0,0,1920,1080);
-        TextureManager.loadingTexture(mcontext,29,16);
+        TextureManager.loadingTexture(mcontext,29,15);
         kbview = new KeyboardView(mcontext,areaKB,mintent);
         rhyview= new RhythmTool(mcontext.mcontext,areaRHY,60000/mintent.getIntExtra("BPM",-1));
         othView = new OtherToolsView(mcontext,areaOTH);
-
-        //areaBtnDone = new Area(10,10,800,800);
-        //btnDone = new Obj2DRectangle(areaBtnDone.x,areaBtnDone.y,areaBtnDone.width,areaBtnDone.height, TextureManager.getTextures("down_right.png"),
-        //        ShaderManager.getShader(2));
 
         this.isInit = true;     //直到资源加载完成才返回标志，此时才可以进行view的Draw绘制
     }

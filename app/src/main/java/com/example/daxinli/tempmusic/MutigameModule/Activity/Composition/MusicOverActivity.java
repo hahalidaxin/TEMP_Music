@@ -20,10 +20,8 @@ import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
 import com.example.daxinli.tempmusic.R;
 import com.example.daxinli.tempmusic.musicTouch.MutiGameActivity;
-import com.wang.avi.AVLoadingIndicatorView;
 
 public class MusicOverActivity extends AppCompatActivity {
-    public AVLoadingIndicatorView avi;
     public NetworkService.MyBinder myBinder;
     public MusicOverReceiver breceiver;
     public TextView text_uploaderNum;
@@ -120,7 +118,6 @@ public class MusicOverActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                MusicOverActivity.this.avi.hide();
                 AlertDialog.Builder builder;
                 builder = new AlertDialog.Builder(MusicOverActivity.this);
                 builder.setTitle("ヾ(◍°∇°◍)ﾉﾞ");
@@ -173,7 +170,7 @@ public class MusicOverActivity extends AppCompatActivity {
                 text_uploaderNum.setText(String.format("%d UPLOADING...",num));
             }
         });
-        if(num==1) {
+        if(num==0) {
             onMusicReceived();
         }
     }

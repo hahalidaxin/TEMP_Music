@@ -1,7 +1,6 @@
 package com.example.daxinli.tempmusic.MutigameModule.ViewTool.KeyBoardToolModule;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.daxinli.tempmusic.MutigameModule.View.Muti_SurfaceView;
@@ -83,6 +82,12 @@ public class KeyboardView extends BaseViewTool {
         //piano
         RESkeyMusic[0] = new int[] {0,R.raw.piano_1, R.raw.piano_2, R.raw.piano_3, R.raw.piano_4, R.raw.piano_5, R.raw.piano_6,
                 R.raw.piano_7, R.raw.piano_8, R.raw.piano_9, R.raw.piano_10, R.raw.piano_11, R.raw.piano_12, R.raw.piano_13};
+        RESkeyMusic[1] = new int[] {0,R.raw.guitar_1,R.raw.guitar_2,R.raw.guitar_3,R.raw.guitar_4,R.raw.guitar_5,R.raw.guitar_6,
+                R.raw.guitar_7,R.raw.guitar_8,R.raw.guitar_9,R.raw.guitar_10,R.raw.guitar_11,R.raw.guitar_12,R.raw.guitar_13};
+        RESkeyMusic[2] = new int[] {0,R.raw.kick_1,R.raw.kick_2,R.raw.kick_3,R.raw.kick_4,R.raw.kick_5,R.raw.kick_6,R.raw.kick_7,
+                R.raw.kick_8,R.raw.kick_9,R.raw.kick_10,R.raw.kick_11,R.raw.kick_12,R.raw.kick_13};
+        RESkeyMusic[3] = new int[] {0,R.raw.bell_1,R.raw.bell_2,R.raw.bell_3,R.raw.bell_4,R.raw.bell_5,R.raw.bell_6,R.raw.bell_7,
+                R.raw.bell_8,R.raw.bell_9,R.raw.bell_10,R.raw.bell_11,R.raw.bell_12,R.raw.bell_13};
         for(int i=0;i<5;i++) {                           //按照当前安排位置，计算当前黑键处于屏幕中的位置
             for (int j=0;j<4;j++) {
                 X[i][j] = Ar.x+Ar.width* (X[i][j])/imgVirW;
@@ -102,7 +107,6 @@ public class KeyboardView extends BaseViewTool {
 
         float x = event.getX();
         float y = event.getY();
-        Log.e(TAG, String.format("onKeyPress: %f %f",x,y));
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 int ans = -1;
@@ -156,22 +160,9 @@ public class KeyboardView extends BaseViewTool {
         nowKeyPressed = key;
         //播放音效 调用不同的特效
         int thisP = funcKey[key];
-        switch(this.instruType) {
-            case 0:
-                //piano
-                mcontext.mcontext.sound.stopMediaMusic();
-                mcontext.mcontext.sound.playMediaMusic(mcontext.mcontext,RESkeyMusic[0][thisP],false);
-                break;
-            case 1:
-                //instru1
-                break;
-            case 2:
-                //instru2
-                break;
-            case 3:
-                //instru3
-                break;
-        }
+
+        mcontext.mcontext.sound.playMusic(RESkeyMusic[instruType][thisP],0);
+
         //切换显示图片
         //同时需要结合抬起动作
     }

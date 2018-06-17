@@ -72,7 +72,7 @@ public class GameView extends BaseView {
             GameData.area_btn_pause = new Area(0,20,120,120);
             //初始化纹理
             TextureManager.loadingTexture(father,0,29);           //加载游戏界面相关图片
-            TextureManager.loadingTexture(father,45,3);           //加载游戏界面相关图片
+            TextureManager.loadingTexture(father,44,3);           //加载游戏界面相关图片
             progress = new ProgressToolView(father.activity);
             scoreDraw = new DrawScore();
             background = new Background();

@@ -22,6 +22,8 @@ public class GameActivity extends BaseActivity {
     public static SharedPreferences.Editor editor;  //保存上次退出的保留
     public static SharedPreferences sp;
 
+
+    public int instruType;          //在surfaceView中需要获取到的instru的类型
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,9 +69,11 @@ public class GameActivity extends BaseActivity {
             boolean tflag=true;
             while((line=reader.readLine())!=null) {
                 if(tflag) {
-                    synchronized (GameData.lock) {
-                        GameData.MusicName=line;          //第一行 同步音乐名称
-                    }
+                    this.instruType = Integer.parseInt(line.trim());
+                    //ynchronized (GameData.lock) {
+                        //GameData.MusicName=line;          //第一行 同步音乐名称
+                    //}
+
                     tflag=false;
                 }
                 else

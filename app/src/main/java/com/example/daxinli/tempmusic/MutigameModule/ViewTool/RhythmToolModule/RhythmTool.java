@@ -48,7 +48,7 @@ public class RhythmTool extends BaseViewTool {
     public void onInit(int x, int y, int w, int h) {
         super.onInit(x, y, w, h);
         lineDrawer = new Obj2DLine(0.2f,0,0,0, ShaderManager.getShader(6));
-        backGround = new Obj2DRectangle(x,y,w,h,0.3f,94/255,1.0f,129/255,ShaderManager.getShader(6));
+        backGround = new Obj2DRectangle(x,y,w,h,1,0,0,0,ShaderManager.getShader(6));
         backGround.setHP(true);
         backGround.setX(x); backGround.setY(y);
         ptMg = new PointsManager(x,y,w,h,thistime);
@@ -74,17 +74,17 @@ public class RhythmTool extends BaseViewTool {
             initFlag = true;
             onInit((int)Ar.x,(int)Ar.y,(int)Ar.width,(int)Ar.height);
         }
-        backGround.setHP(true);
+        //backGround.setHP(true);
         backGround.drawSelf();
         ptMg.go();
         Queue<points> tmpQueue = new LinkedBlockingQueue<points>(ptMg.linePtsQueue);
 
         getLinePtsArray(tmpQueue);
-        lineDrawer.setColor(0.2f,0,0,1);
+        lineDrawer.setColor(0.95f,1,64.0f/255.0f,129.0f/255.0f);
         lineDrawer.setLinePoints(this.lineFormerNum/2,this.lineformer);
         lineDrawer.drawSelf();
 
-        lineDrawer.setColor(0.2f,0,0,0);
+        lineDrawer.setColor(1,0,150.0f/136.0f,136.0f/255.0f);
         lineDrawer.setLinePoints(this.lineLaterNum/2,this.linelater);
         lineDrawer.drawSelf();
 
