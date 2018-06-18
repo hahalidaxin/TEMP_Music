@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorBlack"
+    tools:context="com.example.daxinli.tempmusic.MutigameModule.Activity.gameplay.ChooseMusicActivity">
+    <TextView
+        android:id="@+id/text_musicDetectedNum_singleChoose"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textColor="@color/colorWhite"
+        android:background="@color/colorAccent"
+        android:textSize="15dp"
+        android:text=""/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorWhite" />
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="0dp"
+        android:id="@+id/GrecyclerView_singleChoose"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layoutAnimation="@anim/layout_animation_slide_right"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>

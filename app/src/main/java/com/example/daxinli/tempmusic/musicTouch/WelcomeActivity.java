@@ -156,7 +156,7 @@ public class WelcomeActivity extends BaseActivity implements View.OnClickListene
         Intent intent = new Intent();
         switch(v.getId()) {
             case R.id.btn_GameStart:
-                intent.setClass(this,GameActivity.class);
+                intent.setClass(this,SingleChooseActivity.class);
                 this.startActivity(intent);
                 break;
             case R.id.btn_MutipleGame:

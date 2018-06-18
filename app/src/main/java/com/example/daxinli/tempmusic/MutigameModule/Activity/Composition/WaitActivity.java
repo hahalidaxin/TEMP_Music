@@ -97,6 +97,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
     public int sessionID;
     public int connectType;
     public int instruNumLimit=4;
+    public int instruType;      //记录所选的乐器
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -250,6 +251,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
                     //启动多人游戏
                     intent = new Intent(WaitActivity.this,MutiPlayActivity.class);
                     intent.putExtra("musicScore",extralInfo);
+                    intent.putExtra("instruType",instruType);
                     startActivity(intent);
                 }
                 break;
@@ -388,7 +390,10 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
                 Glide.with(WaitActivity.this).load(RDRAW_img[type*2+state]).into(img_stru[type]);
                 //img_stru[type].setImageResource(RDRAW_img[type*2+state]);
                 String text = state==0? "":instruNametoShow[type];
-                if(flag==1 && state==1) text=text+"(You)";
+                if(flag==1 && state==1) {
+                    text=text+"(You)";
+                    instruType = type;
+                }
                 text_instru[type].setText(text);
             }
         });

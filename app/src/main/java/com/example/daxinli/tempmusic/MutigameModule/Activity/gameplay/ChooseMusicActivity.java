@@ -131,7 +131,6 @@ public class ChooseMusicActivity extends BaseActivity implements View.OnClickLis
         intent.putExtra("InstruNum",msg);
         intent.putExtra("connectType",WaitActivity.CONNECT_GAMEPlAY);
         intent.putExtra("activityType",0);
-        intent.putExtra("instruType",);
         //打开wait界面 此时修改teamstate
         myBinder.sendMessage("<#CREATEVIEW#>teamstate#0");
         startActivity(intent);

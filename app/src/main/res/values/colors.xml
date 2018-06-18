@@ -16,4 +16,5 @@
     <color name="black_overlay">#eae8e8</color>
     <color name="color_cursor">#009688</color>
     <color name="color_pathView_pink">#F17F94</color>
+    <color name="colorNEW">#65c5c1</color>
 </resources>

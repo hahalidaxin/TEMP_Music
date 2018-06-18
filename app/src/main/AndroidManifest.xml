@@ -9,7 +9,7 @@
     <application
         android:name=".musicTouch.myApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -21,9 +21,9 @@
 
         <activity
             android:name=".musicTouch.MutiGameActivity"
-            android:launchMode="singleTask">
-        </activity>>
-        <activity android:name=".musicTouch.GameActivity"></activity>
+            android:launchMode="singleTask"></activity>
+        >
+        <activity android:name=".musicTouch.GameActivity" />
         <activity android:name=".musicTouch.AboutActivity" />
         <activity android:name=".musicTouch.HelpActivity" />
         <activity android:name=".musicTouch.WelcomeActivity">
@@ -38,11 +38,8 @@
         <activity android:name=".musicTouch.RegisterActivity" />
         <activity
             android:name=".MutigameModule.Activity.Composition.CompositionActivity"
-            android:screenOrientation="landscape">
-        </activity>
-
-        <activity android:name=".MutigameModule.Activity.Composition.WaitActivity">
-        </activity>
+            android:screenOrientation="landscape"></activity>
+        <activity android:name=".MutigameModule.Activity.Composition.WaitActivity"></activity>
         <activity
             android:name=".MutigameModule.Activity.CreateAHomeActivity"
             android:launchMode="singleTask" />
@@ -51,14 +48,12 @@
             android:launchMode="singleTask" />
         <activity
             android:name=".MutigameModule.Activity.Composition.MusicOverActivity"
-            android:screenOrientation="landscape">
-        </activity>
-        <activity android:name=".MutigameModule.Activity.gameplay.ChooseMusicActivity">
-        </activity>
+            android:screenOrientation="landscape"></activity>
+        <activity android:name=".MutigameModule.Activity.gameplay.ChooseMusicActivity"></activity>
         <activity android:name=".MutigameModule.Activity.gameplay.MutiPlayActivity" />
-        <activity android:name=".musicTouch.TestActivity">
-        </activity>
-        <activity android:name=".MutigameModule.Activity.gameplay.MutiGameResultActivity">
+        <activity android:name=".musicTouch.TestActivity"></activity>
+        <activity android:name=".MutigameModule.Activity.gameplay.MutiGameResultActivity"></activity>
+        <activity android:name=".musicTouch.SingleChooseActivity">
         </activity>
     </application>
 

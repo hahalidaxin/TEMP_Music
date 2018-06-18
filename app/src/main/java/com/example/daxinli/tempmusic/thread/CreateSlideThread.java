@@ -130,7 +130,7 @@ public class CreateSlideThread extends Thread {
         lastRandomInt=curRandomInt;
         //tp.span代表了滑块所处的类型 因此要求音节以单位化直接反应音节的长短
         int sh =(int) ((tp.ed-tp.st)*GameData.gameSpeed[0]);
-        MainSlide slide = new MainSlide(curRandomInt*baseSlideWidth,-sh,
+        MainSlide slide = new MainSlide(gameView.mactivity,curRandomInt*baseSlideWidth,-sh,
                 baseSlideWidth, sh,tp.key,1,0);
         synchronized (GameView.lock) {
             GameView.mainSlideArrayList.add(slide);

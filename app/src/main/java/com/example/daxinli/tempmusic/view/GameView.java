@@ -1,5 +1,6 @@
 package com.example.daxinli.tempmusic.view;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.view.MotionEvent;
 
@@ -35,6 +36,7 @@ public class GameView extends BaseView {
         private static final String TAG = "GameView";
         public static Object lock = new Object();                 //GameView共享数据的锁
         MySurfaceView father;
+        public Activity mactivity;
 
         public ActionThread actionThread;               //将线程暴露给GameActivity
         public CreateSlideThread createSlideThread;
@@ -61,6 +63,7 @@ public class GameView extends BaseView {
 
         public GameView(MySurfaceView father) {
             this.father = father;
+            mactivity = father.activity;
             initView();
             initThread();
             initGameData();

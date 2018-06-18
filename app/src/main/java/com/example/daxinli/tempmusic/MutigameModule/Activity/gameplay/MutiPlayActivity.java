@@ -22,6 +22,7 @@ import com.example.daxinli.tempmusic.MySurfaceView;
 import com.example.daxinli.tempmusic.constant.GameData;
 import com.example.daxinli.tempmusic.musicTouch.BaseActivity;
 import com.example.daxinli.tempmusic.musicTouch.MutiGameActivity;
+import com.example.daxinli.tempmusic.util.manager.SoundManager;
 import com.example.daxinli.tempmusic.util.screenscale.Constant;
 import com.example.daxinli.tempmusic.util.screenscale.ScreenScaleUtil;
 
@@ -33,6 +34,7 @@ public class MutiPlayActivity extends BaseActivity {
     public static SharedPreferences.Editor editor;  //保存上次退出的保留
     public static SharedPreferences sp;
     public int instruType;
+    public SoundManager sound;
 
     private ServiceConnection connection = new ServiceConnection() {
         @Override
@@ -61,7 +63,7 @@ public class MutiPlayActivity extends BaseActivity {
         this.mintent = getIntent();
         StringBuffer builder = new StringBuffer();
         String[] strs = mintent.getStringExtra("musicScore").split("\\$\\$");
-        instruType = mintent.getIntExtra("instuType",-1);
+        instruType = mintent.getIntExtra("instruType",-1);
         for(int i=0;i<strs.length;i++) {
             builder.append(strs[i]+"#");
         }
@@ -69,6 +71,7 @@ public class MutiPlayActivity extends BaseActivity {
 
         Log.e(TAG, "onCreate: "+GameData.mainMusicScore);
         //加载资源文件
+        sound = new SoundManager(this);
         initScreenData();               //初始化屏幕数据 为后续计算对应点做准备
         loadSettings();
 

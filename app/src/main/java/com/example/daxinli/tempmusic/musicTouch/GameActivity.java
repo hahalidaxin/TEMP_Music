@@ -9,6 +9,7 @@ import android.view.WindowManager;
 
 import com.example.daxinli.tempmusic.MySurfaceView;
 import com.example.daxinli.tempmusic.constant.GameData;
+import com.example.daxinli.tempmusic.util.manager.SoundManager;
 import com.example.daxinli.tempmusic.util.screenscale.Constant;
 import com.example.daxinli.tempmusic.util.screenscale.ScreenScaleUtil;
 
@@ -21,7 +22,9 @@ public class GameActivity extends BaseActivity {
     public MySurfaceView mySurfaceView;
     public static SharedPreferences.Editor editor;  //保存上次退出的保留
     public static SharedPreferences sp;
+    public SoundManager sound;
 
+    public String musicName;
 
     public int instruType;          //在surfaceView中需要获取到的instru的类型
     @Override
@@ -33,10 +36,13 @@ public class GameActivity extends BaseActivity {
         mySurfaceView.requestFocus();
         mySurfaceView.setFocusableInTouchMode(true);
 
+        sound = new SoundManager(this);
         //加载资源文件
         initScreenData();               //初始化屏幕数据 为后续计算对应点做准备
         loadSettings();
-        initIOFile();
+
+        String filename = getIntent().getStringExtra("musicName");
+        if(filename!=null) initIOFile(filename);
 
         setContentView(mySurfaceView);                          //以SurfaceView作为主界面
     }
@@ -58,22 +64,18 @@ public class GameActivity extends BaseActivity {
         boolean isMusicOn = sp.getBoolean("MUSICEFFECT",true);      //default Value
         GameData.GameEffect = isMusicOn;
     }
-    private void initIOFile()  {                         //加载音乐文件       存放在GameData中
+    private void initIOFile(String musicName)  {                         //加载音乐文件       存放在GameData中
         InputStream in=null;
         BufferedReader reader=null;
         StringBuffer tmpScore=new StringBuffer();
         try{
-            in = getResources().getAssets().open("text/musicscore.txt");
+            in = getResources().getAssets().open("text/music/"+musicName);
             reader=new BufferedReader(new InputStreamReader(in));
             String line="";
             boolean tflag=true;
             while((line=reader.readLine())!=null) {
                 if(tflag) {
                     this.instruType = Integer.parseInt(line.trim());
-                    //ynchronized (GameData.lock) {
-                        //GameData.MusicName=line;          //第一行 同步音乐名称
-                    //}
-
                     tflag=false;
                 }
                 else

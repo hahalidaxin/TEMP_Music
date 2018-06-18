@@ -1,6 +1,6 @@
 package com.example.daxinli.tempmusic;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
@@ -26,7 +26,7 @@ public class MySurfaceView extends GLSurfaceView {
     public static final int ACTYPE_MUTIGAMETYPE=1111;
     public static final int ACTYPE_SINGLEGAMETYPE=2222;
     public int activityType;
-    public Context activity;
+    public Activity activity;
     public static BaseView curView;         //注意 这里声明的是static类型 所以一个程序只会创建一次 不会重复进行创建
     public static GameView gameView;
     public static GameoverView gameoverView;
@@ -42,7 +42,7 @@ public class MySurfaceView extends GLSurfaceView {
 
     public int instruType;
 
-    public MySurfaceView(Context context)
+    public MySurfaceView(Activity context)
     {
         super(context);
         if(context instanceof GameActivity) {

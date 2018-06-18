@@ -15,6 +15,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
         <TextView
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/colorWhite"
             android:id="@+id/themetext_setting"
             android:gravity="center_vertical"
             android:layout_width="wrap_content"
@@ -22,6 +24,7 @@
             android:textSize="30dp"
             android:textStyle="bold"/>
         <TextView
+            android:textColor="@color/colorWhite"
             android:id="@+id/descriptext_setting"
             android:layout_marginRight="30dp"
             android:gravity="center_vertical|right"
@@ -32,6 +35,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/c_AboutBackground" />
+        android:background="@color/color_pathView_pink" />
 
 </LinearLayout>

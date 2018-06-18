@@ -1,14 +1,17 @@
 package com.example.daxinli.tempmusic.object;
 
+import android.app.Activity;
 import android.view.MotionEvent;
 
+import com.example.daxinli.tempmusic.MutigameModule.Activity.gameplay.MutiPlayActivity;
 import com.example.daxinli.tempmusic.constant.GameData;
-import com.example.daxinli.tempmusic.musicTouch.WelcomeActivity;
+import com.example.daxinli.tempmusic.musicTouch.GameActivity;
 import com.example.daxinli.tempmusic.util.DrawUtil;
 import com.example.daxinli.tempmusic.util.SFUtil;
 import com.example.daxinli.tempmusic.util.effect.ElseEffect.DrawScore;
 import com.example.daxinli.tempmusic.util.elseUtil.Area;
 import com.example.daxinli.tempmusic.util.manager.ShaderManager;
+import com.example.daxinli.tempmusic.util.manager.SoundManager;
 import com.example.daxinli.tempmusic.util.screenscale.Constant;
 
 
@@ -36,12 +39,13 @@ public class MainSlide{
     private float pressCurY;
     private DrawScore scoredraw;
     private int musicStreamID;
-
+    Activity mactivity;
     int plusScoreTimes;
 
     Obj2DRectangle objSlide;
 
-    public MainSlide(float X, float Y, float Width, float Height, int Pitch, int ttype, int instruType) {
+    public MainSlide(Activity activity, float X, float Y, float Width, float Height, int Pitch, int ttype, int instruType) {
+        this.mactivity = activity;
         this.X = X;
         this.Y = Y;
         this.Width = Width;
@@ -133,10 +137,7 @@ public class MainSlide{
             if(state==0) {
                 state = 1;
                 objSlide.runAnim(1);
-                if(WelcomeActivity.sound!=null) {
-                   this.musicStreamID  = WelcomeActivity.sound.playMusic(Pitch, 0);
-                }
-                //sound的初始化处于WelcomeActivity中 因此需要提前调用WelcomeActivity
+                playSoundKey();
                 if(plusScoreTimes>0) {
                     synchronized (GameData.lock) {
                         GameData.GameScore += GameData.slideT1score;
@@ -170,9 +171,7 @@ public class MainSlide{
 
         baseTouchLimit = Height*(4-GameData.GameRK)/6;
         if(state == 0 && pressCurY>=Y+baseTouchLimit) {
-            if(WelcomeActivity.sound!=null) {
-                this.musicStreamID = WelcomeActivity.sound.playMusic(Pitch, 0);
-            }
+            playSoundKey();
             state = 1;
         }
         if(touchMode!=2 && state==1) touchMode = 1;
@@ -186,18 +185,14 @@ public class MainSlide{
         if(!SFUtil.isin(eX,eY,new Area(X,Y,Width,Height)))
             if(touchMode == 1) {
                 touchMode = 2;               // 只有touchMode为1的时候才会更新信息
-                if(WelcomeActivity.sound!=null) {
-                   WelcomeActivity.sound.stopGameMusic(this.musicStreamID);
-                }
+
             }
         //如果Move出去 则触摸结束
     }
     public void onTouchUp(MotionEvent event) {
         if(touchMode==1 && state==1) {
             touchMode = 2;
-            if(WelcomeActivity.sound!=null) {
-               WelcomeActivity.sound.stopGameMusic(this.musicStreamID);
-            }
+
         }
         //如果触摸抬起 则触摸结束
     }
@@ -206,5 +201,14 @@ public class MainSlide{
     }
     public void getScoreDraw(DrawScore scoredraw) {
         this.scoredraw = scoredraw;
+    }
+    public void playSoundKey() {
+        if(mactivity instanceof GameActivity) {
+            GameActivity gameActivity = (GameActivity)mactivity;
+            gameActivity.sound.playMusic(SoundManager.RESKeyMusic[Instru][Pitch],0);
+        } else {
+            MutiPlayActivity gameActivity = (MutiPlayActivity) mactivity;
+            gameActivity.sound.playMusic(SoundManager.RESKeyMusic[Instru][Pitch],0);
+        }
     }
 }
