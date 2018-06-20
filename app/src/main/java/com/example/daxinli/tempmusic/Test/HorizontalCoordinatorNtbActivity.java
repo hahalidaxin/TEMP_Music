@@ -1,5 +1,6 @@
-package com.example.daxinli.tempmusic.musicTouch;
+package com.example.daxinli.tempmusic.Test;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -7,7 +8,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,23 +16,24 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.daxinli.tempmusic.R;
-import com.example.daxinli.tempmusic.view.floatbackground.FloatBackLayout;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import devlight.io.library.ntb.NavigationTabBar;
 
-public class TestActivity extends AppCompatActivity{
-    private static final String TAG = "TestActivity";
-    Random random = new Random();
-    FloatBackLayout floatBackLayout;
+/**
+ * Created by GIGAMOLE on 28.03.2016.
+ */
+public class HorizontalCoordinatorNtbActivity extends Activity {
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test);
+        setContentView(R.layout.activity_horizontal_coordinator_ntb);
         initUI();
     }
+
     private void initUI() {
         final ViewPager viewPager = (ViewPager) findViewById(R.id.vp_horizontal_ntb);
         viewPager.setAdapter(new PagerAdapter() {

@@ -21,25 +21,19 @@
 
         <activity
             android:name=".musicTouch.MutiGameActivity"
-            android:launchMode="singleTask"></activity>
+            android:launchMode="singleTask" />
         >
         <activity android:name=".musicTouch.GameActivity" />
         <activity android:name=".musicTouch.AboutActivity" />
         <activity android:name=".musicTouch.HelpActivity" />
-        <activity android:name=".musicTouch.WelcomeActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".musicTouch.WelcomeActivity"></activity>
         <activity android:name=".musicTouch.SettingsActivity" />
         <activity android:name=".musicTouch.LoginActivity" />
         <activity android:name=".musicTouch.RegisterActivity" />
         <activity
             android:name=".MutigameModule.Activity.Composition.CompositionActivity"
-            android:screenOrientation="landscape"></activity>
-        <activity android:name=".MutigameModule.Activity.Composition.WaitActivity"></activity>
+            android:screenOrientation="landscape" />
+        <activity android:name=".MutigameModule.Activity.Composition.WaitActivity" />
         <activity
             android:name=".MutigameModule.Activity.CreateAHomeActivity"
             android:launchMode="singleTask" />
@@ -48,12 +42,28 @@
             android:launchMode="singleTask" />
         <activity
             android:name=".MutigameModule.Activity.Composition.MusicOverActivity"
-            android:screenOrientation="landscape"></activity>
-        <activity android:name=".MutigameModule.Activity.gameplay.ChooseMusicActivity"></activity>
+            android:screenOrientation="landscape" />
+        <activity android:name=".MutigameModule.Activity.gameplay.ChooseMusicActivity" />
         <activity android:name=".MutigameModule.Activity.gameplay.MutiPlayActivity" />
-        <activity android:name=".musicTouch.TestActivity"></activity>
-        <activity android:name=".MutigameModule.Activity.gameplay.MutiGameResultActivity"></activity>
-        <activity android:name=".musicTouch.SingleChooseActivity">
+        <activity android:name=".musicTouch.TestActivity" />
+        <activity android:name=".MutigameModule.Activity.gameplay.MutiGameResultActivity" />
+        <activity android:name=".musicTouch.SingleChooseActivity"></activity>
+        <activity android:name=".Test.HorizontalCoordinatorNtbActivity"></activity>
+        <activity android:name=".Test.HorizontalNtbActivity"></activity>
+        <activity android:name=".Test.MainActivity">
+        </activity>
+        <activity android:name=".Test.TopHorizontalNtbActivity" />
+        <activity android:name=".Test.VerticalNtbActivity" />
+        <activity android:name=".Test.SamplesNtbActivity" />
+        <activity
+            android:name=".musicTouch.HomeActivity"
+            android:label="@string/title_activity_home"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
