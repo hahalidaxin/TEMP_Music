@@ -104,8 +104,11 @@ public abstract class FloatObject {
                 if (mCurDistance == 0) {
                     start = new PointF(x, y);
                     end = getRandomPoint((int)start.x, (int)start.y, (int) distance);// 取值范围distance
-                    c1 = getRandomPoint((int)start.x, (int)start.y, random.nextInt(width / 2)); // 取值范围width/2
-                    c2 = getRandomPoint(end.x, end.y, random.nextInt(width / 2));// 取值范围width/2
+                    if(width>0)
+                    {
+                        c1 = getRandomPoint((int) start.x, (int) start.y, random.nextInt(width / 2)); // 取值范围width/2
+                        c2 = getRandomPoint(end.x, end.y, random.nextInt(width / 2));// 取值范围width/2
+                    }
                 }
 
                 // 计算塞贝儿曲线的当前点

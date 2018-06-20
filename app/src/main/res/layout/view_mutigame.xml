@@ -1,0 +1,8 @@
+<com.example.daxinli.tempmusic.view.floatbackground.FloatBackLayout
+    android:id="@+id/welcome_floatbackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+</com.example.daxinli.tempmusic.view.floatbackground.FloatBackLayout>

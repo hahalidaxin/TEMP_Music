@@ -5,6 +5,7 @@ package com.example.daxinli.tempmusic.MutigameModule.other;
  */
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.daxinli.tempmusic.MutigameModule.Activity.gameplay.ChooseMusicActivity;
 import com.example.daxinli.tempmusic.R;
+import com.example.daxinli.tempmusic.musicTouch.HomeActivity;
 import com.example.daxinli.tempmusic.musicTouch.SingleChooseActivity;
 
 import java.util.ArrayList;
@@ -67,6 +69,11 @@ public class MusicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     ((ChooseMusicActivity)activity).sendMessage(firstViewHolder.musicName.getText().toString());
                 } else if(activity instanceof SingleChooseActivity) {
                     ((SingleChooseActivity)activity).onActivityTrans(firstViewHolder.musicName.getText().toString());
+                } else  if(activity instanceof HomeActivity) {
+                    Intent intent = new Intent();
+                    intent.putExtra("type",0);
+                    intent.putExtra("musicName",firstViewHolder.musicName.getText().toString());
+                    ((HomeActivity)activity).onActvitiyTrans(intent);
                 }
             }
         });
@@ -78,10 +85,13 @@ public class MusicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         MusicItem musicItem = mList.get(position);
         FirstViewHolder fholder = (FirstViewHolder) holder;
         //对显示资源记性加载
-        if(musicItem.getImageRes().length()!=0)
+        if(musicItem.getImageRes().length()!=0) {
             fholder.imageView.setText(musicItem.getImageRes());
-        if(musicItem.getMusicName().length()!=0)
-            fholder.musicName.setText(musicItem.getMusicName());
+        }
+        if(musicItem.getMusicName().length()!=0) {
+            String name = musicItem.getMusicName();
+            fholder.musicName.setText(name);
+        }
         if(musicItem.getMusicInfo().length()!=0)
             fholder.musicInfo.setText(musicItem.getMusicInfo());
         ArrayList<Integer> ls = musicItem.getInstrus();

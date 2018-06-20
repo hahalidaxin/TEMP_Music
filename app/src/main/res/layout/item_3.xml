@@ -10,10 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="79dp">
         <ImageView
+            android:layout_marginLeft="10dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
             android:id="@+id/image_setting"
-            android:gravity="center_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
+            android:gravity="center_vertical" />
         <TextView
             android:layout_marginLeft="15dp"
             android:textColor="@color/colorWhite"
@@ -21,7 +23,7 @@
             android:gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textSize="30dp"
+            android:textSize="16dp"
             android:textStyle="bold"/>
         <Switch
             android:id="@+id/switch_setting"

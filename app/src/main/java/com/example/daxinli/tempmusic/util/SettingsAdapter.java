@@ -1,5 +1,7 @@
 package com.example.daxinli.tempmusic.util;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,9 +12,10 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.daxinli.tempmusic.R;
 import com.example.daxinli.tempmusic.constant.GameData;
-import com.example.daxinli.tempmusic.musicTouch.SettingsActivity;
+import com.example.daxinli.tempmusic.musicTouch.HomeActivity;
 
 import java.util.List;
 
@@ -22,7 +25,7 @@ import java.util.List;
 
 public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private List<SettingItem> mList;
-    private SettingsActivity activity;
+    private Activity activity;
     private static final String TAG = "SettingsAdapter";
 
     static class FirstViewHolder extends RecyclerView.ViewHolder {
@@ -62,7 +65,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             this.mswitch  = (Switch) view.findViewById(R.id.switch_setting);
         }
     }
-    public SettingsAdapter(SettingsActivity activity,List<SettingItem> List) {
+    public SettingsAdapter(Activity activity, List<SettingItem> List) {
         this.mList = List;
         this.activity = activity;
     }
@@ -81,12 +84,17 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             firstViewHolder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    HomeActivity homeActivity = (HomeActivity)activity;
+                    Intent intent = new Intent();
                     if(firstViewHolder.textView.getText().toString()=="帮助") {        //转到帮助页面
-                        activity.TurnToActivity(1);
+                        intent.putExtra("type",1);
+                        homeActivity.onActvitiyTrans(intent);
                     } else if(firstViewHolder.textView.getText().toString()=="关于游戏") {   //转到关于游戏页面
-                        activity.TurnToActivity(2);
+                        intent.putExtra("type",2);
+                        homeActivity.onActvitiyTrans(intent);
                     } else if(firstViewHolder.textView.getText().toString()=="登录") {
-                        activity.TurnToActivity(3);
+                        intent.putExtra("type",3);
+                        homeActivity.onActvitiyTrans(intent);
                     }
                 }
             });
@@ -124,18 +132,18 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         switch(settingitem.getType()) {
             case 1:
                 FirstViewHolder fholder = (FirstViewHolder) holder;
-                fholder.imageView.setImageResource(settingitem.getImageId());
+                Glide.with(activity).load(settingitem.getImageId()).into(fholder.imageView);
                 fholder.textView.setText(settingitem.getText());
                 break;
             case 2:
                 SecondViewHolder sholder = (SecondViewHolder) holder;
-                sholder.imageView.setImageResource(settingitem.getImageId());
+                Glide.with(activity).load(settingitem.getImageId()).into(sholder.imageView);
                 sholder.themeView.setText(settingitem.getText());
                 sholder.descripView.setText(settingitem.getDesrip());
                 break;
             case 3:
                 ThirdViewHolder tholder = (ThirdViewHolder) holder;
-                tholder.imageView.setImageResource(settingitem.getImageId());
+                Glide.with(activity).load(settingitem.getImageId()).into(tholder.imageView);
                 tholder.textView.setText(settingitem.getText());
                 break;
 
