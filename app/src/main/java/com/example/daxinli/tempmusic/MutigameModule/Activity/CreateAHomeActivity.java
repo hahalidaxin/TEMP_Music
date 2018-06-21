@@ -199,6 +199,9 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if(buttonPressed!=null) {
+                    buttonPressed.setProgress(0);
+                }
                 //关闭线程 回退activity
                 if(type==0||type==1) {
                     CreateAHomeActivity.this.removeActivity();

@@ -56,7 +56,6 @@ public class GameActivity extends BaseActivity {
         //避免状态栏和虚拟按键的干扰 获得真实显示的屏幕信息
         Point point = new Point();
         getWindowManager().getDefaultDisplay().getRealSize(point);
-        Log.d(TAG,"the screen size is "+point.toString());
         Constant.ssr= ScreenScaleUtil.calScale(point.x, point.y);
     }
     public void loadSettings() {

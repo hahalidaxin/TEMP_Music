@@ -1,6 +1,8 @@
 package com.example.daxinli.tempmusic.thread;
 
 
+import android.util.Log;
+
 import com.example.daxinli.tempmusic.constant.GameData;
 import com.example.daxinli.tempmusic.object.MainSlide;
 import com.example.daxinli.tempmusic.util.effect.RedHeart.RedHeart;
@@ -32,6 +34,7 @@ public class CreateSlideThread extends Thread {
     private boolean pause = false;
     private boolean flag=true;
     private long attachSpan = 0;        //因暂停原因产生的需要补上的睡眠时间
+    private boolean occurRedHeart;
 
     public int state;               //曲子播放的状态
     private GameView gameView;
@@ -68,6 +71,7 @@ public class CreateSlideThread extends Thread {
                         if((++loopTimes)<4) {
                             currentPitch = 0;               //重新返回第一个音
                             nowclockTime = 0;
+                            occurRedHeart = false;
                             synchronized(GameData.lock) {   //游戏难度提升
                                 if(GameData.GameRK<GameData.gameSpeed.length-1)
                                     speedRK=GameData.gameSpeed[++GameData.GameRK];
@@ -100,7 +104,9 @@ public class CreateSlideThread extends Thread {
                 }
 
                 //红心的init初始设定
-                if(loopTimes>=1 && currentTime==randomInitRedHeartTime) {
+                if(!occurRedHeart && currentPitch>=randomInitRedHeartTime) {
+                    occurRedHeart = true;
+                    Log.e(TAG, "run: 释放了红心" );
                     int col;
                     while((col=random.nextInt(4))==lastRandomInt) {}
                     float speed = GameData.gameSpeed[GameData.GameRK]*GameData.MainSlideTHSpan;
@@ -161,7 +167,8 @@ public class CreateSlideThread extends Thread {
                 , Integer.parseInt(MsPitchInfo[2].trim()));
 
         if(MsArray.length>5)
-            randomInitRedHeartTime = random.nextInt(MsArray.length);
+            randomInitRedHeartTime =(random.nextInt(MsArray.length));
+        Log.e(TAG, "initData: "+Integer.toString(randomInitRedHeartTime) );
     }
 
     public void setFlag(boolean flag) { this.flag = flag ; }

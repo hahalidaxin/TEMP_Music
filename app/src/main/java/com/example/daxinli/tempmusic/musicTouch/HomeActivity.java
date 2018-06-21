@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.dd.processbutton.FlatButton;
 import com.example.daxinli.tempmusic.MutigameModule.Activity.CreateAHomeActivity;
 import com.example.daxinli.tempmusic.MutigameModule.Activity.EnterAHomeActivity;
 import com.example.daxinli.tempmusic.MutigameModule.other.MusicScoreAdapter;
@@ -60,6 +61,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
         setContentView(R.layout.activity_home);
         initUI();
     }
+
     private void initUI() {
         final ViewPager viewPager = (ViewPager) findViewById(R.id.vp_horizontal_ntb);
         viewPager.setAdapter(new PagerAdapter() {
@@ -194,6 +196,12 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
                 intent = new Intent(HomeActivity.this,EnterAHomeActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.btn_cleanProj_listSorted:
+                //清空rankList
+                SharedPreferences.Editor editor = getSharedPreferences("music",MODE_PRIVATE).edit();
+                editor.clear().apply();
+                initRankList();
+                break;
         }
     }
 
@@ -256,6 +264,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
      //初始化排行榜界面private
      ArrayList<turple> turList;
      boolean initRankListFlag = false;
+     FlatButton btn_cleanProj;
      PullToRefreshView mPullToRefreshView;
      private void initRankList() {
          //设置下拉刷新事件
@@ -269,6 +278,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
                  }
              });
          }
+         btn_cleanProj = (FlatButton) findViewById(R.id.btn_cleanProj_listSorted);
+         btn_cleanProj.setOnClickListener(this);
         //设置recyclerView的显示数据
          turList = new ArrayList<>();
          SharedPreferences pref = getSharedPreferences("music",MODE_PRIVATE);

@@ -26,6 +26,7 @@ public class SoundManager
 	SoundPool sp ;
 	HashMap<Integer	,Integer> hm ;
 	Activity activity;
+	public static boolean IsOn=true;
 
 	public MediaPlayer mp  ;
 	public int lastMP;
@@ -52,6 +53,7 @@ public class SoundManager
 }
 	public int playMusic(int sound,int loop)
 	{
+		if(!IsOn) return 0;
         if(sp!=null)
 		    return sp.play(hm.get(sound), 1, 1, 1, loop, 1);
         return 0;
@@ -62,4 +64,8 @@ public class SoundManager
         sp.stop(streamID);
         //sp.setVolume(sound, 0, 0);
     }
+
+	public static void setOn(boolean on) {
+		IsOn = on;
+	}
 }

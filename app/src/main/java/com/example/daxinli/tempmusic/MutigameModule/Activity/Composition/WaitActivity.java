@@ -369,6 +369,8 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
         if(builder!=null) return ;
         if(type==4) {
             btn_startGame.setProgress(-1);
+            //结束旋转动画
+            imgPhone.setVisibility(View.INVISIBLE);
         }
         runOnUiThread(new Runnable() {
             @Override
