@@ -1,6 +1,7 @@
 package com.example.daxinli.tempmusic.musicTouch;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -42,6 +43,7 @@ public class GameActivity extends BaseActivity {
         loadSettings();
 
         String filename = getIntent().getStringExtra("musicName");
+        musicName = filename;
         if(filename!=null) initIOFile(filename);
 
         setContentView(mySurfaceView);                          //以SurfaceView作为主界面
@@ -102,6 +104,12 @@ public class GameActivity extends BaseActivity {
                 e.printStackTrace();
             }
         }
+    }
+    public void onDataSaved(Intent intent) {
+        //对游戏成绩进行保存
+        SharedPreferences.Editor editor = getSharedPreferences("music",MODE_PRIVATE).edit();
+        editor.putInt(musicName,intent.getIntExtra("score",-1));
+        editor.apply();
     }
 
 }

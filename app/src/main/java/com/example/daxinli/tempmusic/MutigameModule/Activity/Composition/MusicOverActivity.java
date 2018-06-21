@@ -19,7 +19,7 @@ import com.example.daxinli.tempmusic.MutigameModule.Network.MusicOverReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
 import com.example.daxinli.tempmusic.R;
-import com.example.daxinli.tempmusic.musicTouch.MutiGameActivity;
+import com.example.daxinli.tempmusic.musicTouch.HomeActivity;
 
 public class MusicOverActivity extends AppCompatActivity {
     public NetworkService.MyBinder myBinder;
@@ -133,7 +133,7 @@ public class MusicOverActivity extends AppCompatActivity {
                             // TODO: 2018/6/9 需要改成 单例模式
                             //上传成员退出的消息
                             myBinder.sendMessage("<#EXIT#>");
-                            Intent intent = new Intent(MusicOverActivity.this, MutiGameActivity.class);
+                            Intent intent = new Intent(MusicOverActivity.this, HomeActivity.class);
                             startActivity(intent);
                         }
                     });
@@ -152,7 +152,7 @@ public class MusicOverActivity extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Intent intent = new Intent(MusicOverActivity.this, MutiGameActivity.class);
+                                    Intent intent = new Intent(MusicOverActivity.this, HomeActivity.class);
                                     startActivity(intent);
                                 }
                             });

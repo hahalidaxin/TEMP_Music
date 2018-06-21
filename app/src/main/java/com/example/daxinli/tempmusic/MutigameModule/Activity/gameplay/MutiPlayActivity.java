@@ -21,7 +21,7 @@ import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
 import com.example.daxinli.tempmusic.MySurfaceView;
 import com.example.daxinli.tempmusic.constant.GameData;
 import com.example.daxinli.tempmusic.musicTouch.BaseActivity;
-import com.example.daxinli.tempmusic.musicTouch.MutiGameActivity;
+import com.example.daxinli.tempmusic.musicTouch.HomeActivity;
 import com.example.daxinli.tempmusic.util.manager.SoundManager;
 import com.example.daxinli.tempmusic.util.screenscale.Constant;
 import com.example.daxinli.tempmusic.util.screenscale.ScreenScaleUtil;
@@ -114,7 +114,7 @@ public class MutiPlayActivity extends BaseActivity {
                         } catch(Exception e ) {
                             e.printStackTrace();
                         }
-                        Intent intent = new Intent(MutiPlayActivity.this,MutiGameActivity.class);
+                        Intent intent = new Intent(MutiPlayActivity.this,HomeActivity.class);
                         startActivity(intent);
                     }
                 }).start();
@@ -138,7 +138,7 @@ public class MutiPlayActivity extends BaseActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if(type==1) {
-                                Intent intent = new Intent(MutiPlayActivity.this,MutiGameActivity.class);
+                                Intent intent = new Intent(MutiPlayActivity.this,HomeActivity.class);
                                 startActivity(intent);
                             }
                         }
@@ -167,7 +167,7 @@ public class MutiPlayActivity extends BaseActivity {
     }
     public void exitActivity(int type) {
         if(type==0) {
-            Intent intent = new Intent(MutiPlayActivity.this,MutiGameActivity.class);
+            Intent intent = new Intent(MutiPlayActivity.this,HomeActivity.class);
             startActivity(intent);
         }
     }

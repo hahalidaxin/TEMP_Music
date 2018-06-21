@@ -23,7 +23,7 @@ import com.example.daxinli.tempmusic.MutigameModule.Network.MutiGameResultReceiv
 import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
 import com.example.daxinli.tempmusic.R;
-import com.example.daxinli.tempmusic.musicTouch.MutiGameActivity;
+import com.example.daxinli.tempmusic.musicTouch.HomeActivity;
 
 public class MutiGameResultActivity extends AppCompatActivity {
     private static final String TAG = "MutiGameResultActivity";
@@ -155,7 +155,7 @@ public class MutiGameResultActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         //Button按下需要进行activity的回退
-                        Intent intent = new Intent(MutiGameResultActivity.this, MutiGameActivity.class);
+                        Intent intent = new Intent(MutiGameResultActivity.this, HomeActivity.class);
                         startActivity(intent);
                     }
                 });
@@ -177,7 +177,7 @@ public class MutiGameResultActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if(type==1 || type==3) {
-                            Intent intent = new Intent(MutiGameResultActivity.this,MutiGameActivity.class);
+                            Intent intent = new Intent(MutiGameResultActivity.this,HomeActivity.class);
                             startActivity(intent);
                         }
                         builder = null;

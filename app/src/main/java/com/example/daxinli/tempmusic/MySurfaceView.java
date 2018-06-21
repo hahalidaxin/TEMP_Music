@@ -157,6 +157,9 @@ public class MySurfaceView extends GLSurfaceView {
         Log.e(TAG, "onTurnView: ");
         if(this.activityType==ACTYPE_MUTIGAMETYPE) {
             ((MutiPlayActivity)activity).onSendMessage(type,intent);
+        }else if(this.activityType==ACTYPE_SINGLEGAMETYPE) {
+            //需要将成绩保存
+            ((GameActivity)activity).onDataSaved(intent);
         }
     }
 

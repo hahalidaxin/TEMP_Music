@@ -129,8 +129,9 @@ public class GameView extends BaseView {
             Intent intent = new Intent();
             intent.putExtra("ratio",(int)(GameData.gameProgressRatio*100));
             intent.putExtra("score",GameData.GameScore);
-            if(father.activityType==MySurfaceView.ACTYPE_SINGLEGAMETYPE)
+            if(father.activityType==MySurfaceView.ACTYPE_SINGLEGAMETYPE) {
                 MySurfaceView.curView = MySurfaceView.gameoverView;
+            }
             father.onTurnView(1,intent);
             /*
             switch(x) {

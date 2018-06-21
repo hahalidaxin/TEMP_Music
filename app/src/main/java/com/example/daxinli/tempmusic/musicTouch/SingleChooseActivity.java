@@ -28,7 +28,7 @@ public class SingleChooseActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_single_choose);
+        setContentView(R.layout.view_single_choose);
         startFindLocalMusic();
         initView();
         initRecyclerView();

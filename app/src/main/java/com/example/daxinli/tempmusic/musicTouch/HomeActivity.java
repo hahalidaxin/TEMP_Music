@@ -2,9 +2,11 @@ package com.example.daxinli.tempmusic.musicTouch;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -28,6 +30,8 @@ import com.example.daxinli.tempmusic.MutigameModule.Activity.CreateAHomeActivity
 import com.example.daxinli.tempmusic.MutigameModule.Activity.EnterAHomeActivity;
 import com.example.daxinli.tempmusic.MutigameModule.other.MusicItem;
 import com.example.daxinli.tempmusic.MutigameModule.other.MusicListAdapter;
+import com.example.daxinli.tempmusic.MutigameModule.other.MusicScoreAdapter;
+import com.example.daxinli.tempmusic.MutigameModule.other.MusicScoreItem;
 import com.example.daxinli.tempmusic.R;
 import com.example.daxinli.tempmusic.util.SettingItem;
 import com.example.daxinli.tempmusic.util.SettingsAdapter;
@@ -35,7 +39,9 @@ import com.example.daxinli.tempmusic.view.floatbackground.FloatBackLayout;
 import com.example.daxinli.tempmusic.view.floatbackground.FloatBitmap;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -57,8 +63,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
         final ViewPager viewPager = (ViewPager) findViewById(R.id.vp_horizontal_ntb);
         viewPager.setAdapter(new PagerAdapter() {
             public View[] views = new View[4];
-            private int[] RID_views  = { R.layout.activity_single_choose,R.layout.item_vp_list,
-                    R.layout.view_mutigame,R.layout.activity_settings };
+            private int[] RID_views  = { R.layout.view_single_choose,R.layout.view_ranklist,
+                    R.layout.view_mutigame,R.layout.view_settings};
             @Override
             public int getCount() {
                 return 4;
@@ -204,6 +210,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
                 initMusicList();
                 break;
             case 1:
+                initRankList();
                 break;
             case 2:
                 initMutiGame();
@@ -225,7 +232,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
              e.printStackTrace();
          }
          ArrayList<MusicItem> settingList = new ArrayList<>();
-         //String msg = mintent.getStringExtra("musicList");
          RecyclerView recyclerView = (RecyclerView) findViewById(R.id.GrecyclerView_singleChoose);
          TextView textMusicNum = (TextView)findViewById(R.id.text_musicDetectedNum_singleChoose);
          textMusicNum.setText(String.format("(嘿ヾ(✿ﾟ▽ﾟ)ノ，我们找到了%d首歌曲：",fileList.length));
@@ -244,6 +250,31 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
          recyclerView.setLayoutAnimation(controller);
          recyclerView.getAdapter().notifyDataSetChanged();
          recyclerView.scheduleLayoutAnimation();
+     }
+
+
+     //初始化排行榜界面
+     private ArrayList<turple> turList;
+     private void initRankList() {
+         turList = new ArrayList<>();
+         SharedPreferences pref = getSharedPreferences("music",MODE_PRIVATE);
+         Map<String,?> map = pref.getAll();
+         for(Map.Entry<String,?> item : map.entrySet()) {
+            String finame =""+item.getKey();
+            String score = ""+item.getValue();
+            turList.add(new turple(finame,score));
+         }
+         Collections.sort(turList);
+         ArrayList<MusicScoreItem> settingList = new ArrayList<>();
+         for(int i=0;i<turList.size();i++) {
+             settingList.add(new MusicScoreItem(i,turList.get(i).name,Integer.parseInt(turList.get(i).score)));
+         }
+
+         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView_listSorted);
+         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+         recyclerView.setLayoutManager(linearLayoutManager);
+         MusicScoreAdapter settingsAdapter = new MusicScoreAdapter(this,settingList);
+         recyclerView.setAdapter(settingsAdapter);
      }
 
      //初始化游戏设置界面
@@ -352,4 +383,44 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
         }
     }
 
+    private class turple implements Comparable{
+        public String name;
+        public String score;
+        public turple(String name,String score) {
+            super();
+            this.name = name;
+            this.score = score;
+        }
+
+        @Override
+        public int hashCode() {
+            return super.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return super.equals(obj);
+        }
+
+        @Override
+        protected Object clone() throws CloneNotSupportedException {
+            return super.clone();
+        }
+
+        @Override
+        public String toString() {
+            return super.toString();
+        }
+
+        @Override
+        protected void finalize() throws Throwable {
+            super.finalize();
+        }
+
+        @Override
+        public int compareTo(@NonNull Object o) {
+            return Integer.parseInt(this.score)-
+                    Integer.parseInt(((turple)o).score);
+        }
+    }
 }

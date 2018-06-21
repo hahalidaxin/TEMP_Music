@@ -19,7 +19,7 @@ import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.View.Muti_SurfaceView;
 import com.example.daxinli.tempmusic.MutigameModule.service.NetworkService;
 import com.example.daxinli.tempmusic.musicTouch.BaseActivity;
-import com.example.daxinli.tempmusic.musicTouch.MutiGameActivity;
+import com.example.daxinli.tempmusic.musicTouch.HomeActivity;
 import com.example.daxinli.tempmusic.util.manager.SoundManager;
 import com.example.daxinli.tempmusic.util.screenscale.Constant;
 import com.example.daxinli.tempmusic.util.screenscale.ScreenScaleUtil;
@@ -117,7 +117,7 @@ public class CompositionActivity extends BaseActivity {
                         }catch(Exception e) {
                             e.printStackTrace();
                         }
-                        Intent intent = new Intent(CompositionActivity.this,MutiGameActivity.class);
+                        Intent intent = new Intent(CompositionActivity.this,HomeActivity.class);
                         startActivity(intent);
                     }
                 }).start();
@@ -143,7 +143,7 @@ public class CompositionActivity extends BaseActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Intent intent = new Intent(CompositionActivity.this,MutiGameActivity.class);
+                            Intent intent = new Intent(CompositionActivity.this,HomeActivity.class);
                             startActivity(intent);
                         }
                     });
@@ -168,7 +168,7 @@ public class CompositionActivity extends BaseActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if(type==1) {
-                                Intent intent = new Intent(CompositionActivity.this,MutiGameActivity.class);
+                                Intent intent = new Intent(CompositionActivity.this,HomeActivity.class);
                                 startActivity(intent);
                             }
                         }
