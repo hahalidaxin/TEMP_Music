@@ -70,7 +70,6 @@ public class PathSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     }
     private int[] Rtime = {0,75,50,25,150,125,125,125};
     public void startAnimation(final Activity activity) {
-        Log.e(TAG, String.format("startAnimation: %d",pathManagerArrayList.size()) );
         final ArrayList<PathManager> tmpPath = new ArrayList<>(pathManagerArrayList);
         new Thread(new Runnable() {
             @Override

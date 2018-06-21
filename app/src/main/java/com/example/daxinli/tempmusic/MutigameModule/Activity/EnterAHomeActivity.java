@@ -9,9 +9,11 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.widget.Button;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 
+import com.dd.processbutton.iml.ActionProcessButton;
 import com.example.daxinli.tempmusic.MutigameModule.Activity.Composition.WaitActivity;
 import com.example.daxinli.tempmusic.MutigameModule.Network.HomeACReceiver;
 import com.example.daxinli.tempmusic.MutigameModule.Network.NetMsgReceiver;
@@ -21,11 +23,12 @@ import com.example.daxinli.tempmusic.util.effect.pathviewer.PathSurfaceView;
 
 public class EnterAHomeActivity extends AbHomeActivity implements View.OnClickListener {
     EditText editText_paswordtoEnter;
-    Button btn_enterYourHome;
+    ActionProcessButton btn_enterYourHome;
     //NetMsgSender netMsgSender;
     private NetworkService.MyBinder myBinder;
     private HomeACReceiver breceiver;
     private Intent serviceIntent;
+
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -53,6 +56,7 @@ public class EnterAHomeActivity extends AbHomeActivity implements View.OnClickLi
     protected void onResume() {
         super.onResume();
         //注册广播//初始化广播接收器
+        if(btn_enterYourHome!=null) btn_enterYourHome.setProgress(0);
         breceiver = new HomeACReceiver(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(NetMsgReceiver.HOME_AC_ACTION);
@@ -81,7 +85,7 @@ public class EnterAHomeActivity extends AbHomeActivity implements View.OnClickLi
 
     public void initView() {
         editText_paswordtoEnter = (EditText) findViewById(R.id.editText_homepassword_toenter);
-        btn_enterYourHome = (Button) findViewById(R.id.btn_enterYourHome);
+        btn_enterYourHome = (ActionProcessButton) findViewById(R.id.btn_enterYourHome);
 
         btn_enterYourHome.setOnClickListener(this);
 
@@ -93,6 +97,12 @@ public class EnterAHomeActivity extends AbHomeActivity implements View.OnClickLi
         switch(v.getId()) {
             case R.id.btn_enterYourHome:
                 String requestCode = editText_paswordtoEnter.getText().toString();
+                if(requestCode.length()==0) {
+                    Animation ani_shake = AnimationUtils.loadAnimation(this,R.anim.animation_shake);
+                    editText_paswordtoEnter.startAnimation(ani_shake);
+                    return ;
+                }
+                btn_enterYourHome.setProgress(75);
                 myBinder.sendMessage("<#CONNECT#>NORMAL#"+requestCode);
                 break;
         }
@@ -103,6 +113,7 @@ public class EnterAHomeActivity extends AbHomeActivity implements View.OnClickLi
             @Override
             public void run() {
                 if(flag) {
+                    if(btn_enterYourHome!=null) btn_enterYourHome.setProgress(100);
                     Intent intent = new Intent(EnterAHomeActivity.this,WaitActivity.class);
                     intent.putExtra("clockID",clockID);
                     intent.putExtra("sessionID",sessionID);
@@ -110,6 +121,7 @@ public class EnterAHomeActivity extends AbHomeActivity implements View.OnClickLi
                     intent.putExtra("connectType",WaitActivity.CONNECT_COMPOSE);    //任意
                     startActivity(intent);
                 } else {
+                    btn_enterYourHome.setProgress(-1);
                     if(type==0)
                         EnterAHomeActivity.this.showAlerDialog("!!!∑(ﾟДﾟノ)ノ", "没有该房间", 3);
                     else if(type==1)
@@ -152,6 +164,7 @@ public class EnterAHomeActivity extends AbHomeActivity implements View.OnClickLi
                 } else if(type==3) {
 
                 }
+                btn_enterYourHome.setProgress(0);
                 builder = null;
             }
         });

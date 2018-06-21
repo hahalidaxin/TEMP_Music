@@ -12,6 +12,8 @@ import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.dd.processbutton.iml.ActionProcessButton;
 import com.example.daxinli.tempmusic.MutigameModule.Activity.CreateAHomeActivity;
 import com.example.daxinli.tempmusic.MutigameModule.Activity.EnterAHomeActivity;
 import com.example.daxinli.tempmusic.MutigameModule.Activity.gameplay.MutiPlayActivity;
@@ -45,13 +48,14 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
     public static final int CONNECT_COMPOSE  = 1113;
     public static final int TYPE_LEADER = 0;
     private static final String TAG = "WaitOtherPeopleActivity";
-    Button btn_startGame;
+    ActionProcessButton btn_startGame;
     Button btn_sendDanmu;
     TextView text_teamateLinked;
     EditText editText_Danmu;
     EditText editText_MusicName;
     EditText editText_BPM;
     LinearLayout lilayout;
+    ImageView imgPhone;
 
     public final String[] instruNametoShow = { "钢琴","吉他","打击","响铃" };
     int[] RID_imgInstru = {R.id.img_Instru1_wait1,R.id.img_Instru2_wait1,
@@ -114,7 +118,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
         initView();
     }
     void initView() {
-        btn_startGame = (Button) findViewById(R.id.btn_leader_startgame);
+        btn_startGame = (ActionProcessButton) findViewById(R.id.btn_leader_startgame);
         text_teamateLinked = (TextView) findViewById(R.id.text_amout_peoplein);
         btn_sendDanmu = (Button) findViewById(R.id.btn_danmusend_createhome);
         editText_Danmu = (EditText) findViewById(R.id.edittext_danmu_createhome);
@@ -122,6 +126,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
         editText_BPM = (EditText) findViewById(R.id.edittext_bpm);
         editText_MusicName = (EditText) findViewById(R.id.edittext_musicname);
         lilayout = (LinearLayout) findViewById(R.id.Lilayout_tohide);
+        imgPhone = (ImageView) findViewById(R.id.phone_wait);
         btn_startGame.setOnClickListener(this);
         btn_sendDanmu.setOnClickListener(this);
         if(connectType==CONNECT_COMPOSE) {
@@ -178,13 +183,42 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
         danmakuView.prepare(parser,danmakuContext);
     }
 
+    boolean isPhoneAlerThreadStart =false;
+    private int runAlertTimes = 0;
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.btn_leader_startgame:
+                btn_startGame.setProgress(75);
                 if(connectType==CONNECT_COMPOSE) {
+                    //需要提示要即将进行手机屏幕的旋转
                     myBinder.sendMessage("<#WAITVIEW#>STARTGAME#" + editText_MusicName.getText().toString() + "#"
                             + editText_BPM.getText().toString());
+
+                    imgPhone.setVisibility(View.VISIBLE);
+                    if(!isPhoneAlerThreadStart) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                while (true) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Animation ani = AnimationUtils.loadAnimation(WaitActivity.this, R.anim.animation_rotate);
+                                            imgPhone.startAnimation(ani);
+                                        }
+                                    });
+                                    try {
+                                        Thread.sleep(2000);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    runAlertTimes+=1;
+                                }
+                            }
+                        }).start();
+                        isPhoneAlerThreadStart = true;
+                    }
                 } else if(connectType==CONNECT_GAMEPlAY) {
                     int x = -1;
                     for(int i=0;i<4;i++) if(text_instru[i].getText().toString().contains("You")) {
@@ -232,6 +266,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
                             instruType = i;
                             break;
                         }
+                    btn_startGame.setProgress(100);
 
                     intent = new Intent(WaitActivity.this, CompositionActivity.class);
                     intent.putExtra("activityType", mateType);
@@ -246,9 +281,29 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
                         intent.putExtra("musicName", strs[0]);
                         intent.putExtra("BPM", Integer.parseInt(strs[1].trim()));
                     }
-                    startActivity(intent);
+                    final Intent mintent = intent;
+                    //如果提醒动画没有播放完成 需要对加载时间进行延迟
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(runAlertTimes<1) {
+                                try {
+                                    Thread.sleep(2000);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    WaitActivity.this.startActivity(mintent);
+                                }
+                            });
+                        }
+                    }).start();
                 } else if(connectType==CONNECT_GAMEPlAY) {
                     //启动多人游戏
+                    btn_startGame.setProgress(100);
                     intent = new Intent(WaitActivity.this,MutiPlayActivity.class);
                     intent.putExtra("musicScore",extralInfo);
                     intent.putExtra("instruType",instruType);
@@ -312,6 +367,9 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
     AlertDialog.Builder builder;            //用来处理多个builder重叠出现的情况
     public void ShowAlertDialog(final String tititle,final String msg,final int type) {     //用户想要退出显示警告信息框
         if(builder!=null) return ;
+        if(type==4) {
+            btn_startGame.setProgress(-1);
+        }
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -339,7 +397,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
                             myBinder.restartNetThread();
                             startActivity(intent);
                         }else if(type==4) {
-
+                            btn_startGame.setProgress(0);
                         }
                         builder = null;
                     }

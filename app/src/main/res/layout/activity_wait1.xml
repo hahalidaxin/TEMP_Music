@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorBlack"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
         <com.example.daxinli.tempmusic.util.effect.pathviewer.PathSurfaceView
             android:id="@+id/wait_pathView"
             android:layout_width="match_parent"
@@ -197,15 +198,34 @@
             android:layout_height="wrap_content"
             android:textSize="15dp"
             android:text="文本框"/>
-        <Button
-            android:layout_gravity="center"
+
+        <com.dd.processbutton.iml.ActionProcessButton
             android:id="@+id/btn_leader_startgame"
-            android:layout_width="wrap_content"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:text="开始游戏"/>
+            android:layout_marginBottom="16dp"
+            android:text="开始游戏"
+            android:layout_gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            custom:pb_colorComplete="@color/green_complete"
+            custom:pb_colorNormal="@color/blue_normal"
+            custom:pb_colorPressed="@color/blue_pressed"
+            custom:pb_colorProgress="@color/purple_progress"
+            custom:pb_textComplete="Success"
+            custom:pb_textProgress="Loading"
+            custom:pb_textError="Error"
+            custom:pb_colorError="@color/red_error" />
 
 
     </LinearLayout>
 
 </LinearLayout>
+    <ImageView
+        android:id="@+id/phone_wait"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/pic_phone"
+        android:visibility="invisible"/>
 </FrameLayout>

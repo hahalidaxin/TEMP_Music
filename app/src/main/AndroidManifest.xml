@@ -38,7 +38,8 @@
             android:screenOrientation="landscape" />
         <activity android:name=".MutigameModule.Activity.gameplay.ChooseMusicActivity" />
         <activity android:name=".MutigameModule.Activity.gameplay.MutiPlayActivity" />
-        <activity android:name=".musicTouch.TestActivity" />
+        <activity android:name=".musicTouch.TestActivity">
+        </activity>
         <activity android:name=".MutigameModule.Activity.gameplay.MutiGameResultActivity" />
         <activity android:name=".musicTouch.SingleChooseActivity"></activity>
         <activity android:name=".Test.HorizontalCoordinatorNtbActivity"></activity>
@@ -51,6 +52,7 @@
         <activity
             android:name=".musicTouch.HomeActivity"
             android:label="@string/title_activity_home"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

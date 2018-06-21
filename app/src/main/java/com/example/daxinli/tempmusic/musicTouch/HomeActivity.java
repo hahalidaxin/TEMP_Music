@@ -316,18 +316,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
          actionBar = getSupportActionBar();
          if(actionBar != null) {
              actionBar.setTitle("");
-             //actionBar.setDisplayHomeAsUpEnabled(true);
          }
 
-         //添加标题栏的用户名称
-         /*
-         tv_usernameActionBar = (TextView) findViewById(R.id.login_name_setting);
-         String userTitle="";
-         if(userTitle.length()==0)
-             tv_usernameActionBar.setText("尚未登录");
-         else
-             tv_usernameActionBar.setText(userTitle);
-           */
          Glide.with(this).load(R.drawable.myback).into(imageView);
          Glide.with(this).load(R.drawable.touxiang).into(headP);
 
@@ -361,10 +351,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
         //设置浮动背景
          floatBackLayout =  (FloatBackLayout) findViewById(R.id.welcome_floatbackground);
          //floatBackLayout.setBackGround(this,R.drawable.pic_start_backg);
-         for(int i=0;i<17;i++) {
+         for(int i=0;i<30;i++) {
+             int x = i>=17?i-17:i;
              float posX = ((float)random.nextInt(100)/100.0f);
              float posY = ((float)random.nextInt(100)/100.0f);
-             floatBackLayout.addFloatView(new FloatBitmap(this,posX,posY,RID_picNote[i]));
+             floatBackLayout.addFloatView(new FloatBitmap(this,posX,posY,RID_picNote[x]));
          }
          floatBackLayout.initFloatObject(1080,1920);
          new Thread(new Runnable() {

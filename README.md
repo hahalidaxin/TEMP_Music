@@ -32,6 +32,9 @@
 4) NavigationTabBar
 5) Phoenix Pull-to-Refresh
 
+## 免责声明
+游戏纯属个人产品，不用于任何商业用途
+<br>本游戏的开发灵感来自于音乐游戏《钢琴键》，采用了游戏中音乐列表的侧边图片，如有侵权，将立即删除。
 
 ## 关于作者
 hahalidaxin

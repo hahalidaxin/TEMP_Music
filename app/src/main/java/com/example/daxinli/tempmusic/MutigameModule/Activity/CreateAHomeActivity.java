@@ -8,11 +8,12 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 
+import com.dd.processbutton.iml.ActionProcessButton;
 import com.example.daxinli.tempmusic.MutigameModule.Activity.Composition.WaitActivity;
 import com.example.daxinli.tempmusic.MutigameModule.Activity.gameplay.ChooseMusicActivity;
 import com.example.daxinli.tempmusic.MutigameModule.Network.HomeACReceiver;
@@ -25,8 +26,8 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
     private static final String TAG = "CreateAHomeActivity";
     public static final int HOMEMATELIMIT = 4;
     private EditText editText_homePassword;
-    private Button btn_createYourHome;
-    private Button btn_mutiplaymusic;
+    private ActionProcessButton btn_createYourHome;
+    private ActionProcessButton btn_mutiplaymusic;
 
     private NetworkService.MyBinder myBinder;
     private HomeACReceiver breceiver;
@@ -57,9 +58,11 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
 
     public void initWork() {
         editText_homePassword = (EditText) findViewById(R.id.editText_homepassword);
-        btn_createYourHome = (Button) findViewById(R.id.btn_createYourHome);
-        btn_mutiplaymusic= (Button) findViewById(R.id.btn_mutiplayMusic);
+        btn_createYourHome = (ActionProcessButton) findViewById(R.id.btn_createYourHome);
+        btn_mutiplaymusic= (ActionProcessButton) findViewById(R.id.btn_mutiplayMusic);
 
+        btn_createYourHome.setMode(ActionProcessButton.Mode.ENDLESS);
+        btn_mutiplaymusic.setMode(ActionProcessButton.Mode.ENDLESS);
         btn_createYourHome.setOnClickListener(this);
         btn_mutiplaymusic.setOnClickListener(this);
         connectType = 0;
@@ -71,6 +74,9 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
             public void run() {
                 if(flag) {
                     if(connectType ==0) {
+                        if(buttonPressed!= null)
+                            buttonPressed.setProgress(100);        //按钮状态设置
+
                         Intent intent = new Intent(CreateAHomeActivity.this, WaitActivity.class);   //进入等待界面 此时需要提醒服务器端记性teamstate的修改
                         intent.putExtra("clockID", clockID);
                         intent.putExtra("sessionID", sessionID);
@@ -83,30 +89,51 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
                         myBinder.sendMessage("<#CREATEVIEW#>MusicList");
                     }
                 } else {
-                    if(type==0)
+                    if(type==0) {
+                        if(buttonPressed!= null)
+                            buttonPressed.setProgress(-1);        //按钮状态设置
                         CreateAHomeActivity.this.showAlerDialog("创建失败", "请更换您的密码", 2);
+                    }
                 }
             }
         });
     }
     public void onPlayerActivityTrans(String msg) {
+        if(buttonPressed!=null)
+            buttonPressed.setProgress(100);
         Intent intent = new Intent(CreateAHomeActivity.this, ChooseMusicActivity.class);        //进入乐谱选择界面//这个时候其他组员依然不能够进入房间
         intent.putExtra("activityType",0);
         intent.putExtra("musicList",msg);
-        Log.e(TAG, "onPlayerActivityTrans: "+msg);
         startActivity(intent);
     }
+
+    ActionProcessButton buttonPressed = null;
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.btn_createYourHome:
                 String requestCode = editText_homePassword.getText().toString();
+                if(requestCode.length()==0) {
+                    Animation ani_shake = AnimationUtils.loadAnimation(this,R.anim.animation_shake);
+                    editText_homePassword.startAnimation(ani_shake);
+                    return ;
+                }
+                connectType=0;
                 myBinder.sendMessage("<#CONNECT#>LEADER#"+requestCode);
+                btn_createYourHome.setProgress(75);
+                buttonPressed = btn_createYourHome;
                 break;
             case R.id.btn_mutiplayMusic:
-                connectType = 1;
                 String msg = editText_homePassword.getText().toString();
+                if(msg.length()==0) {
+                    Animation ani_shake = AnimationUtils.loadAnimation(this,R.anim.animation_shake);
+                    editText_homePassword.startAnimation(ani_shake);
+                    return ;
+                }
+                connectType = 1;
                 myBinder.sendMessage("<#CONNECT#>LEADER#"+msg);
+                btn_mutiplaymusic.setProgress(75);
+                buttonPressed = btn_mutiplaymusic;
                 break;
         }
     }
@@ -115,6 +142,10 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
     protected void onResume() {
         super.onResume();
         //注册广播//初始化广播接收器
+        if(btn_createYourHome!=null) btn_createYourHome.setProgress(0);
+        if(btn_mutiplaymusic!=null) btn_mutiplaymusic.setProgress(0);
+        if(buttonPressed!=null) buttonPressed = null;
+
         breceiver = new HomeACReceiver(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(NetMsgReceiver.HOME_AC_ACTION);
@@ -158,6 +189,8 @@ public class CreateAHomeActivity extends AbHomeActivity implements View.OnClickL
                     if(type==2) {
                         //取消重新连接网络 直接回退到上一个activity
                         CreateAHomeActivity.this.removeActivity();
+                        if(buttonPressed!= null)
+                            buttonPressed.setProgress(0);
                     }
                     builder = null;
                 }

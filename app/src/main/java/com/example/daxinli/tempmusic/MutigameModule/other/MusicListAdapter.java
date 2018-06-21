@@ -7,6 +7,7 @@ package com.example.daxinli.tempmusic.MutigameModule.other;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +67,7 @@ public class MusicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             public void onClick(View v) {
                 String filename = firstViewHolder.musicName.getText().toString()+"-"+firstViewHolder.musicInfo.getText().toString();
                 if(activity instanceof ChooseMusicActivity) {
-                    ((ChooseMusicActivity)activity).sendMessage(firstViewHolder.musicName.getText().toString());
+                    ((ChooseMusicActivity)activity).sendMessage(filename);
                 } else if(activity instanceof SingleChooseActivity) {
                     ((SingleChooseActivity)activity).onActivityTrans(firstViewHolder.musicName.getText().toString());
                 } else  if(activity instanceof HomeActivity) {
@@ -96,11 +97,12 @@ public class MusicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             fholder.musicInfo.setText(musicItem.getMusicInfo());
         ArrayList<Integer> ls = musicItem.getInstrus();
         if(ls.size()!=0) {
+            int sz = ls.size();
+            Log.e(TAG, String.format("onBindViewHolder: %d %d",position,sz));
             for (int i = 0; i < 4; i++) {
-                if (i < ls.size())
-                    Glide.with(activity).load(DID_iconInstru[i]).into(fholder.iconInstru[i]);
-                else
-                    fholder.iconInstru[i].setVisibility(View.INVISIBLE);
+                if (i<sz) {
+                    Glide.with(activity).load(DID_iconInstru[ls.get(i)]).into(fholder.iconInstru[i]);
+                }
             }
         }
     }
