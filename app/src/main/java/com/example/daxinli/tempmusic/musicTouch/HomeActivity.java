@@ -295,18 +295,19 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
          }
 
          //添加标题栏的用户名称
+         /*
          tv_usernameActionBar = (TextView) findViewById(R.id.login_name_setting);
          String userTitle="";
          if(userTitle.length()==0)
              tv_usernameActionBar.setText("尚未登录");
          else
              tv_usernameActionBar.setText(userTitle);
-
+           */
          Glide.with(this).load(R.drawable.myback).into(imageView);
          Glide.with(this).load(R.drawable.touxiang).into(headP);
 
          headP.setOnClickListener(this);
-         tv_usernameActionBar.setOnClickListener(this);
+//         tv_usernameActionBar.setOnClickListener(this);
 
          settingList.add(new SettingItem(R.drawable.pic_effect,"音效","",3));
          settingList.add(new SettingItem(R.drawable.pic_help,"帮助","",1));
@@ -419,7 +420,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
 
         @Override
         public int compareTo(@NonNull Object o) {
-            return Integer.parseInt(this.score)-
+            return -Integer.parseInt(this.score)+
                     Integer.parseInt(((turple)o).score);
         }
     }
