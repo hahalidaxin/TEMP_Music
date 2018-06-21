@@ -1,3 +1,8 @@
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -11,7 +16,7 @@
     <com.yalantis.phoenix.PullToRefreshView
         android:id="@+id/pull_to_refresh_listSorted"
         android:layout_width="match_parent"
-        android:layout_height="522dp">
+        android:layout_height="match_parent">
         <android.support.v7.widget.RecyclerView
             android:layout_marginTop="0dp"
             android:id="@+id/recyclerView_listSorted"
@@ -22,13 +27,13 @@
          </android.support.v7.widget.RecyclerView>
     </com.yalantis.phoenix.PullToRefreshView>
 
-    <com.dd.processbutton.FlatButton
-        android:id="@+id/btn_cleanProj_listSorted"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="0dp"
-        android:text="清空数据"
-        android:textColor="@android:color/white"
-        android:textSize="12dp" />
 </LinearLayout>
+    <at.markushi.ui.CircleButton
+        android:id="@+id/circleButton_listSorted"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_gravity="right|bottom"
+        android:src="@drawable/ic_action_tick"
+        app:cb_color="#FF74B4"
+        app:cb_pressedRingWidth="12dp" />
+</FrameLayout>

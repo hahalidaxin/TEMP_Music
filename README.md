@@ -8,12 +8,13 @@
 * 游戏界面特效基于OpenglES实现，其他部分的特效基于SurfaceView绘制实现。
 * 游戏音源分别来自于FL的Piano Guitar Kick Bell，播放音乐使用SoundPool。
 * 程序进行了比较详尽的错误处理，增强了游戏的健壮性。
-* 调用实现的有：圆角Image，Loading图标，等待界面弹幕聊天室，Glide加载图片。
+* 调用实现的有：圆角Image，Loading图标，等待界面弹幕聊天室，Glide加载图片、NavigationTabBar主选择界面。
 
 ## 特效
 * 游戏界面的大部分特效基于帧动画的原理，其中有点击红心、数字跳动、三角形烟花绽放、节奏型工具，钢琴按压等；另外还有滑块点击特效原理是通过编写相应的shader完成的。
 * 多个Activity的背景被设置为了电流流动的特效，本特效的思路来源于BiliBili的弹幕聊天室，学习途径是一篇博客[这里]("")，在此基础上进行了重新封装，并编写了电流的路径文件。
 * 欢迎界面的浮动音符，继承FrameLayout重写onDraw实现，其中不规则浮动用到了随机化与贝塞尔曲线，学习途径是一篇博客[这里]("")，再次基础上拓展了音符可以跟随触摸位置改变。
+* 其他诸如控件的透明度变化、控件的位移、EditText的抖动、手机屏幕翻转提示等都是基于XML实现的补间动画。
 
 ## 游戏流程
 
@@ -32,6 +33,7 @@
 3) DanmakuFlameMaster
 4) NavigationTabBar
 5) Phoenix Pull-to-Refresh
+6) CircleButton
 
 ## 免责声明
 游戏纯属个人产品，不用于任何商业用途

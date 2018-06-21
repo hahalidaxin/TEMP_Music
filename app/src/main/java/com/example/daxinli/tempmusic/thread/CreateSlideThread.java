@@ -137,7 +137,7 @@ public class CreateSlideThread extends Thread {
         //tp.span代表了滑块所处的类型 因此要求音节以单位化直接反应音节的长短
         int sh =(int) ((tp.ed-tp.st)*GameData.gameSpeed[0]);
         MainSlide slide = new MainSlide(gameView.mactivity,curRandomInt*baseSlideWidth,-sh,
-                baseSlideWidth, sh,tp.key,1,0);
+                baseSlideWidth, sh,tp.key,1,gameView.getInstruType());
         synchronized (GameView.lock) {
             GameView.mainSlideArrayList.add(slide);
         }
@@ -168,7 +168,6 @@ public class CreateSlideThread extends Thread {
 
         if(MsArray.length>5)
             randomInitRedHeartTime =(random.nextInt(MsArray.length));
-        Log.e(TAG, "initData: "+Integer.toString(randomInitRedHeartTime) );
     }
 
     public void setFlag(boolean flag) { this.flag = flag ; }

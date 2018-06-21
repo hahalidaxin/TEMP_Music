@@ -33,9 +33,6 @@ public class GameActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        mySurfaceView = new MySurfaceView(this);
-        mySurfaceView.requestFocus();
-        mySurfaceView.setFocusableInTouchMode(true);
 
         sound = new SoundManager(this);
         //加载资源文件
@@ -46,6 +43,9 @@ public class GameActivity extends BaseActivity {
         musicName = filename;
         if(filename!=null) initIOFile(filename);
 
+        mySurfaceView = new MySurfaceView(this);
+        mySurfaceView.requestFocus();
+        mySurfaceView.setFocusableInTouchMode(true);
         setContentView(mySurfaceView);                          //以SurfaceView作为主界面
     }
 
@@ -104,11 +104,17 @@ public class GameActivity extends BaseActivity {
             }
         }
     }
+
     public void onDataSaved(Intent intent) {
         //对游戏成绩进行保存
         SharedPreferences.Editor editor = getSharedPreferences("music",MODE_PRIVATE).edit();
-        editor.putInt(musicName,intent.getIntExtra("score",-1));
-        editor.apply();
+        SharedPreferences pre = getSharedPreferences("music",MODE_PRIVATE);
+        int nowscore = intent.getIntExtra("score",-1);
+        int oriscore = pre.getInt(musicName,-1);
+        if(nowscore>oriscore) {
+            editor.putInt(musicName, intent.getIntExtra("score", -1));
+            editor.apply();
+        }
     }
 
 }

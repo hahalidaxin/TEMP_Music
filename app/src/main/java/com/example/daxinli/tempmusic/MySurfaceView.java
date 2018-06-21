@@ -40,8 +40,6 @@ public class MySurfaceView extends GLSurfaceView {
     public boolean isInitOver = false;
     private static boolean isExit = false;
 
-    public int instruType;
-
     public MySurfaceView(Activity context)
     {
         super(context);
@@ -50,6 +48,7 @@ public class MySurfaceView extends GLSurfaceView {
             instruType  = ((GameActivity)context).instruType;
         } else if(context instanceof MutiPlayActivity) {
             this.activityType = ACTYPE_MUTIGAMETYPE;
+            instruType = ((MutiPlayActivity)context).instruType;
         }
 
         activity = context;
@@ -161,6 +160,10 @@ public class MySurfaceView extends GLSurfaceView {
             //需要将成绩保存
             ((GameActivity)activity).onDataSaved(intent);
         }
+    }
+    public int instruType ;
+    public int getInstruType() {
+        return instruType;
     }
 
 }

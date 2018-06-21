@@ -56,14 +56,12 @@ public class MutiPlayActivity extends BaseActivity {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        mySurfaceView = new MySurfaceView(this);
-        mySurfaceView.requestFocus();
-        mySurfaceView.setFocusableInTouchMode(true);
 
         this.mintent = getIntent();
         StringBuffer builder = new StringBuffer();
         String[] strs = mintent.getStringExtra("musicScore").split("\\$\\$");
         instruType = mintent.getIntExtra("instruType",-1);
+
         for(int i=0;i<strs.length;i++) {
             builder.append(strs[i]+"#");
         }
@@ -75,7 +73,9 @@ public class MutiPlayActivity extends BaseActivity {
         initScreenData();               //初始化屏幕数据 为后续计算对应点做准备
         loadSettings();
 
-
+        mySurfaceView = new MySurfaceView(this);
+        mySurfaceView.requestFocus();
+        mySurfaceView.setFocusableInTouchMode(true);
         setContentView(mySurfaceView);                          //以SurfaceView作为主界面
     }
     @Override

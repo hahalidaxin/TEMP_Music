@@ -51,6 +51,8 @@ public class SoundManager
 			}
 		}
 }
+public void stopSoundPool() {
+}
 	public int playMusic(int sound,int loop)
 	{
 		if(!IsOn) return 0;
@@ -62,7 +64,6 @@ public class SoundManager
     {
         sp.pause(streamID);
         sp.stop(streamID);
-        //sp.setVolume(sound, 0, 0);
     }
 
 	public static void setOn(boolean on) {

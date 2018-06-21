@@ -1,6 +1,7 @@
 package com.example.daxinli.tempmusic.musicTouch;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
@@ -11,6 +12,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -26,7 +28,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.dd.processbutton.FlatButton;
 import com.example.daxinli.tempmusic.MutigameModule.Activity.CreateAHomeActivity;
 import com.example.daxinli.tempmusic.MutigameModule.Activity.EnterAHomeActivity;
 import com.example.daxinli.tempmusic.MutigameModule.other.MusicScoreAdapter;
@@ -46,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import at.markushi.ui.CircleButton;
 import de.hdodenhof.circleimageview.CircleImageView;
 import devlight.io.library.ntb.NavigationTabBar;
 
@@ -196,11 +198,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
                 intent = new Intent(HomeActivity.this,EnterAHomeActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.btn_cleanProj_listSorted:
-                //清空rankList
-                SharedPreferences.Editor editor = getSharedPreferences("music",MODE_PRIVATE).edit();
-                editor.clear().apply();
-                initRankList();
+            case R.id.circleButton_listSorted:
+                ShowAlertDialog(0,"(｡◕ˇ∀ˇ◕)","清除全部排行咩？");
                 break;
         }
     }
@@ -264,8 +263,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
      //初始化排行榜界面private
      ArrayList<turple> turList;
      boolean initRankListFlag = false;
-     FlatButton btn_cleanProj;
      PullToRefreshView mPullToRefreshView;
+     CircleButton btn_clearAll;
      private void initRankList() {
          //设置下拉刷新事件
          mPullToRefreshView = (PullToRefreshView) findViewById(R.id.pull_to_refresh_listSorted);
@@ -278,8 +277,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
                  }
              });
          }
-         btn_cleanProj = (FlatButton) findViewById(R.id.btn_cleanProj_listSorted);
-         btn_cleanProj.setOnClickListener(this);
+         //圆形按钮清空全部
+         btn_clearAll = (CircleButton) findViewById(R.id.circleButton_listSorted);
+         btn_clearAll.setOnClickListener(this);
         //设置recyclerView的显示数据
          turList = new ArrayList<>();
          SharedPreferences pref = getSharedPreferences("music",MODE_PRIVATE);
@@ -409,7 +409,39 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
                 break;
         }
     }
+    AlertDialog.Builder builder;
+    public void ShowAlertDialog(final int type,final String tititle,final String msg) {     //用户想要退出显示警告信息框
+        if(builder!=null) builder=null;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                builder = new AlertDialog.Builder(HomeActivity.this);
+                builder.setTitle(tititle);
+                builder.setMessage(msg);
+                builder.setCancelable(false);
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(type==0) {
+                            SharedPreferences.Editor editor = getSharedPreferences("music",MODE_PRIVATE).edit();
+                            editor.clear().apply();
+                            HomeActivity.this.initRankList();
+                        }
+                    }
+                });
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(type==0) {
 
+                        }
+                    }
+                });
+                builder.show();
+            }
+        });
+
+    }
     private class turple implements Comparable{
         public String name;
         public String score;

@@ -38,6 +38,8 @@ dependencies {
     compile 'devlight.io:navigationtabbar:1.2.5'
     //导入progress Button依赖
     compile 'com.github.dmytrodanylyk.android-process-button:library:1.0.4'
+    //圆形按钮
+    compile 'com.github.markushi:circlebutton:1.1'
 
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'

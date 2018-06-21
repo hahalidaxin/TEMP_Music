@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.MotionEvent;
 
+import com.example.daxinli.tempmusic.MutigameModule.Activity.gameplay.MutiPlayActivity;
 import com.example.daxinli.tempmusic.MySurfaceView;
 import com.example.daxinli.tempmusic.constant.GameData;
+import com.example.daxinli.tempmusic.musicTouch.GameActivity;
 import com.example.daxinli.tempmusic.object.Background;
 import com.example.daxinli.tempmusic.object.MainSlide;
 import com.example.daxinli.tempmusic.object.Obj2DRectangle;
@@ -132,22 +134,12 @@ public class GameView extends BaseView {
             if(father.activityType==MySurfaceView.ACTYPE_SINGLEGAMETYPE) {
                 MySurfaceView.curView = MySurfaceView.gameoverView;
             }
-            father.onTurnView(1,intent);
-            /*
-            switch(x) {
-                case 1:
-                    //将主界面设置为gameoverView
-                    if(father.activityType==MySurfaceView.ACTYPE_SINGLEGAMETYPE)
-                        MySurfaceView.curView = MySurfaceView.gameoverView;
-                    father.onTurnView(1,intent);
-                    break;
-                case 2:
-                    if(father.activityType==MySurfaceView.ACTYPE_SINGLEGAMETYPE)
-                        MySurfaceView.curView = MySurfaceView.gameVictoryView;
-                    father.onTurnView(1,intent);
-                    break;
+            if(father.activity instanceof GameActivity) {
+                ((GameActivity)father.activity).sound.stopSoundPool();
+            } else if(father.activity instanceof MutiPlayActivity ) {
+                ((MutiPlayActivity)father.activity).sound.stopSoundPool();
             }
-            */
+            father.onTurnView(1,intent);
         }
         @Override
         public boolean onTouchEvent(MotionEvent e) {                //需要将返回值设为true 否则不能继续触发move以及up函数
@@ -282,5 +274,9 @@ public class GameView extends BaseView {
     @Override
     public boolean getIsInit() {
         return true;
+    }
+
+    public int getInstruType() {
+            return father.getInstruType();
     }
 }
