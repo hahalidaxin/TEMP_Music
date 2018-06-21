@@ -71,8 +71,8 @@ public class MainSlide{
         if(objSlide!=null) objSlide.setRadiusSpan(GameData.slideAnim1Radius[GameData.GameRK]);
     }
     public void go() {                                          //滑块进行下滑
-        this.Y += this.speed; //GameData.gameSpeed[GameData.GameRK]*GameData.MainSlideTHSpan;
-        this.ls_minY += this.speed; //GameData.gameSpeed[GameData.GameRK]*GameData.MainSlideTHSpan;
+        this.Y += this.speed;
+        this.ls_minY += this.speed;
         //根据游戏难度决定每sleepSpan时间内滑块下落的高度
     }
 

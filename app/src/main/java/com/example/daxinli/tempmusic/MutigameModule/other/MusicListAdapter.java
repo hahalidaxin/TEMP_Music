@@ -7,7 +7,6 @@ package com.example.daxinli.tempmusic.MutigameModule.other;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,7 +97,6 @@ public class MusicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         ArrayList<Integer> ls = musicItem.getInstrus();
         if(ls.size()!=0) {
             int sz = ls.size();
-            Log.e(TAG, String.format("onBindViewHolder: %d %d",position,sz));
             for (int i = 0; i < 4; i++) {
                 if (i<sz) {
                     Glide.with(activity).load(DID_iconInstru[ls.get(i)]).into(fholder.iconInstru[i]);

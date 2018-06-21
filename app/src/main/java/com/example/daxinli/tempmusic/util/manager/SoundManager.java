@@ -8,7 +8,6 @@ import android.media.MediaPlayer;
 import android.media.SoundPool;
 
 import com.example.daxinli.tempmusic.R;
-import com.example.daxinli.tempmusic.constant.GameData;
 
 import java.util.HashMap;
 
@@ -63,52 +62,4 @@ public class SoundManager
         sp.stop(streamID);
         //sp.setVolume(sound, 0, 0);
     }
-
-	long preTimeStamp=0;
-	public void playGameMusic(int sound,int loop)
-	{
-		long currTimeStamp=System.nanoTime();
-		preTimeStamp=currTimeStamp;
-		@SuppressWarnings("static-access")
-		AudioManager am = (AudioManager)activity.getSystemService(activity.AUDIO_SERVICE);
-		float steamVolumCurrent = am.getStreamVolume(AudioManager.STREAM_MUSIC)  ;
-		float steamVolumMax = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)  ;
-		float volum = steamVolumCurrent/steamVolumMax  ;
-		sp.play(
-				hm.get(sound),
-				volum,
-				volum,
-				1	,
-				loop,
-				1
-				);
-	}
-
-	public void playMediaMusic(Activity ac, int id,boolean loop) {
-		if(!GameData.GameEffect) return ;
-		if(mp!=null) {
-			mp.pause();
-			if(id != lastMP)
-				mp=null;
-		}
-		if(mp==null)
-		{
-			mp = MediaPlayer.create(ac, id);
-			mp.setVolume(1.0f, 1.0f);
-			lastMP = id;
-
-		}
-		mp.setLooping(loop);
-		mp.start();
-	}
-	public void stopMediaMusic() {
-		if(mp!=null && mp.isPlaying()) {
-			try {
-				mp.stop();
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
 }

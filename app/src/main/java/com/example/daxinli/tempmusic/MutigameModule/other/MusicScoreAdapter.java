@@ -65,7 +65,9 @@ public class MusicScoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             Glide.with(activity).load(DID_medal[3]).into(fholder.medal);
             fholder.rank.setText(Integer.toString(rank+1));
         }
-        fholder.musicName.setText(musicItem.getMusicName());
+        String name = musicItem.getMusicName();
+        int x = name.indexOf('.');
+        fholder.musicName.setText(name.substring(0,x));
         fholder.musicScore.setText(Integer.toString(musicItem.getMusicScore()));
     }
 

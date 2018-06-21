@@ -19,7 +19,7 @@
         android:layout_height="60dp"
         app:ntb_badge_gravity="top"
         app:ntb_badge_position="right"
-        app:ntb_badged="true"
+        app:ntb_badged="false"
         app:ntb_scaled="true"
         app:ntb_tinted="true"
         app:ntb_title_mode="all"

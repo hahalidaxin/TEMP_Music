@@ -28,10 +28,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.daxinli.tempmusic.MutigameModule.Activity.CreateAHomeActivity;
 import com.example.daxinli.tempmusic.MutigameModule.Activity.EnterAHomeActivity;
-import com.example.daxinli.tempmusic.MutigameModule.other.MusicItem;
-import com.example.daxinli.tempmusic.MutigameModule.other.MusicListAdapter;
 import com.example.daxinli.tempmusic.MutigameModule.other.MusicScoreAdapter;
 import com.example.daxinli.tempmusic.MutigameModule.other.MusicScoreItem;
+import com.example.daxinli.tempmusic.MutigameModule.other.newMusicListAdapter;
+import com.example.daxinli.tempmusic.MutigameModule.other.newMusicListItem;
 import com.example.daxinli.tempmusic.R;
 import com.example.daxinli.tempmusic.util.SettingItem;
 import com.example.daxinli.tempmusic.util.SettingsAdapter;
@@ -205,7 +205,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
 
     public void inflateWithData(int pos) {
         //根据不同的View进行View数据的初始化
-        Log.e(TAG, String.format("inflateWithData: %d",pos));
         switch(pos) {
             case 0:
                 initMusicList();
@@ -232,16 +231,16 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
              Log.e(TAG, "startFindLocalMusic: error"  );
              e.printStackTrace();
          }
-         ArrayList<MusicItem> settingList = new ArrayList<>();
+         ArrayList<newMusicListItem> settingList = new ArrayList<>();
          RecyclerView recyclerView = (RecyclerView) findViewById(R.id.GrecyclerView_singleChoose);
          TextView textMusicNum = (TextView)findViewById(R.id.text_musicDetectedNum_singleChoose);
          textMusicNum.setText(String.format("(嘿ヾ(✿ﾟ▽ﾟ)ノ，我们找到了%d首歌曲：",fileList.length));
          for(int i=0;i< fileList.length;i++) {
-             settingList.add(new MusicItem(i+1,fileList[i],"",new ArrayList<Integer>()));
+             settingList.add(new newMusicListItem(Integer.toString(i+1),fileList[i]));
          }
          LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
          recyclerView.setLayoutManager(linearLayoutManager);
-         MusicListAdapter settingsAdapter = new MusicListAdapter(this,settingList);
+         newMusicListAdapter settingsAdapter = new newMusicListAdapter(this,settingList);
          recyclerView.setAdapter(settingsAdapter);
 
          //激发动画
