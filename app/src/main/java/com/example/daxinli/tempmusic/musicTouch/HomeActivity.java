@@ -14,14 +14,18 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.daxinli.tempmusic.MutigameModule.Activity.CreateAHomeActivity;
+import com.example.daxinli.tempmusic.MutigameModule.Activity.EnterAHomeActivity;
 import com.example.daxinli.tempmusic.MutigameModule.other.MusicItem;
 import com.example.daxinli.tempmusic.MutigameModule.other.MusicListAdapter;
 import com.example.daxinli.tempmusic.R;
@@ -48,7 +52,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         initUI();
-
     }
     private void initUI() {
         final ViewPager viewPager = (ViewPager) findViewById(R.id.vp_horizontal_ntb);
@@ -137,7 +140,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
         );
 
         navigationTabBar.setModels(models);
-        navigationTabBar.setViewPager(viewPager, 2);
+        navigationTabBar.setViewPager(viewPager, 0);            //index代表初始的Viewpager提供显示的position
         navigationTabBar.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
@@ -173,7 +176,24 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        Intent intent = null;
+        switch(v.getId()) {
+            //多人游戏 按键
+            case R.id.btn_createAHome:
+                intent = new Intent(HomeActivity.this,CreateAHomeActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_enterAHome:
+                intent = new Intent(HomeActivity.this,EnterAHomeActivity.class);
+                startActivity(intent);
+                break;
+        }
+    }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        return true;
     }
 
     public void inflateWithData(int pos) {
@@ -240,7 +260,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
          actionBar = getSupportActionBar();
          if(actionBar != null) {
              actionBar.setTitle("");
-             actionBar.setDisplayHomeAsUpEnabled(true);
+             //actionBar.setDisplayHomeAsUpEnabled(true);
          }
 
          //添加标题栏的用户名称
@@ -270,23 +290,31 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
 
      //初始化多人游戏界面
      private int RID_picNote[] = {R.drawable.pic_note1,R.drawable.pic_note2,R.drawable.pic_note3,R.drawable.pic_note4,
-            R.drawable.pic_note5,R.drawable.pic_note6};
+            R.drawable.pic_note5,R.drawable.pic_note6,R.drawable.pic_note7,R.drawable.pic_note8,R.drawable.pic_note9,
+             R.drawable.pic_note10,R.drawable.pic_note11,R.drawable.pic_note12,R.drawable.pic_note13,R.drawable.pic_note14,
+             R.drawable.pic_note15,R.drawable.pic_note16,R.drawable.pic_note17};
      private Random random = new Random();
      private FloatBackLayout floatBackLayout;
      private void initMutiGame() {
+         //设置监听
+         Button btn_createHome  = (Button) findViewById(R.id.btn_createAHome);
+         Button btn_enterHome  = (Button) findViewById(R.id.btn_enterAHome);
+         btn_enterHome.setOnClickListener(this);
+         btn_createHome.setOnClickListener(this);
+        //设置浮动背景
          floatBackLayout =  (FloatBackLayout) findViewById(R.id.welcome_floatbackground);
-         floatBackLayout.setBackGround(this,R.drawable.pic_start_backg);
-         for(int i=0;i<12;i++) {
+         //floatBackLayout.setBackGround(this,R.drawable.pic_start_backg);
+         for(int i=0;i<17;i++) {
              float posX = ((float)random.nextInt(100)/100.0f);
              float posY = ((float)random.nextInt(100)/100.0f);
-             int x = i<6? i:i-6;
-             floatBackLayout.addFloatView(new FloatBitmap(this,posX,posY,RID_picNote[x]));
+             floatBackLayout.addFloatView(new FloatBitmap(this,posX,posY,RID_picNote[i]));
          }
+         floatBackLayout.initFloatObject(1080,1920);
          new Thread(new Runnable() {
              @Override
              public void run() {
                  try {
-                     Thread.sleep(1000);
+                     Thread.sleep(100);
                  } catch(Exception e) {
                      e.printStackTrace();
                  }

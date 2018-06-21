@@ -68,6 +68,7 @@ public abstract class FloatObject {
         Log.e(TAG, "init: ");
         this.x = x;
         this.y = y;
+        Log.e(TAG, String.format("init: %d %d",x,y));
         this.width = width;
         this.height = height;
 
@@ -104,11 +105,11 @@ public abstract class FloatObject {
                 if (mCurDistance == 0) {
                     start = new PointF(x, y);
                     end = getRandomPoint((int)start.x, (int)start.y, (int) distance);// 取值范围distance
-                    if(width>0)
-                    {
+                    //if(width>0)
+                    //{
                         c1 = getRandomPoint((int) start.x, (int) start.y, random.nextInt(width / 2)); // 取值范围width/2
                         c2 = getRandomPoint(end.x, end.y, random.nextInt(width / 2));// 取值范围width/2
-                    }
+                    //}
                 }
 
                 // 计算塞贝儿曲线的当前点
