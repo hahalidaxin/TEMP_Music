@@ -6,8 +6,9 @@ import android.graphics.BitmapFactory;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
+ import android.util.Log;
 
-import java.io.IOException;
+ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
@@ -91,13 +92,17 @@ import java.util.HashMap;
 			e.printStackTrace();
 		}
 		Bitmap bitmap=BitmapFactory.decodeStream(in);
-		GLUtils.texImage2D
-		(
-				GLES30.GL_TEXTURE_2D,
-				0,
-				bitmap,
-				0
-		);
+		try {
+			GLUtils.texImage2D
+					(
+							GLES30.GL_TEXTURE_2D,
+							0,
+							bitmap,
+							0
+					);
+		} catch(Exception e) {
+			Log.e("lidaxin", "initTexture: "+path);
+		}
 		bitmap.recycle();
 		return textures[0];
 	}

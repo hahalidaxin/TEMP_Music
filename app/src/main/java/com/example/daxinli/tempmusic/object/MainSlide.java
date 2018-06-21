@@ -204,11 +204,22 @@ public class MainSlide{
     }
     public void playSoundKey() {
         if(mactivity instanceof GameActivity) {
-            GameActivity gameActivity = (GameActivity)mactivity;
-            gameActivity.sound.playMusic(SoundManager.RESKeyMusic[Instru][Pitch],0);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    GameActivity gameActivity = (GameActivity)mactivity;
+                    gameActivity.sound.playMusic(SoundManager.RESKeyMusic[Instru][Pitch], 0);
+                }
+            }).start();
         } else {
-            MutiPlayActivity gameActivity = (MutiPlayActivity) mactivity;
-            gameActivity.sound.playMusic(SoundManager.RESKeyMusic[Instru][Pitch],0);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    MutiPlayActivity gameActivity = (MutiPlayActivity) mactivity;
+                    gameActivity.sound.playMusic(SoundManager.RESKeyMusic[Instru][Pitch],0);
+                }
+            }).start();
+
         }
     }
 }

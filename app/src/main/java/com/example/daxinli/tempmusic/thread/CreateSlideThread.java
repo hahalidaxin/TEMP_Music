@@ -160,7 +160,8 @@ public class CreateSlideThread extends Thread {
         thisPitch=new Pitch(Integer.parseInt(MsPitchInfo[0].trim()), Integer.parseInt(MsPitchInfo[1].trim())
                 , Integer.parseInt(MsPitchInfo[2].trim()));
 
-        randomInitRedHeartTime = MsArray.length/2 + random.nextInt(MsArray.length/2);
+        if(MsArray.length>5)
+            randomInitRedHeartTime = random.nextInt(MsArray.length);
     }
 
     public void setFlag(boolean flag) { this.flag = flag ; }

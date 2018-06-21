@@ -171,17 +171,21 @@ public class MutiPlayActivity extends BaseActivity {
             startActivity(intent);
         }
     }
-    //将所有的通信操作都集成到MutiPlayActivity中，方便统一管理。
+    //将所有的通信操作都集成到MutiPlayActivity中，方便统一管理。\
+    boolean changeFlag = false;
     public void onSendMessage(int type,Intent intent) {
         //1: gameover //2:gamevitory
         Log.e(TAG, "onSendMessage: ");
         switch(type) {
             case 1:
-                String ratio = Integer.toString(intent.getIntExtra("ratio",-1));
-                String score = Integer.toString(intent.getIntExtra("score",-1));
-                myBinder.sendMessage("<#MUTIPLAYVIEW#>GAMEOVER#"+ratio+"#"+score);
-                Intent mintent = new Intent(MutiPlayActivity.this,MutiGameResultActivity.class);
-                startActivity(mintent);
+                if(!changeFlag) {
+                    String ratio = Integer.toString(intent.getIntExtra("ratio", -1));
+                    String score = Integer.toString(intent.getIntExtra("score", -1));
+                    myBinder.sendMessage("<#MUTIPLAYVIEW#>GAMEOVER#" + ratio + "#" + score);
+                    Intent mintent = new Intent(MutiPlayActivity.this, MutiGameResultActivity.class);
+                    startActivity(mintent);
+                    changeFlag = true;
+                }
                 break;
             case 2:
                 break;
