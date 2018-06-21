@@ -17,10 +17,7 @@
         <service
             android:name=".MutigameModule.service.NetworkService"
             android:enabled="true"
-            android:exported="true" /><![CDATA[
-
-        >
-        ]]>
+            android:exported="true" />
         <activity android:name=".musicTouch.GameActivity" />
         <activity android:name=".musicTouch.AboutActivity" />
         <activity android:name=".musicTouch.HelpActivity" />

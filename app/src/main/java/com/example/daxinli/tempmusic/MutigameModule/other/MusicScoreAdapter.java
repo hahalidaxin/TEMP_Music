@@ -58,11 +58,12 @@ public class MusicScoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         MyHolder fholder = (MyHolder) holder;
         //对显示资源记性加载
         int rank = musicItem.getRank();
-        if(rank<=3) {
+        if(rank<=2) {
             Glide.with(activity).load(DID_medal[rank]).into(fholder.medal);
+            fholder.rank.setText("");
         } else {
             Glide.with(activity).load(DID_medal[3]).into(fholder.medal);
-            fholder.rank.setText(Integer.toString(rank));
+            fholder.rank.setText(Integer.toString(rank+1));
         }
         fholder.musicName.setText(musicItem.getMusicName());
         fholder.musicScore.setText(Integer.toString(musicItem.getMusicScore()));

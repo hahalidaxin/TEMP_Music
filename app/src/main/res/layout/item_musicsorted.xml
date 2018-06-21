@@ -11,17 +11,18 @@
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent">
-        <TextView
-            android:id="@+id/rank_listSorted"
-            android:textColor="@color/colorWhite"
-            android:gravity="center"
-            android:textSize="22dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
         <ImageView
             android:id="@+id/medal_image_listSorted"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:id="@+id/rank_listSorted"
+            android:textColor="@color/colorWhite"
+            android:gravity="center"
+            android:textSize="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
     </FrameLayout>
     <LinearLayout
         android:layout_weight="4"

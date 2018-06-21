@@ -37,6 +37,7 @@ import com.example.daxinli.tempmusic.util.SettingItem;
 import com.example.daxinli.tempmusic.util.SettingsAdapter;
 import com.example.daxinli.tempmusic.view.floatbackground.FloatBackLayout;
 import com.example.daxinli.tempmusic.view.floatbackground.FloatBitmap;
+import com.yalantis.phoenix.PullToRefreshView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -253,9 +254,23 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
      }
 
 
-     //初始化排行榜界面
-     private ArrayList<turple> turList;
+     //初始化排行榜界面private
+     ArrayList<turple> turList;
+     boolean initRankListFlag = false;
+     PullToRefreshView mPullToRefreshView;
      private void initRankList() {
+         //设置下拉刷新事件
+         mPullToRefreshView = (PullToRefreshView) findViewById(R.id.pull_to_refresh_listSorted);
+         if(!initRankListFlag) {
+             initRankListFlag = true;
+             mPullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
+                 @Override
+                 public void onRefresh() {
+                     initRankList();
+                 }
+             });
+         }
+        //设置recyclerView的显示数据
          turList = new ArrayList<>();
          SharedPreferences pref = getSharedPreferences("music",MODE_PRIVATE);
          Map<String,?> map = pref.getAll();
@@ -269,12 +284,22 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
          for(int i=0;i<turList.size();i++) {
              settingList.add(new MusicScoreItem(i,turList.get(i).name,Integer.parseInt(turList.get(i).score)));
          }
-
          RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView_listSorted);
          LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
          recyclerView.setLayoutManager(linearLayoutManager);
          MusicScoreAdapter settingsAdapter = new MusicScoreAdapter(this,settingList);
          recyclerView.setAdapter(settingsAdapter);
+         //激发动画
+         final Context context = recyclerView.getContext();
+         final LayoutAnimationController controller =
+                 AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_fall_down);
+         recyclerView.setLayoutAnimation(controller);
+         recyclerView.getAdapter().notifyDataSetChanged();
+         recyclerView.scheduleLayoutAnimation();
+
+         if(mPullToRefreshView!=null) {
+             mPullToRefreshView.setRefreshing(false);       //通知停止刷新
+         }
      }
 
      //初始化游戏设置界面

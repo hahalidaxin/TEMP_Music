@@ -27,9 +27,10 @@
 
 ## 开源技术
 1) GLide
-2) circleimageview
+2) Circleimageview
 3) DanmakuFlameMaster
 4) NavigationTabBar
+5) Phoenix Pull-to-Refresh
 
 
 ## 关于作者

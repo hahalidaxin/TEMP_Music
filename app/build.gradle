@@ -32,8 +32,12 @@ dependencies {
     compile 'com.github.ctiao:ndkbitmap-armv5:0.9.21'
     compile 'com.github.ctiao:ndkbitmap-x86:0.9.21'
 
+    //导入下拉刷新
+    compile 'com.yalantis:phoenix:1.2.3'
     //导入游戏导航栏依赖
     compile 'devlight.io:navigationtabbar:1.2.5'
+    //导入progress Button依赖
+    compile 'com.github.dmytrodanylyk.android-process-button:library:1.0.4'
 
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
