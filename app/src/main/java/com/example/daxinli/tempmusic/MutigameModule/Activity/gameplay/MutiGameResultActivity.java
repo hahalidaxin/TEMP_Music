@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -61,7 +62,7 @@ public class MutiGameResultActivity extends AppCompatActivity {
         //注册广播//初始化广播接收器
         breceiver = new MutiGameResultReceiver(this);
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(NetMsgReceiver.NORMAL_AC_ACTION);
+        //intentFilter.addAction(NetMsgReceiver.NORMAL_AC_ACTION);
         intentFilter.addAction(NetMsgReceiver.MUTIGAMERECEIVE_AC_ACTION);
         registerReceiver(breceiver,intentFilter);
         //初始化service
@@ -105,11 +106,6 @@ public class MutiGameResultActivity extends AppCompatActivity {
             decorView.setSystemUiVisibility(flag);
         }
     }
-    private void testInitView () {
-        for(int i=0;i<4;i++) {
-            addResult(i,76,100);
-        }
-    }
     public void addResult(final int instruType, final int ratio, final int score) {
         final LinearLayout li = linear_result[nowResNum];
         new Thread(new Runnable() {
@@ -139,6 +135,7 @@ public class MutiGameResultActivity extends AppCompatActivity {
             @Override
             public void run() {
                 //linear_result[nowResNum].findViewById(R.id.image_instru_mutires);
+                Log.e(TAG, String.format("run: %d",instruType) );
                 ((TextView)li.findViewById(R.id.text_resScore_mutires)).setText("得分："+Integer.toString(score));
                 Glide.with(MutiGameResultActivity.this).load(DID_iconInstru[instruType]).into((ImageView) li.findViewById(R.id.image_instru_mutires));
                 linear_result[nowResNum++].setVisibility(View.VISIBLE);

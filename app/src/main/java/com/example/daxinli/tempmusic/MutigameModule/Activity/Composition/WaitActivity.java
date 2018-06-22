@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -107,6 +109,16 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        View decorView = getWindow().getDecorView();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            int flag = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+            decorView.setSystemUiVisibility(flag);
+        }
+
         mintent = getIntent();
         mateType = mintent.getIntExtra("activityType",-1);
         clockID = mintent.getIntExtra("clockID",-1);
@@ -136,6 +148,11 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
             }
         } else if(connectType==CONNECT_GAMEPlAY) {
             lilayout.setVisibility(View.INVISIBLE);
+            if(mateType==1) {
+                btn_startGame.setVisibility(View.INVISIBLE);
+            }
+        }
+        if(connectType==CONNECT_GAMEPlAY) {
             String[] strs = mintent.getStringExtra("InstruNum").split("\\$\\$");
             boolean[] flag = new boolean[4];
             instruNumLimit = strs.length;
@@ -184,6 +201,37 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
     }
 
     boolean isPhoneAlerThreadStart =false;
+    private void startRotatePhoneAnim() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                imgPhone.setVisibility(View.VISIBLE);
+            }
+        });
+        if(!isPhoneAlerThreadStart) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (true) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Animation ani = AnimationUtils.loadAnimation(WaitActivity.this, R.anim.animation_rotate);
+                                imgPhone.startAnimation(ani);
+                            }
+                        });
+                        try {
+                            Thread.sleep(2000);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        runAlertTimes+=1;
+                    }
+                }
+            }).start();
+            isPhoneAlerThreadStart = true;
+        }
+    }
     private int runAlertTimes = 0;
     @Override
     public void onClick(View v) {
@@ -195,30 +243,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
                     myBinder.sendMessage("<#WAITVIEW#>STARTGAME#" + editText_MusicName.getText().toString() + "#"
                             + editText_BPM.getText().toString());
 
-                    imgPhone.setVisibility(View.VISIBLE);
-                    if(!isPhoneAlerThreadStart) {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                while (true) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Animation ani = AnimationUtils.loadAnimation(WaitActivity.this, R.anim.animation_rotate);
-                                            imgPhone.startAnimation(ani);
-                                        }
-                                    });
-                                    try {
-                                        Thread.sleep(2000);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                    runAlertTimes+=1;
-                                }
-                            }
-                        }).start();
-                        isPhoneAlerThreadStart = true;
-                    }
+
                 } else if(connectType==CONNECT_GAMEPlAY) {
                     int x = -1;
                     for(int i=0;i<4;i++) if(text_instru[i].getText().toString().contains("You")) {
@@ -287,6 +312,7 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
                         @Override
                         public void run() {
                             if(runAlertTimes<1) {
+                                startRotatePhoneAnim();
                                 try {
                                     Thread.sleep(2000);
                                 } catch (Exception e) {
@@ -303,12 +329,24 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
                     }).start();
                 } else if(connectType==CONNECT_GAMEPlAY) {
                     //启动多人游戏
-                    btn_startGame.setProgress(100);
-                    intent = new Intent(WaitActivity.this,MutiPlayActivity.class);
-                    intent.putExtra("musicScore",extralInfo);
-                    intent.putExtra("instruType",instruType);
-                    startActivity(intent);
+                    if(mateType==0) {
+                        btn_startGame.setProgress(100);
+                        intent = new Intent(WaitActivity.this, MutiPlayActivity.class);
+                        intent.putExtra("musicScore", extralInfo);
+                        intent.putExtra("instruType", instruType);
+                        Log.e(TAG, String.format("onActivityTrans: 1 %d",instruType));
+                        startActivity(intent);
+                    } else if (mateType == 1) { //接收的不对 应该获得自己的乐谱
+                        myBinder.sendMessage(String.format("<#WAITVIEW#>STARTGAME&MUSIC2#%d",instruType));   //发送请求信号
+                    }
                 }
+                break;
+            case 1:
+                intent = new Intent(WaitActivity.this, MutiPlayActivity.class);
+                intent.putExtra("musicScore", extralInfo);
+                intent.putExtra("instruType", instruType);
+                Log.e(TAG, String.format("onActivityTrans: 2 %d",instruType));
+                startActivity(intent);
                 break;
         }
     }
@@ -404,6 +442,14 @@ public class WaitActivity extends BaseActivity implements View.OnClickListener {
                         builder = null;
                     }
                 });
+                if(type==0) {
+                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                }
                 builder.show();
             }
         });

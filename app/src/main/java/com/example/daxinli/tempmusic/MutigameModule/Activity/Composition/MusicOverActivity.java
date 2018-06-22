@@ -93,9 +93,9 @@ public class MusicOverActivity extends AppCompatActivity {
 
     public void initView() {
         text_uploaderNum = (TextView) findViewById(R.id.text_uploaderNum);
-        if(activityType==1) {
-            text_uploaderNum.setVisibility(View.INVISIBLE);
-        }
+        //if(activityType==1) {
+        //text_uploaderNum.setVisibility(View.INVISIBLE);
+        //}
     }
     public void sendMusic() {
         //在单独的线程中进行数据的发送
@@ -163,7 +163,7 @@ public class MusicOverActivity extends AppCompatActivity {
         });
     }
     public void setNumbertoShow(final int num) {
-        if(mintent.getIntExtra("activityType",-1)!=0) return ;
+        //if(mintent.getIntExtra("activityType",-1)!=0) return ;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

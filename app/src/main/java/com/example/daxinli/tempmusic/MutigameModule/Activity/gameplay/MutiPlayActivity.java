@@ -181,7 +181,7 @@ public class MutiPlayActivity extends BaseActivity {
                 if(!changeFlag) {
                     String ratio = Integer.toString(intent.getIntExtra("ratio", -1));
                     String score = Integer.toString(intent.getIntExtra("score", -1));
-                    myBinder.sendMessage("<#MUTIPLAYVIEW#>GAMEOVER#" + ratio + "#" + score);
+                    myBinder.sendMessage(String.format("<#MUTIPLAYVIEW#>GAMEOVER#%d#%s#%s" ,instruType,ratio,score));
                     Intent mintent = new Intent(MutiPlayActivity.this, MutiGameResultActivity.class);
                     startActivity(mintent);
                     changeFlag = true;
