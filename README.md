@@ -18,6 +18,21 @@
 
 ## 游戏流程
 
+## 界面展示
+
+<img src="https://github.com/hahalidaxin/TEMP_Music/blob/master/IMGforREADME/%E5%8D%95%E4%BA%BA%E6%B8%B8%E6%88%8F%E6%9B%B2%E7%9B%AE%E9%80%89%E6%8B%A9%E7%95%8C%E9%9D%A2.jpg" width = "270" height = "480" alt="图片名称" style="display:inline-block" />
+<img src="https://github.com/hahalidaxin/TEMP_Music/blob/master/IMGforREADME/%E6%B8%B8%E6%88%8F%E8%BF%9B%E8%A1%8C%E7%95%8C%E9%9D%A2.jpg" width = "270" height = "480" alt="图片名称" style="display:inline-block"  />
+<img src="https://github.com/hahalidaxin/TEMP_Music/blob/master/IMGforREADME/%E5%8D%95%E4%BA%BA%E6%B8%B8%E6%88%8F%E7%BB%93%E6%9D%9F%E6%8E%A5%E7%95%8C%E9%9D%A2.jpg" width = "270" height = "480" alt="图片名称"  />
+<img src="https://github.com/hahalidaxin/TEMP_Music/blob/master/IMGforREADME/%E6%8E%92%E8%A1%8C.jpg" width = "270" height = "480" alt="图片名称"  />
+<img src="https://github.com/hahalidaxin/TEMP_Music/blob/master/IMGforREADME/%E5%A4%9A%E4%BA%BA.jpg" width = "270" height = "480" alt="图片名称"  />
+<img src="https://github.com/hahalidaxin/TEMP_Music/blob/master/IMGforREADME/%E5%88%9B%E5%BB%BA%E6%88%BF%E9%97%B4.jpg" width = "270" height = "480" alt="图片名称"  />
+<img src="https://github.com/hahalidaxin/TEMP_Music/blob/master/IMGforREADME/%E5%A4%9A%E4%BA%BA%E6%BC%94%E5%A5%8F%E9%80%89%E6%8B%A9%E6%9B%B2%E7%9B%AE.jpg" width = "270" height = "480" alt="图片名称"  />
+<img src="https://github.com/hahalidaxin/TEMP_Music/blob/master/IMGforREADME/%E5%BC%B9%E5%B9%95%E8%81%8A%E5%A4%A9%E7%AD%89%E5%BE%85%E5%AE%A4.jpg" width = "270" height = "480" alt="图片名称"  />
+<img src="https://github.com/hahalidaxin/TEMP_Music/blob/master/IMGforREADME/%E8%B0%B1%E6%9B%B2%E7%95%8C%E9%9D%A2.jpg" width = "270" height = "480" alt="图片名称"  />
+<img src="https://github.com/hahalidaxin/TEMP_Music/blob/master/IMGforREADME/%E8%B0%B1%E6%9B%B2%E4%B8%8A%E4%BC%A0%E7%95%8C%E9%9D%A2.jpg" width = "270" height = "480" alt="图片名称"  />
+<img src="https://github.com/hahalidaxin/TEMP_Music/blob/master/IMGforREADME/%E6%B8%B8%E6%88%8F%E5%A3%B0%E6%98%8E.jpg" width = "270" height = "480" alt="图片名称"  />
+<img src="https://github.com/hahalidaxin/TEMP_Music/blob/master/IMGforREADME/%E8%AE%BE%E7%BD%AE%E7%95%8C%E9%9D%A2.jpg" width = "270" height = "480" alt="图片名称"  />
+
 ## TODO:
 - [ ] 添加游戏帮助
 - [ ] 增加可以使用的音调
