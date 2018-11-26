@@ -91,6 +91,7 @@
 
 ## 关于作者
 hahalidaxin
-* [cnblogs]("http://www.cnblogs.com/lidaxin/")
+* [cnblogs](http://www.cnblogs.com/lidaxin/) <br>
+* [CSDN](http://blog.csdn.net/hahalidaxin)
 
 > Since 2018/5/7
